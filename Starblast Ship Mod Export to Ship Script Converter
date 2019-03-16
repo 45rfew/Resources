@@ -5,7 +5,7 @@
         <title>Starblast Ship Mod Export to Ship Script Converter</title>
 		<style>
 			body {
-				background-color: #ffffff;
+				background-color: #520bdf;
 			}
 			
 			#jsonInput {
