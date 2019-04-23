@@ -19,14 +19,15 @@
     </head>
     <body>
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/1346-1353_spread_of_the_Black_Death_in_Europe_map.svg/500px-1346-1353_spread_of_the_Black_Death_in_Europe_map.svg.png" alt="image">
-        <input type="text" id="jsonInput" placeholder="Yeet" />
+    <img src="https://media.discordapp.net/attachments/295360290478882816/570396558831648768/black_plage.png?width=400&height=300" alt="image2">
+    <input type="text" id="jsonInput" placeholder="Yeet" />
         <textarea id="coffeescriptOutput" rows="20" cols="80">The disastrous mortal disease known as the Black Death spread across Europe in the years 1346-53. The frightening name, however, only came several centuries after its visitation (and was probably a mistranslation of the Latin word ‘atra’ meaning both ‘terrible’ and ‘black)’. Chronicles and letters from the time describe the terror wrought by the illness. In Florence, the great Renaissance poet Petrarch was sure that they would not be believed: ‘O happy posterity, who will not experience such abysmal woe and will look upon our testimony as a fable.’ A Florentine chronicler relates that,
 
-All the citizens did little else except to carry dead bodies to be buried [...] At every church they dug deep pits down to the water-table; and thus those who were poor who died during the night were bundled up quickly and thrown into the pit. In the morning when a large number of bodies were found in the pit, they took some earth and shovelled it down on top of them; and later others were placed on top of them and then another layer of earth, just as one makes lasagne with layers of pasta and cheese.
+All the citizens did little else except to carry dead bodies to be buried. At every church they dug deep pits down to the water-table; and thus those who were poor who died during the night were bundled up quickly and thrown into the pit. In the morning when a large number of bodies were found in the pit, they took some earth and shovelled it down on top of them; and later others were placed on top of them and then another layer of earth, just as one makes lasagne with layers of pasta and cheese.
 
 The accounts are remarkably similar. The chronicler Agnolo di Tura ‘the Fat’ relates from his Tuscan home town that
 
-... in many places in Siena great pits were dug and piled deep with the multitude of dead [...] And there were also those who were so sparsely covered with earth that the dogs dragged them forth and devoured many bodies throughout the city.
+... in many places in Siena great pits were dug and piled deep with the multitude of dead. And there were also those who were so sparsely covered with earth that the dogs dragged them forth and devoured many bodies throughout the city.
 
 The tragedy was extraordinary. In the course of just a few months, 60 per cent of Florence’s population died from the plague, and probably the same proportion in Siena. In addition to the bald statistics, we come across profound personal tragedies: Petrarch lost to the Black Death his beloved Laura to whom he wrote his famous love poems; Di Tura tells us that ‘I [...] buried my five children with my own hands’.
 
