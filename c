@@ -13,7 +13,8 @@
 				color: #d1d3cf;
 			}
 			#coffeescriptOutput { 
-			        background-color: #6c0c83;      
+			        background-color: #6c0c83;     
+	                }
 		</style>
     </head>
     <body>
