@@ -30,8 +30,8 @@
     </head>
     <body>
         <input type="text" id="jsonInput" placeholder="Yeet" />
-        <input type="number" id="indentationInput" placeholder="Starting Indentation" value="1" />
-        <button type="button" id="convert" onclick="convert();">Convert</button>
+//      <input type="number" id="indentationInput" placeholder="Starting Indentation" value="1" /
+//      <button type="button" id="convert" onclick="convert();">Convert</button>
         <textarea id="coffeescriptOutput" rows="20" cols="80">Yeet</textarea>
         <script>
 
