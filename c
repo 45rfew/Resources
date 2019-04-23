@@ -5,7 +5,7 @@
         <title>The black plage killed people.</title>
 		<style>
 			body {
-				background-color: #520bdf;
+				background-color: #110550;
 			}
 			
 			#jsonInput {
