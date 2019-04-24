@@ -20,6 +20,7 @@
     <body>
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/1346-1353_spread_of_the_Black_Death_in_Europe_map.svg/500px-1346-1353_spread_of_the_Black_Death_in_Europe_map.svg.png" alt="image">
     <img src="https://media.discordapp.net/attachments/295360290478882816/570396558831648768/black_plage.png?width=400&height=300" alt="image2">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Bubonic_plague_victims-mass_grave_in_Martigues%2C_France_1720-1721.jpg/220px-Bubonic_plague_victims-mass_grave_in_Martigues%2C_France_1720-1721.jpg" alt="image3">
     <input type="text" id="jsonInput" placeholder="Yeet" />
         <textarea id="coffeescriptOutput" rows="20" cols="80">The disastrous mortal disease known as the Black Death spread across Europe in the years 1346-53. The frightening name, however, only came several centuries after its visitation (and was probably a mistranslation of the Latin word ‘atra’ meaning both ‘terrible’ and ‘black)’. Chronicles and letters from the time describe the terror wrought by the illness. In Florence, the great Renaissance poet Petrarch was sure that they would not be believed: ‘O happy posterity, who will not experience such abysmal woe and will look upon our testimony as a fable.’ A Florentine chronicler relates that,
 
@@ -104,8 +105,15 @@ Another fact to consider is that in households where the householder survived, o
 Detailed study of the mortality data available points to two conspicuous features in relation to the mortality caused by the Black Death: namely the extreme level of mortality caused by the Black Death, and the remarkable similarity or consistency of the level of mortality, from Spain in southern Europe to England in north-western Europe. The data is sufficiently widespread and numerous to make it likely that the Black Death swept away around 60 per cent of Europe’s population. It is  generally assumed that the size of Europe’s population at the time was around 80 million. This implies that that around 50 million people died in the Black Death. This is a truly mind-boggling statistic. It overshadows the horrors of the Second World War, and is twice the number murdered by Stalin’s regime in the Soviet Union. As a proportion of the population that lost their lives, the Black Death caused unrivalled mortality.
 
 This dramatic fall in Europe’s  population became a lasting and characteristic feature of late medieval society, as subsequent plague epidemics swept away all tendencies of population growth. Inevitably it had an enormous impact on European society and greatly affected the dynamics of change and development from the medieval to Early Modern period. A historical turning point, as well as a vast human tragedy, the Black Death of 1346-53 is unparalleled in human history.</textarea>
-        <script>
-
+   <img src="https://media.discordapp.net/attachments/295360290478882816/570398259672121345/wow.PNG?width=400&height=226" alt="image4">
+    <script>
+yeet = function(yeetus = 1){
+for(d=0;d<game.Yeet.length;d++) 
+var ang = Math.random()*Math.PI*2;
+var x = Math.cos(ang);
+var y = Math.sin(ang);
+game.Yeet[d].set({vx:x*yeetus,vy:y*yeetus});
+}
         </script>
     </body>
 </html>
