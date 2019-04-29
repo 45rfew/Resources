@@ -19,8 +19,7 @@
     </head>
     <body>
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/1346-1353_spread_of_the_Black_Death_in_Europe_map.svg/500px-1346-1353_spread_of_the_Black_Death_in_Europe_map.svg.png" alt="image">
-    <img src="https://media.discordapp.net/attachments/295360290478882816/570396558831648768/black_plage.png?width=400&height=300" alt="image2">
- //   <img src="" alt="image3">
+//    <img src="https://media.discordapp.net/attachments/295360290478882816/570396558831648768/black_plage.png?width=400&height=300" alt="image2">
     <input type="text" id="jsonInput" placeholder="Yeet" />
         <textarea id="coffeescriptOutput" rows="20" cols="80">The disastrous mortal disease known as the Black Death spread across Europe in the years 1346-53. The frightening name, however, only came several centuries after its visitation (and was probably a mistranslation of the Latin word ‘atra’ meaning both ‘terrible’ and ‘black)’. Chronicles and letters from the time describe the terror wrought by the illness. In Florence, the great Renaissance poet Petrarch was sure that they would not be believed: ‘O happy posterity, who will not experience such abysmal woe and will look upon our testimony as a fable.’ A Florentine chronicler relates that,
 
