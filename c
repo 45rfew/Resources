@@ -76,6 +76,29 @@ Another plague ship sailed from Bordeaux, northwards to Rouen in Normandy where 
 
 Yet another ship bearing plague  left Bordeaux a few weeks later and arrived around May 8th, in the southern English town of Melcombe Regis, part of present-day Weymouth in Dorset: the epidemic broke out shortly before June 24th. The significance of ships in the rapid transmission of contagion is underscored by the fact that at the time the Black Death landed in Weymouth it was still in an early phase in Italy. From Weymouth, the Black Death spread not only inland, but also in new metastatic leaps by ships, which in some cases must have travelled earlier than the recognized outbreaks of the epidemic: Bristol was contaminated in June, as were the coastal towns of the Pale in Ireland; London was contaminated in early August since the epidemic outbreak drew comment at the end of September. Commercial seaport towns like Colchester and Harwich must have been contaminated at about the same time. From these the Black Death spread inland. It is now also clear that the whole of England was  conquered in the course of 1349  because, in the late autumn of 1348, ship transport opened a northern front in England for the Black Death, apparently in Grimsby.
 
+The early arrival of the Black Death in England and the rapid spread to its southeastern regions shaped much of the pattern of spread in Northern Europe. The plague must have arrived in Oslo in the autumn of 1348, and must have come with a ship from south-eastern England, which had lively commercial contacts with Norway. The outbreak of the Black Death in Norway took place before the disease had managed to penetrate southern Germany, again illustrating the great importance of transportation by ship and the relative slowness of spread by land. The outbreak in Oslo was soon stopped by the advent of winter weather, but it broke out again in the early spring.  Soon it spread out of Oslo along the main roads inland and on both sides of the Oslofjord. Another independent introduction of contagion occurred in early July 1349 in the town of Bergen; it arrived in a ship from England, probably from King’s Lynn. The opening of the second plague front was the reason that all Norway could be conquered in the course of 1349. It disappeared completely with the advent of winter, the last victims died at the turn of the year.
+
+The early dissemination of the Black Death to Oslo, which prepared the ground for a full outbreak in early spring, had great significance for the pace and pattern of the Black Death’s further conquest of Northern Europe. Again ship transport played a crucial role, this time primarily by Hanseatic ships fleeing homewards from their trading station in Oslo with goods acquired during the winter. On their way the seaport of Halmstad close to the Sound was apparently contaminated in early July. This was the starting point for the plague’s conquest of Denmark and Sweden, which was followed by several other independent introductions of plague contagion later; by the end of 1350 most of these territories had been ravaged.
+
+However, the voyage homewards to the Hanseatic cities on the Baltic Sea had started significantly earlier. The outbreak of the Black Death in the Prussian town of Elbing (today the Polish town of Elblag) on  August 24th, 1349, was a new milestone in the history of the Black Death. A ship that left Oslo at the beginning of June would probably sail through the Sound around June 20th and reach Elbing in the second half of July, in time to unleash an epidemic outbreak around August 24th. Other ships that returned at the end of the shipping season in the autumn from the trading stations in Oslo or Bergen, brought the Black Death to a number of other Hanseatic cities both on the Baltic Sea and the North Sea. The advent of winter stopped the outbreaks initially as had happened elsewhere, but contagion was spread with goods to commercial towns and cities deep into northern Germany. In the spring of 1350, a northern German plague front was formed that spread southwards and met the plague front which in the summer of 1349 had formed in southern Germany with importation of contagion from Austria and Switzerland.
+
+
+Napoleon did not succeed in conquering Russia. Hitler did not succeed. But the Black Death did. It entered the territory of the city state of Novgorod in the late autumn of 1351 and reached the town of Pskov just before the winter set in and temporarily suppressed the epidemic; thus the full outbreak did not start until the early spring of 1352. In Novgorod itself, the Black Death broke out in mid-August. In 1353, Moscow was ravaged, and the disease also reached the border with the Golden Horde, this time from the west, where it petered out. Poland was invaded by epidemic forces coming both from Elbing and  from the northern German plague front and, apparently, from the south by contagion coming across the border from Slovakia via Hungary.
+
+Iceland and Finland are the only regions that, we know with certainty, avoided the Black Death because they had tiny populations with minimal contact abroad. It seems unlikely that any other region was so lucky.
+
+How many people were affected? Knowledge of general mortality is crucial to all discussions of the social and historical impact of the plague. Studies of mortality among ordinary populations are far more useful, therefore, than studies of special social groups, whether monastic communities, parish priests or social elites. Because around 90 per cent of Europe’s population lived in the countryside, rural studies of mortality are much more important than urban ones.
+
+Researchers generally used to agree that the Black Death swept away 20-30 per cent of Europe’s population. However, up to 1960 there were only a few studies of mortality among ordinary people, so the basis for this assessment was weak. From 1960, a great number of mortality studies from various parts of Europe were published. These have been collated and it is now clear that the earlier estimates of mortality need to be doubled. No suitable sources for the study of mortality have been found in the Muslim countries that were ravaged.
+
+The mortality data available  reflects the special nature of medieval registrations of populations. In a couple of cases, the sources are real censuses recording all members of the population, including women and children. However, most of the sources are tax registers and manorial registers recording households in the form of the names of the householders. Some registers aimed at recording all households, also the poor and destitute classes who did not pay taxes or rents, but the majority recorded only householders who paid tax to the town or land rent to the lord of the manor. This means that they overwhelmingly registered   the better-off adult men of the population, who for reasons of age, gender and economic status had lower mortality rates in plague epidemics than the general population. According to the extant complete registers of all households, the rent or tax-paying classes constituted about half the population both in the towns and in the countryside, the other half were too poor. Registers that yield information on both halves of the populations indicate that mortality among the poor was 5-6 per cent higher. This means that in the majority of cases when registers only record the better-off half of the adult male population, mortality among the adult male population as a whole can be deduced by adding 2.5-3 per cent.
+
+Another fact to consider is that in households where the householder survived, other members often died. For various reasons women and children suffer higher incidence of mortality from plague than adult men. A couple of censuses produced by city states in Tuscany in order to establish the need for grain or salt are still extant. They show that the households were, on average, reduced in the countryside from 4.5 to 4 persons and in urban centres from 4 to 3.5 persons. All medieval sources that permit the study of the size and composition of households among the ordinary population produce similar data, from Italy in southern Europe to England in the west and Norway in northern Europe. This means that the mortality among the registered households as a whole was 11-12.5 per cent higher than among the registered householders.
+
+Detailed study of the mortality data available points to two conspicuous features in relation to the mortality caused by the Black Death: namely the extreme level of mortality caused by the Black Death, and the remarkable similarity or consistency of the level of mortality, from Spain in southern Europe to England in north-western Europe. The data is sufficiently widespread and numerous to make it likely that the Black Death swept away around 60 per cent of Europe’s population. It is  generally assumed that the size of Europe’s population at the time was around 80 million. This implies that that around 50 million people died in the Black Death. This is a truly mind-boggling statistic. It overshadows the horrors of the Second World War, and is twice the number murdered by Stalin’s regime in the Soviet Union. As a proportion of the population that lost their lives, the Black Death caused unrivalled mortality.
+
+This dramatic fall in Europe’s  population became a lasting and characteristic feature of late medieval society, as subsequent plague epidemics swept away all tendencies of population growth. Inevitably it had an enormous impact on European society and greatly affected the dynamics of change and development from the medieval to Early Modern period. A historical turning point, as well as a vast human tragedy, the Black Death of 1346-53 is unparalleled in human history.</textarea>
+ 
     <!-- Portfolio Grid Section -->
     <section id="portfolio">
         <div class="container">
@@ -148,32 +171,298 @@ Yet another ship bearing plague  left Bordeaux a few weeks later and arrived aro
                 </div>
             </div>
         </div>
-    </section>
+    </section> 
+  <img src="https://media.discordapp.net/attachments/295360290478882816/570398259672121345/wow.PNG?width=400&height=226" alt="image4">
+    <!-- Footer -->
+    <footer class="text-center">
+        <div class="footer-above">
+            <div class="container">
+                <div class="row">
+                    <div class="footer-col col-md-4">
+                        <h3>Location</h3>
+                        <p>Your hostel address line 1
+                            <br>Your hostel address line 2</p>
+                    </div>
+                    <div class="footer-col col-md-4">
+                        <h3>Around the Web</h3>
+                        <ul class="list-inline">
+                            <li>
+                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-google-plus"></i></a>
+                            </li>
+                            <li>
+                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-linkedin"></i></a>
+                            </li>
+                            <li>
+                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-dribbble"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="footer-col col-md-4">
+                        <h3>Yourname</h3>
+                        <p><a href="http://startbootstrap.com">Yourname</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-below">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        Copyright &copy; Your Website 2016
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-The early arrival of the Black Death in England and the rapid spread to its southeastern regions shaped much of the pattern of spread in Northern Europe. The plague must have arrived in Oslo in the autumn of 1348, and must have come with a ship from south-eastern England, which had lively commercial contacts with Norway. The outbreak of the Black Death in Norway took place before the disease had managed to penetrate southern Germany, again illustrating the great importance of transportation by ship and the relative slowness of spread by land. The outbreak in Oslo was soon stopped by the advent of winter weather, but it broke out again in the early spring.  Soon it spread out of Oslo along the main roads inland and on both sides of the Oslofjord. Another independent introduction of contagion occurred in early July 1349 in the town of Bergen; it arrived in a ship from England, probably from King’s Lynn. The opening of the second plague front was the reason that all Norway could be conquered in the course of 1349. It disappeared completely with the advent of winter, the last victims died at the turn of the year.
+    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+    <div class="scroll-top page-scroll hidden-sm hidden-xs hidden-lg hidden-md">
+        <a class="btn btn-primary" href="#page-top">
+            <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
 
-The early dissemination of the Black Death to Oslo, which prepared the ground for a full outbreak in early spring, had great significance for the pace and pattern of the Black Death’s further conquest of Northern Europe. Again ship transport played a crucial role, this time primarily by Hanseatic ships fleeing homewards from their trading station in Oslo with goods acquired during the winter. On their way the seaport of Halmstad close to the Sound was apparently contaminated in early July. This was the starting point for the plague’s conquest of Denmark and Sweden, which was followed by several other independent introductions of plague contagion later; by the end of 1350 most of these territories had been ravaged.
+    <!-- Portfolio Modals -->
+    <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>Project Title</h2>
+                            <hr class="star-primary">
+                            <img src="img/portfolio/cabin.png" class="img-responsive img-centered" alt="">
+                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
+                            <ul class="list-inline item-details">
+                                <li>Client:
+                                    <strong><a href="http://startbootstrap.com">Yourname</a>
+                                    </strong>
+                                </li>
+                                <li>Date:
+                                    <strong><a href="http://startbootstrap.com">April 2014</a>
+                                    </strong>
+                                </li>
+                                <li>Service:
+                                    <strong><a href="http://startbootstrap.com">Web Development</a>
+                                    </strong>
+                                </li>
+                            </ul>
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>Project Title</h2>
+                            <hr class="star-primary">
+                            <img src="img/portfolio/cake.png" class="img-responsive img-centered" alt="">
+                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
+                            <ul class="list-inline item-details">
+                                <li>Client:
+                                    <strong><a href="http://startbootstrap.com">Yourname</a>
+                                    </strong>
+                                </li>
+                                <li>Date:
+                                    <strong><a href="http://startbootstrap.com">April 2014</a>
+                                    </strong>
+                                </li>
+                                <li>Service:
+                                    <strong><a href="http://startbootstrap.com">Web Development</a>
+                                    </strong>
+                                </li>
+                            </ul>
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portfolio-modal modal fade" id="portfolioModal3" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>Project Title</h2>
+                            <hr class="star-primary">
+                            <img src="img/portfolio/circus.png" class="img-responsive img-centered" alt="">
+                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
+                            <ul class="list-inline item-details">
+                                <li>Client:
+                                    <strong><a href="http://startbootstrap.com">Yourname</a>
+                                    </strong>
+                                </li>
+                                <li>Date:
+                                    <strong><a href="http://startbootstrap.com">April 2014</a>
+                                    </strong>
+                                </li>
+                                <li>Service:
+                                    <strong><a href="http://startbootstrap.com">Web Development</a>
+                                    </strong>
+                                </li>
+                            </ul>
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portfolio-modal modal fade" id="portfolioModal4" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>Project Title</h2>
+                            <hr class="star-primary">
+                            <img src="img/portfolio/game.png" class="img-responsive img-centered" alt="">
+                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
+                            <ul class="list-inline item-details">
+                                <li>Client:
+                                    <strong><a href="http://startbootstrap.com">Yourname</a>
+                                    </strong>
+                                </li>
+                                <li>Date:
+                                    <strong><a href="http://startbootstrap.com">April 2014</a>
+                                    </strong>
+                                </li>
+                                <li>Service:
+                                    <strong><a href="http://startbootstrap.com">Web Development</a>
+                                    </strong>
+                                </li>
+                            </ul>
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portfolio-modal modal fade" id="portfolioModal5" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>Project Title</h2>
+                            <hr class="star-primary">
+                            <img src="img/portfolio/safe.png" class="img-responsive img-centered" alt="">
+                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
+                            <ul class="list-inline item-details">
+                                <li>Client:
+                                    <strong><a href="http://startbootstrap.com">Yourname</a>
+                                    </strong>
+                                </li>
+                                <li>Date:
+                                    <strong><a href="http://startbootstrap.com">April 2014</a>
+                                    </strong>
+                                </li>
+                                <li>Service:
+                                    <strong><a href="http://startbootstrap.com">Web Development</a>
+                                    </strong>
+                                </li>
+                            </ul>
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portfolio-modal modal fade" id="portfolioModal6" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>Project Title</h2>
+                            <hr class="star-primary">
+                            <img src="img/portfolio/submarine.png" class="img-responsive img-centered" alt="">
+                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
+                            <ul class="list-inline item-details">
+                                <li>Client:
+                                    <strong><a href="http://startbootstrap.com">Yourname</a>
+                                    </strong>
+                                </li>
+                                <li>Date:
+                                    <strong><a href="http://startbootstrap.com">April 2014</a>
+                                    </strong>
+                                </li>
+                                <li>Service:
+                                    <strong><a href="http://startbootstrap.com">Web Development</a>
+                                    </strong>
+                                </li>
+                            </ul>
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-However, the voyage homewards to the Hanseatic cities on the Baltic Sea had started significantly earlier. The outbreak of the Black Death in the Prussian town of Elbing (today the Polish town of Elblag) on  August 24th, 1349, was a new milestone in the history of the Black Death. A ship that left Oslo at the beginning of June would probably sail through the Sound around June 20th and reach Elbing in the second half of July, in time to unleash an epidemic outbreak around August 24th. Other ships that returned at the end of the shipping season in the autumn from the trading stations in Oslo or Bergen, brought the Black Death to a number of other Hanseatic cities both on the Baltic Sea and the North Sea. The advent of winter stopped the outbreaks initially as had happened elsewhere, but contagion was spread with goods to commercial towns and cities deep into northern Germany. In the spring of 1350, a northern German plague front was formed that spread southwards and met the plague front which in the summer of 1349 had formed in southern Germany with importation of contagion from Austria and Switzerland.
+    <!-- jQuery -->
+    <script src="vendor/jquery/jquery.min.js"></script>
 
+    <!-- Bootstrap Core JavaScript -->
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
-Napoleon did not succeed in conquering Russia. Hitler did not succeed. But the Black Death did. It entered the territory of the city state of Novgorod in the late autumn of 1351 and reached the town of Pskov just before the winter set in and temporarily suppressed the epidemic; thus the full outbreak did not start until the early spring of 1352. In Novgorod itself, the Black Death broke out in mid-August. In 1353, Moscow was ravaged, and the disease also reached the border with the Golden Horde, this time from the west, where it petered out. Poland was invaded by epidemic forces coming both from Elbing and  from the northern German plague front and, apparently, from the south by contagion coming across the border from Slovakia via Hungary.
+    <!-- Plugin JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
 
-Iceland and Finland are the only regions that, we know with certainty, avoided the Black Death because they had tiny populations with minimal contact abroad. It seems unlikely that any other region was so lucky.
-
-How many people were affected? Knowledge of general mortality is crucial to all discussions of the social and historical impact of the plague. Studies of mortality among ordinary populations are far more useful, therefore, than studies of special social groups, whether monastic communities, parish priests or social elites. Because around 90 per cent of Europe’s population lived in the countryside, rural studies of mortality are much more important than urban ones.
-
-Researchers generally used to agree that the Black Death swept away 20-30 per cent of Europe’s population. However, up to 1960 there were only a few studies of mortality among ordinary people, so the basis for this assessment was weak. From 1960, a great number of mortality studies from various parts of Europe were published. These have been collated and it is now clear that the earlier estimates of mortality need to be doubled. No suitable sources for the study of mortality have been found in the Muslim countries that were ravaged.
-
-The mortality data available  reflects the special nature of medieval registrations of populations. In a couple of cases, the sources are real censuses recording all members of the population, including women and children. However, most of the sources are tax registers and manorial registers recording households in the form of the names of the householders. Some registers aimed at recording all households, also the poor and destitute classes who did not pay taxes or rents, but the majority recorded only householders who paid tax to the town or land rent to the lord of the manor. This means that they overwhelmingly registered   the better-off adult men of the population, who for reasons of age, gender and economic status had lower mortality rates in plague epidemics than the general population. According to the extant complete registers of all households, the rent or tax-paying classes constituted about half the population both in the towns and in the countryside, the other half were too poor. Registers that yield information on both halves of the populations indicate that mortality among the poor was 5-6 per cent higher. This means that in the majority of cases when registers only record the better-off half of the adult male population, mortality among the adult male population as a whole can be deduced by adding 2.5-3 per cent.
-
-Another fact to consider is that in households where the householder survived, other members often died. For various reasons women and children suffer higher incidence of mortality from plague than adult men. A couple of censuses produced by city states in Tuscany in order to establish the need for grain or salt are still extant. They show that the households were, on average, reduced in the countryside from 4.5 to 4 persons and in urban centres from 4 to 3.5 persons. All medieval sources that permit the study of the size and composition of households among the ordinary population produce similar data, from Italy in southern Europe to England in the west and Norway in northern Europe. This means that the mortality among the registered households as a whole was 11-12.5 per cent higher than among the registered householders.
-
-Detailed study of the mortality data available points to two conspicuous features in relation to the mortality caused by the Black Death: namely the extreme level of mortality caused by the Black Death, and the remarkable similarity or consistency of the level of mortality, from Spain in southern Europe to England in north-western Europe. The data is sufficiently widespread and numerous to make it likely that the Black Death swept away around 60 per cent of Europe’s population. It is  generally assumed that the size of Europe’s population at the time was around 80 million. This implies that that around 50 million people died in the Black Death. This is a truly mind-boggling statistic. It overshadows the horrors of the Second World War, and is twice the number murdered by Stalin’s regime in the Soviet Union. As a proportion of the population that lost their lives, the Black Death caused unrivalled mortality.
-
-This dramatic fall in Europe’s  population became a lasting and characteristic feature of late medieval society, as subsequent plague epidemics swept away all tendencies of population growth. Inevitably it had an enormous impact on European society and greatly affected the dynamics of change and development from the medieval to Early Modern period. A historical turning point, as well as a vast human tragedy, the Black Death of 1346-53 is unparalleled in human history.</textarea>
-   <img src="https://media.discordapp.net/attachments/295360290478882816/570398259672121345/wow.PNG?width=400&height=226" alt="image4">
-
+    <!-- Theme JavaScript -->
+    <script src="js/freelancer.min.js"></script>
         </script>
     </body>
 </html>
