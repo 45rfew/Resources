@@ -76,6 +76,79 @@ Another plague ship sailed from Bordeaux, northwards to Rouen in Normandy where 
 
 Yet another ship bearing plague  left Bordeaux a few weeks later and arrived around May 8th, in the southern English town of Melcombe Regis, part of present-day Weymouth in Dorset: the epidemic broke out shortly before June 24th. The significance of ships in the rapid transmission of contagion is underscored by the fact that at the time the Black Death landed in Weymouth it was still in an early phase in Italy. From Weymouth, the Black Death spread not only inland, but also in new metastatic leaps by ships, which in some cases must have travelled earlier than the recognized outbreaks of the epidemic: Bristol was contaminated in June, as were the coastal towns of the Pale in Ireland; London was contaminated in early August since the epidemic outbreak drew comment at the end of September. Commercial seaport towns like Colchester and Harwich must have been contaminated at about the same time. From these the Black Death spread inland. It is now also clear that the whole of England was  conquered in the course of 1349  because, in the late autumn of 1348, ship transport opened a northern front in England for the Black Death, apparently in Grimsby.
 
+    <!-- Portfolio Grid Section -->
+    <section id="portfolio">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Portfolio</h2>
+                    <hr class="star-primary">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4 portfolio-item">
+                    <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <i class="fa fa-search-plus fa-3x"></i>
+                            </div>
+                        </div>
+                        <img src="img/portfolio/cabin.png" class="img-responsive" alt="">
+                    </a>
+                </div>
+                <div class="col-sm-4 portfolio-item">
+                    <a href="#portfolioModal2" class="portfolio-link" data-toggle="modal">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <i class="fa fa-search-plus fa-3x"></i>
+                            </div>
+                        </div>
+                        <img src="img/portfolio/cake.png" class="img-responsive" alt="">
+                    </a>
+                </div>
+                <div class="col-sm-4 portfolio-item">
+                    <a href="#portfolioModal3" class="portfolio-link" data-toggle="modal">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <i class="fa fa-search-plus fa-3x"></i>
+                            </div>
+                        </div>
+                        <img src="img/portfolio/circus.png" class="img-responsive" alt="">
+                    </a>
+                </div>
+                <div class="col-sm-4 portfolio-item">
+                    <a href="#portfolioModal4" class="portfolio-link" data-toggle="modal">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <i class="fa fa-search-plus fa-3x"></i>
+                            </div>
+                        </div>
+                        <img src="img/portfolio/game.png" class="img-responsive" alt="">
+                    </a>
+                </div>
+                <div class="col-sm-4 portfolio-item">
+                    <a href="#portfolioModal5" class="portfolio-link" data-toggle="modal">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <i class="fa fa-search-plus fa-3x"></i>
+                            </div>
+                        </div>
+                        <img src="img/portfolio/safe.png" class="img-responsive" alt="">
+                    </a>
+                </div>
+                <div class="col-sm-4 portfolio-item">
+                    <a href="#portfolioModal6" class="portfolio-link" data-toggle="modal">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <i class="fa fa-search-plus fa-3x"></i>
+                            </div>
+                        </div>
+                        <img src="img/portfolio/submarine.png" class="img-responsive" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
 The early arrival of the Black Death in England and the rapid spread to its southeastern regions shaped much of the pattern of spread in Northern Europe. The plague must have arrived in Oslo in the autumn of 1348, and must have come with a ship from south-eastern England, which had lively commercial contacts with Norway. The outbreak of the Black Death in Norway took place before the disease had managed to penetrate southern Germany, again illustrating the great importance of transportation by ship and the relative slowness of spread by land. The outbreak in Oslo was soon stopped by the advent of winter weather, but it broke out again in the early spring.  Soon it spread out of Oslo along the main roads inland and on both sides of the Oslofjord. Another independent introduction of contagion occurred in early July 1349 in the town of Bergen; it arrived in a ship from England, probably from King’s Lynn. The opening of the second plague front was the reason that all Norway could be conquered in the course of 1349. It disappeared completely with the advent of winter, the last victims died at the turn of the year.
 
