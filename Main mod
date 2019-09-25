@@ -1,4 +1,4 @@
-```js
+```node
 e = function(i,type){
   var gems = 0;
   var level = Math.trunc(type / 100);  
