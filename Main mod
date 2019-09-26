@@ -1,4 +1,3 @@
-<script type ="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script> 
 e = function(i,type){
   var gems = 0;
   var level = Math.trunc(type / 100);  
