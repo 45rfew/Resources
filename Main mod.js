@@ -506,14 +506,11 @@ var Button = function(x, y, width, height, id, fill, bordercol, textcol, clickab
   components = [
   {type:"box",position:[0,0,0,0],fill:fill,stroke:bordercol,width:0},
   {type:"text",position:[0,0,78,20],value:text,color:textcol,align:align},
-  //{ type: "text",position:[45,45,60,40],value:"["+shortcut+"]",color:tcol}
   ];
-
   for(var ship of game.ships){
     if(ship.alive !== true){
       visible = false;
-    }
-    else{
+    } else {
       visible = true;
     }
     ship.setUIComponent({
@@ -526,34 +523,6 @@ var Button = function(x, y, width, height, id, fill, bordercol, textcol, clickab
     });
   }
 };
-
-/* 
-var MainButton = function(x, y, width, height, id, fill, clickable, shortcut, visible){
-  components = [];
-    components = [
-    {type:"box",position:[39,51,52,30],fill:fill,stroke:"#000000",width:3},
-    {type:"text",position:[39.5,50,12,6],value:"Welcome!",color:"#000000",align:"left"},
-    {type:"text",position:[42.4,55.5,20,15],value:"Here are some tips to get you started:",align:"left"},
-    {type:"text",position:[44,58,16,21],value:"Don't die.",align:"left"},    //{type:"text",position:[44,58,16,1],value:"Aliens will be the main source of gems here."},{type:"text",position:[48.2,60.5,16,1],value:"You'll find them in the center of the map, where the sun is."},    {type:"text",position:[53.8,6316,1],value:"If you need, you can also mine the asteroids that are floating around the place."},    {type:"text",position:[57.3,65.5,16,1],value:"You can reset your ship back into tier one, just press the reset button in the top left corner."},    {type:"text",position:[55.2,68,16,1],value:"You can toggle between healing and offensive lasers by pressing the healer button."},    {type:"text",position:[46.3,70.5,16,1],value:"Survival mode triggers after 15 minutes, be careful."},    {type:"text",position:[53.55,73,16,1],value:"Your lasers won't do anything to other players, not unitl survival mode starts."},{type:"text",position:[46.12,75.5,16,1],value:"Don't shoot the blue orb in the center, just... don't."},    
-    {type:"text",position:[49,65,19,21],value:"Plz don't attempt to kill each other before survival mode starts.",align:"left"},    
-    {type:"text",position:[54,75,16,21],value:"Just wait a bit kay",align:"left"},     
-    {type:"text",position:[40,71,27,1],value:"Good luck and have fun!",align:"left"},
-    {type:"text",position:[79,77,16,3],value:"Okay"},    
-    ];
-    for (let ship of game.ships){
-      if (ship.type == 102){
-        ship.setUIComponent({
-        id:id,
-        position:[x,y,width,height],
-        clickable: clickable,
-        shortcut: shortcut,      
-        visible: visible,
-        components: components
-      });
-    }
-  }  
-};
-*/ 
 
 var firework = function(x, y, alienAmount, alienCode, alienLevel, alienCrystaldrop, asteroidAmount) {
   for(let i = 0; i<alienAmount; i++){
