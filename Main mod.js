@@ -175,24 +175,21 @@ function tick(game){
           if (game.step % asteroid_step === 0){
             game.addAsteroid({x:Math.cos(Math.random() * Math.PI * 2) * 360,y: Math.sin(Math.random() * Math.PI * 2) * 360,vx: Math.cos(Math.random() * Math.PI * 2) * 0.5,vy: Math.sin(Math.random() * Math.PI * 2) * 0.5,size: Math.random() * (80 - 40 + 1) + 40});
           }
-        }
+        } 
+        var missile_tick = 720;
+        var torpedo_tick = 1800; 
+        var heavy_mine_tick = 2200;
         if (game.collectibles.length < 40){
-          var missile_tick;   
-          var torpedo_tick;    
-          var heavy_mine_tick;
-          if (game.step < 10790){
-            missile_tick = 720;   
-            torpedo_tick = 1800;    
-            heavy_mine_tick = 2200;            
-          } else if (game.step >= 10800 && game.step % 60 === 0){
-            missile_tick = 350;   
-            torpedo_tick = 700;    
-            heavy_mine_tick = 1500;                
-          } else if (game.step >= 18000 && game.step % 60 === 0){
-            torpedo_tick = 350;           
-            heavy_mine_tick = 450;               
-          } else if (game.step >= 27000 && game.step % 60 === 0){
-            heavy_mine_tick = 350;          
+          if (game.step % 60 === 0){ 
+            while (game.step >= 10800){
+              missile_tick -= 60;
+            }
+            while (game.step >= 18000){            
+              torpedo_tick -= 60;
+            }
+            while (game.step >= 27000){            
+              heavy_mine_tick -= 60;
+            }
           }
           if (game.step % 40 === 0){
             game.addCollectible({code: 10,x: Math.cos(Math.random() * Math.PI * 2) * 50,y: Math.sin(Math.random() * Math.PI * 2) * 50});
