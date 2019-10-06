@@ -142,6 +142,9 @@ this.options = {
 
 function tick(game){
   if (game.ships.length !== 0){
+    var missile_tick = 720;
+    var torpedo_tick = 1800; 
+    var heavy_mine_tick = 2200;    
     if (game.step % 15 === 0){
       var ALhex; 
       if (game.aliens.length > Math.round(game.options.map_size / 3 * 1.15)){
@@ -176,18 +179,15 @@ function tick(game){
             game.addAsteroid({x:Math.cos(Math.random() * Math.PI * 2) * 360,y: Math.sin(Math.random() * Math.PI * 2) * 360,vx: Math.cos(Math.random() * Math.PI * 2) * 0.5,vy: Math.sin(Math.random() * Math.PI * 2) * 0.5,size: Math.random() * (80 - 40 + 1) + 40});
           }
         } 
-        var missile_tick = 720;
-        var torpedo_tick = 1800; 
-        var heavy_mine_tick = 2200;
         if (game.collectibles.length < 40){
           if (game.step % 60 === 0){ 
-            while (game.step >= 10800){
+            if (game.step >= 10800){
               missile_tick -= 60;
             }
-            while (game.step >= 18000){            
+            else if (game.step >= 18000){            
               torpedo_tick -= 60;
             }
-            while (game.step >= 27000){            
+            else if (game.step >= 27000){            
               heavy_mine_tick -= 60;
             }
           }
@@ -336,7 +336,7 @@ function game_start(game){
     echo("Map size: " + game.options.map_size);  
     echo("Map name: " + game.options.map_name);
     echo("Maximum aliens: " + Math.round(game.options.map_size / 3));
-    for(var i = 0; i<5; i++){
+    for (var i = 0; i<5; i++){
       game.addAsteroid({x:Math.cos(Math.random() * Math.PI * 2) * 360,y:Math.sin(Math.random() * Math.PI * 2) * 360,vx:Math.cos(Math.random() * Math.PI * 2) * 0.5,vy:Math.sin(Math.random() * Math.PI * 2) * 0.5,size:Math.random() * (80 - 40 + 1) + 40});
     }
   }
@@ -348,7 +348,7 @@ this.tick = game_start;
 this.event = function(event, game){
   var killer = event.killer;
   var ship = event.ship;      
-  switch (event.name) {
+  switch (event.name){
     case "alien_destroyed":
       var alien = event.alien;
       if (game.step <= 43100) {
@@ -504,15 +504,15 @@ var Button = function(x, y, width, height, id, fill, bordercol, textcol, clickab
   {type:"box",position:[0,0,0,0],fill:fill,stroke:bordercol,width:0},
   {type:"text",position:[0,0,78,20],value:text,color:textcol,align:align},
   ];
-  for(var ship of game.ships){
-    if(ship.alive !== true){
+  for (var ship of game.ships){
+    if (ship.alive !== true){
       visible = false;
     } else {
       visible = true;
     }
     ship.setUIComponent({
-      id:id,
-      position:[x,y,width,height],
+      id: id,
+      position: [x,y,width,height],
       clickable: clickable,
       shortcut: shortcut,      
       visible: visible,
