@@ -119,7 +119,7 @@ this.options = {
   ships: ships,
   reset_tree: true,
   vocabulary: vocabulary,
-  survival_time: 15 - neg_surv,
+  survival_time: 12,
   starting_ship: 101,
   starting_ship_maxed: true, 
   custom_map: map,
@@ -157,7 +157,7 @@ function tick(game){
         AShex = "#FFFFFF";
       }
       Button(89, 42, 13, 15, "Asteroid", "#FFFFFF", "#00000000", AShex, false, null, true, "Asteroid count:" + game.asteroids.length,"right");
-      if (game.step <= (43100 - surv_neg_time)){
+      if (game.step <= (43100 - 10800)){
         var max = Math.round(game.options.map_size / 3);
         var spawn_delay = game.step / (885 / 1.5);
         if (game.aliens.length < max) { 
@@ -276,7 +276,7 @@ function tick(game){
   if (game.step % 400 === 0){
     Button(26.5, 10, 60, 25, "quote", "#FFFFFF", "#00000000", "#FFFFFF", false, null, true,quotes[Math.floor(quotes.length * Math.random())],null);
   }
-  if (game.step == (43200 - surv_neg_time)){
+  if (game.step == (43200 - 10800)){
     for (let i = 0; i < 1; i++){
       if (game.step % 30 === 0){
         killaliensNasteroids(true, null, null, null, false);
@@ -291,7 +291,7 @@ function tick(game){
       } 
     }
   }  
-  if (game.step >= (43800 - surv_neg_time) && game.step % 60 === 0){
+  if (game.step >= (43800 - 10800) && game.step % 60 === 0){
     for (let alien of game.aliens){
       if (game.aliens.length === 1){  
         if (!game.custom.final_boss){
@@ -333,8 +333,8 @@ function tick(game){
 }
 
 var survival_step;
-var neg_surv = 3;
-var surv_neg_time = neg_surv * 3600;
+//var neg_surv = 3;
+//var surv_neg_time = neg_surv * 3600;
 
 function game_start(game){
   if (!game.custom.init){
@@ -357,7 +357,7 @@ this.event = function(event, game){
   switch (event.name){
     case "alien_destroyed":
       var alien = event.alien;
-      if (game.step <= (43100 - surv_neg_time)) {
+      if (game.step <= (43100 - 10800)) {
         if (alien !== null && alien.code == 10 && alien.level === 1) {
           game.addAlien({code:10,level:0,x:alien.x + alien.vy * 3,y:alien.y + alien.vx * 3,vx: -1 * alien.vy,vy:alien.vx,crystal_drop:10,points:10});
         }
@@ -407,7 +407,7 @@ this.event = function(event, game){
           }             
         }
       }
-      if (game.step <= (53940 - surv_neg_time)){        
+      if (game.step <= (53940 - 10800)){        
         if (alien !== null && alien.code == 19 && alien.level === 2){
           for(let i = 0; i<2; i++){         
             game.addAlien({code:19,level:1,x:alien.x + alien.vy * 3,y:alien.y + alien.vx * 3,vx: -1 * alien.vy,vy:alien.vx,crystal_drop:650,points:2500});
