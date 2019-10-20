@@ -81,7 +81,7 @@ ships.push(Kfir_C_7_606);
 ships.push(Vulcan_607);
 ships.push(Lancephorhynchus_608);
 ships.push(Galateus_701);
-ships.push(V_Vanquisher_702);
+ships.push(Vanquisher_702);
 ships.push(Epiloguer_703);
 ships.push(Raigeki_704);
 ships.push(Nirvana_705);
@@ -333,8 +333,6 @@ function tick(game){
 }
 
 var survival_step;
-//var neg_surv = 3;
-//var surv_neg_time = neg_surv * 3600;
 
 function game_start(game){
   if (!game.custom.init){
