@@ -1,6 +1,6 @@
 e = function(i,type){
-  var gems = 0;
-  var level = Math.trunc(type / 100);  
+  let gems = 0;
+  let level = Math.trunc(type / 100);  
   if (level === 6){
     gems = 720;    
   }
@@ -88,6 +88,17 @@ ships.push(Pusat_706);
 ships.push(Netflix_707);
 ships.push(Cairngorgon_708);
 
+var shields = {};
+for (var ship of ships){
+  var typespec = JSON.parse(ship).typespec;
+  var type = typespec.level * 100 + typespec.model;
+  var data = {};
+  data.level = typespec.level;
+  data.min = typespec.specs.shield.capacity[0];
+  data.delta = typespec.specs.shield.capacity[1] - data.min;
+  shields[type] = data;
+}
+
 var map = "";
 
 var music = ["red_mist.mp3","civilisation.mp3","procedurality.mp3","argon.mp3","crystals.mp3"];
@@ -140,6 +151,68 @@ this.options = {
 };
 
 function tick(game){
+  for (let ship of game.ships){
+    if (!ship.custom.buttons){
+      ship.custom.buttons = true;    //this stuff doesn't do anything
+      Button(2.2, 31, 20, 20, "timer", "#FFFFFF", "#00000000", Thex, false, null, false, "Time till survival: " + minutes + ":" + seconds,null);
+      Button(91.2, 40, 10, 11.5, "Alien", "#FFFFFF", "#00000000", ALhex, false, null, false, "Alien count:" + game.aliens.length,"right");
+      Button(89, 42, 13, 15, "Asteroid", "#FFFFFF", "#00000000", AShex, false, null, false, "Asteroid count:" + game.asteroids.length,"right");
+      clickableButton(0,"reset",false,"Reset");
+      clickableButton(8,"healer",false,"Healer");    
+      Button(26.5, 10, 60, 25, "quote", "#FFFFFF", "#00000000", "#FFFFFF", false, null, false,quotes[Math.floor(quotes.length * Math.random())],null);
+      ship.setUIComponent({
+        id: "shield",
+        position: [5.5,33,10,8],
+        clickable: true,
+        visible: false,
+        components: [
+          {type:"box",position:[0,25,100,50],fill:"#00000000",stroke:"#000000",width:4},
+          {type: "text",position:[10,35,80,30],value:"Shield refill",color:"#FFFFFF"}
+        ]
+      });
+      ship.setUIComponent({
+        id: "energy",
+        position: [5.5,40,10,8],
+        clickable: true,
+        visible: false,
+        components: [
+          {type:"box",position:[0,25,100,50],fill:"#00000000",stroke:"#000000",width:4},
+          {type: "text",position:[10,35,80,30],value:"Energy refill",color:"#FFFFFF"}
+        ]
+      });         
+      ship.setUIComponent({
+        id: "secondary",
+        position: [5.5,47,10,8],
+        clickable: true,
+        visible: false,
+        components: [
+          {type:"box",position:[0,25,100,50],fill:"#00000000",stroke:"#000000",width:4},
+          {type: "text",position:[10,35,80,30],value:"Random secondary",color:"#FFFFFF"}
+        ]
+      });
+      ship.setUIComponent({
+        id: "crystals",
+        position: [5.5,54,10,8],
+        clickable: true,
+        visible: false,
+        components: [
+          {type:"box",position:[0,25,100,50],fill:"#00000000",stroke:"#000000",width:4},
+          {type: "text",position:[10,35,80,30],value:"Crystals",color:"#FFFFFF"}
+        ]
+      }); 
+      ship.setUIComponent({
+        id: "Stat sheet",
+        position: [85.7,46,17,13],
+        clickable: false,
+        visible: false,
+        components: [
+          {type: "text",position: [0,0,78,20],color: "#FFFFFF",value: "Aliens killed:" + ship.custom_a,align:"right"},
+          {type: "text",position: [0,16,78,20],color: "#FFFFFF",value: "Asteroids destroyed:" + ship.custom_b,align:"right"},
+          {type: "text",position: [0,32,78,20],color: "#FFFFFF",value: "Players killed:" + ship.custom_c,align:"right"}
+        ]
+      });     
+    }
+  }
   if (game.ships.length !== 0 && game.step > 5400){
     Button(126.5, 10, 60, 25, "spawn interval", "#FFFFFF", "#00000000", "#FFFFFF", false, null, false,"",null);
     Button(128, 15, 60, 20, "spawn interval timer", "#FFFFFF", "#00000000", "#FFFFFF", false, null, false, "",null);
@@ -168,7 +241,7 @@ function tick(game){
       Button(89, 42, 13, 15, "Asteroid", "#FFFFFF", "#00000000", AShex, false, null, true, "Asteroid count:" + game.asteroids.length,"right");
       if (game.step <= (43100 - 10800)){
         var max = Math.round(game.options.map_size / 3);
-        var spawn_delay = game.step / (85 / 1.5);
+        var spawn_delay = game.step / (885 / 1.5);
         if (game.aliens.length < max) { 
           alien.x = Math.cos(Math.random() * Math.PI * 2) * 25;
           alien.y = Math.sin(Math.random() * Math.PI * 2) * 25;
@@ -246,7 +319,6 @@ function tick(game){
   } 
   if (game.step == 5400){
     Button(26.5, 10, 60, 25, "spawn interval", "#FFFFFF", "#00000000", "#FFFFFF", false, null, false,"Waiting for more players",null);
-    
     if (!game.custom.interval){
       game.custom.interval = true;
       for (let i = 0; i<5; i++){
@@ -257,8 +329,120 @@ function tick(game){
   if (game.step % 30 === 0){
     for (let ship of game.ships){
       if (game.step > 5400){
-        Button(2, 29, 10, 11.5, "reset", "#FFFFFF", "#00000000", "#FFFFFF", true, null, true, "Reset",null);
-        Button(10, 29, 10, 11.5, "healing", "#FFFFFF", "#00000000", "#FFFFFF", true, null, true, "Healer",null);
+        clickableButton(0,"reset",true,"Reset");
+        clickableButton(8,"healer",true,"Healer");
+        ship.custom.not_dead = true;  
+        if (!ship.custom.facilityButton && ship.custom.not_dead === true){
+          ship.custom.facilityButton = true;
+          ship.custom.hexA = "#00ff00";
+          ship.custom.hexB = "#00ff00";
+          ship.custom.hexC = "#00ff00";
+          ship.custom.hexD = "#00ff00";
+          ship.setUIComponent({
+            id: "shield",
+            position: [5.5,33,10,8],
+            clickable: true,
+            visible: true,
+            components: [
+              {type:"box",position:[0,25,100,50],fill:"#00000000",stroke:ship.custom.hexA,width:4},
+              {type: "text",position:[10,35,80,30],value:"Shield refill",color:"#FFFFFF"}
+            ]
+          });
+          ship.setUIComponent({
+            id: "energy",
+            position: [5.5,40,10,8],
+            clickable: true,
+            visible: true,
+            components: [
+              {type:"box",position:[0,25,100,50],fill:"#00000000",stroke:ship.custom.hexB,width:4},
+              {type: "text",position:[10,35,80,30],value:"Energy refill",color:"#FFFFFF"}
+            ]
+          });         
+          ship.setUIComponent({
+            id: "secondary",
+            position: [5.5,47,10,8],
+            clickable: true,
+            visible: true,
+            components: [
+              {type:"box",position:[0,25,100,50],fill:"#00000000",stroke:ship.custom.hexC,width:4},
+              {type: "text",position:[10,35,80,30],value:"Random secondary",color:"#FFFFFF"}
+            ]
+          });
+          ship.setUIComponent({
+            id: "crystals",
+            position: [5.5,54,10,8],
+            clickable: true,
+            visible: true,
+            components: [
+              {type:"box",position:[0,25,100,50],fill:"#00000000",stroke:ship.custom.hexD,width:4},
+              {type: "text",position:[10,35,80,30],value:"Crystals",color:"#FFFFFF"}
+            ]
+          }); 
+        }
+        if (ship.custom.shield === true && game.step % 1800 === 0){
+          if (ship.custom.hexA === "#ff0000"){
+            ship.custom.hexA = "#00ff00";
+            ship.custom.shield = false;
+            ship.setUIComponent({
+              id: "shield",
+              position: [5.5,33,10,8],
+              clickable: true,
+              visible: true,
+              components: [
+                {type:"box",position:[0,25,100,50],fill:"#00000000",stroke:ship.custom.hexA,width:4},
+                {type: "text",position:[10,35,80,30],value:"Shield refill",color:"#FFFFFF"}
+              ]
+            }); 
+          }
+        }      
+        if (ship.custom.energy === true && game.step % 1800 === 0){
+          if (ship.custom.hexB === "#ff0000"){
+            ship.custom.hexB = "#00ff00";
+            ship.custom.energy = false;
+            ship.setUIComponent({
+              id: "energy",
+              position: [5.5,40,10,8],
+              clickable: true,
+              visible: true,
+              components: [
+                {type:"box",position:[0,25,100,50],fill:"#00000000",stroke:ship.custom.hexB,width:4},
+                {type: "text",position:[10,35,80,30],value:"Energy refill",color:"#FFFFFF"}
+              ]
+            });   
+          }
+        }
+        if (ship.custom.secondary === true && game.step % 1800 === 0){
+          if (ship.custom.hexC === "#ff0000"){
+            ship.custom.hexC = "#00ff00";
+            ship.custom.secondary = false;
+            ship.setUIComponent({
+              id: "secondary",
+              position: [5.5,47,10,8],
+              clickable: true,
+              visible: true,
+              components: [
+                {type:"box",position:[0,25,100,50],fill:"#00000000",stroke:ship.custom.hexC,width:4},
+                {type: "text",position:[10,35,80,30],value:"Random secondary",color:"#FFFFFF"}
+              ]
+            });      
+          }
+        }
+        if (ship.custom.crystals === true && game.step % 1800 === 0){
+          if (ship.custom.hexD === "#ff0000"){
+            ship.custom.hexD = "#00ff00";
+            ship.custom.crystals = false;
+            ship.setUIComponent({
+              id: "crystals",
+              position: [5.5,54,10,8],
+              clickable: true,
+              visible: true,
+              components: [
+                {type:"box",position:[0,25,100,50],fill:"#00000000",stroke:ship.custom.hexD,width:4},
+                {type: "text",position:[10,35,80,30],value:"Crystals",color:"#FFFFFF"}
+              ]
+            });      
+          }
+        }      
       }
       if (!ship.custom.init){
         ship.custom.init = true;
@@ -280,8 +464,8 @@ function tick(game){
         ship.set({team:ship.id * 1e-6, x:Math.cos(Math.random() * Math.PI * 2) * 360, y:Math.sin(Math.random() * Math.PI * 2) * 360, healing:false, hue:1, invulnerable:300, generator:3000, shield:3000});
         if (ship.custom.init){
           Button(0, 0, 0, 0, "timer", "#00000000", "#00000000", "#00000000", false, null, false, ".",null);
-          Button(0, 0, 0, 0, "reset", "#00000000", "#00000000", "#00000000", false, null, false, "Reset",null);
-          Button(0, 0, 0, 0, "healing", "#00000000", "#00000000", "#00000000", false, null, false, "Healer",null);
+          clickableButton(0,"reset",false,"Reset");
+          clickableButton(8,"healer",false,"Healer");
         }
       }
     }
@@ -292,7 +476,7 @@ function tick(game){
       firework(0, 0, null, null, null, null, 50);
       for (let i = 0; i < 40; i++){ 
         var dir = Math.random()*2*Math.PI;
-        game.addAlien({code:firework_aliens_code[Math.floor(Math.random() * firework_aliens_code.length)], level:Math.floor(Math.random() * 3), crystal_drop:75,vx:Math.sin(dir),vy:Math.cos(dir)});
+        game.addAlien({code:firework_aliens_codes[Math.floor(Math.random() * firework_aliens_codes.length)], level:Math.floor(Math.random() * 3), crystal_drop:75,vx:Math.sin(dir),vy:Math.cos(dir)});
       } 
     }        
   }
@@ -327,9 +511,35 @@ function tick(game){
   }
   if (game.step % 30 === 0 && game.step > 5400){
     for (let ship of game.ships){
-      if (ship.alive === false){  
+      if (ship.alive === false){
+        ship.setUIComponent({
+          id: "shield",
+          visible: false,
+        });
+        ship.setUIComponent({
+          id: "energy",
+          visible: false,
+        });
+        ship.setUIComponent({
+          id: "secondary",
+          visible: false,
+        });
+        ship.setUIComponent({
+          id: "crystals",
+          visible: false,
+        });  
+        ship.custom.not_dead = false;         
         ship.setUIComponent({id: "Stat sheet",position: [0,0,0,0],clickable: false,visible: false});
-      } else {
+      } else {    
+        if (ship.custom_a === undefined){
+          ship.custom_a = 0;
+        }  
+        if (ship.custom_b === undefined){
+          ship.custom_b = 0;
+        } 
+        if (ship.custom_c === undefined){
+          ship.custom_c = 0;
+        }    
         ship.setUIComponent({
           id: "Stat sheet",
           position: [85.7,46,17,13],
@@ -341,15 +551,7 @@ function tick(game){
             {type: "text",position: [0,32,78,20],color: "#FFFFFF",value: "Players killed:" + ship.custom_c,align:"right"}
           ]
         });
-        if (ship.custom_a === undefined){
-          ship.custom_a = 0;
-        }  
-        if (ship.custom_b === undefined){
-          ship.custom_b = 0;
-        } 
-        if (ship.custom_c === undefined){
-          ship.custom_c = 0;
-        }           
+        ship.custom.not_dead = true; 
       }
     }    
   }  
@@ -362,13 +564,13 @@ function tick(game){
           let steps = 5400 - game.step;
           let minutes = Math.floor(steps / 3600);
           let seconds = Math.floor((steps % 3600) / 60);
-          if (seconds < 10){
-            seconds = "0" + seconds;
-          }
-          if (minutes < 10){
-            minutes = "0" + minutes;
-          }      
-          Button(28, 15, 60, 20, "spawn interval timer", "#FFFFFF", "#00000000", "#FFFFFF", false, null, true, minutes + ":" + seconds,null);
+            if (seconds < 10){
+              seconds = "0" + seconds;
+            }
+            if (minutes < 10){
+              minutes = "0" + minutes;
+            }      
+            Button(28, 15, 60, 20, "spawn interval timer", "#FFFFFF", "#00000000", "#FFFFFF", false, null, true, minutes + ":" + seconds,null);
           }
         }    
       }      
@@ -483,22 +685,20 @@ this.event = function(event, game){
       killer.custom_a++;
       killer.setUIComponent({
         id: "Stat sheet",
-        position: [85.7,46,17,13],
-        clickable: false,
+        position: [85.3,46.5,17.8,13],
         visible: true,
         components: [
           {type: "text",position: [0,0,78,20],color: "#FFFFFF",value: "Aliens killed:" + killer.custom_a,align:"right"},
           {type: "text",position: [0,16,78,20],color: "#FFFFFF",value: "Asteroids destroyed:" + killer.custom_b,align:"right"},
           {type: "text",position: [0,32,78,20],color: "#FFFFFF",value: "Players killed:" + killer.custom_c,align:"right"}
         ]
-      });
+      });      
       break;     
     case "asteroid_destroyed":
       killer.custom_b++;
       killer.setUIComponent({
         id: "Stat sheet",
         position: [85.3,46.5,17.8,13],
-        clickable: false,
         visible: true,
         components: [
           {type: "text",position: [0,0,78,20],color: "#FFFFFF",value: "Aliens killed:" + killer.custom_a,align:"right"},
@@ -512,7 +712,6 @@ this.event = function(event, game){
       killer.setUIComponent({
         id: "Stat sheet",
         position: [90.45,48,11,13],
-        clickable: false,
         visible: true,
         components: [
           {type: "text",position: [0,0,78,20],color: "#FFFFFF",value: "Aliens killed:" + killer.custom_a,align:"right"},
@@ -522,17 +721,113 @@ this.event = function(event, game){
       });
       break;   
     case "ui_component_clicked":
-      var component = event.id;
+      let component = event.id;
       if (component == "reset"){
         resetShip(ship);
       } 
       else if (component == "healing"){
         healShip(ship);
       }
+      else if (component == "shield"){
+        ship.custom.hexA = "#ff0000";   
+        ship.setUIComponent({
+          id: "shield",
+          position: [5.5,33,10,8],
+          clickable: true,
+          visible: true,
+          components: [
+            {type:"box",position:[0,25,100,50],fill:"#00000000",stroke:ship.custom.hexA,width:4},
+            {type: "text",position:[10,35,80,30],value:"Shield refill",color:"#FFFFFF"}
+          ]
+        });         
+        var shield = shields[ship.type];
+        var stat = Math.trunc(ship.stats / 1e7);
+        var shield_cap = shield.delta * stat / shield.level + shield.min;      
+        ship.set({shield:ship.shield+shield_cap/4});
+        ship.custom.shield = true;
+      }         
+      else if (component == "energy"){
+        ship.set({generator:3000}); 
+        ship.custom.hexB = "#ff0000";
+        ship.setUIComponent({
+          id: "energy",
+          position: [5.5,40,10,8],
+          clickable: true,
+          visible: true,
+          components: [
+            {type:"box",position:[0,25,100,50],fill:"#00000000",stroke:ship.custom.hexB,width:4},
+            {type: "text",position:[10,35,80,30],value:"Energy refill",color:"#FFFFFF"}
+          ]
+        });           
+        ship.custom.energy = true;
+      }        
+      else if (component == "secondary"){
+        if (ship.custom.hexC === "#00ff00"){
+          ship.custom.hexC = "#ff0000";
+          ship.setUIComponent({
+            id: "secondary",
+            position: [5.5,47,10,8],
+            clickable: true,
+            visible: true,
+            components: [
+              {type:"box",position:[0,25,100,50],fill:"#00000000",stroke:ship.custom.hexC,width:4},
+              {type: "text",position:[10,35,80,30],value:"Random secondary",color:"#FFFFFF"}
+            ]
+          });
+          ship.custom.secondary = true;          
+          for (let i = 0; i<Math.floor(Math.random() * 3) + 1; i++){    
+            let spread = 8;
+            let x = ship.x + Math.random()*spread*2-spread;
+            let y = ship.y + Math.random()*spread*2-spread;        
+            game.addCollectible({code:secondary_codes[Math.floor(Math.random() * secondary_codes.length)],x:x,y:y});
+          }
+        }
+      } else if (component == "crystals"){
+        if (ship.custom.hexD === "#00ff00"){   
+          ship.custom.hexD = "#ff0000";
+          ship.setUIComponent({
+            id: "crystals",
+            position: [5.5,54,10,8],
+            clickable: true,
+            visible: true,
+            components: [
+              {type:"box",position:[0,25,100,50],fill:"#00000000",stroke:ship.custom.hexD,width:4},
+              {type: "text",position:[10,35,80,30],value:"Crystals",color:"#FFFFFF"}
+            ]
+          });
+          ship.custom.crystals = true;      
+          let crystals = 0;
+          let ship_level = Math.trunc(ship.type/100);  
+          if (ship_level === 1){
+            crystals = 20;
+          } else
+          if (ship_level === 2){
+            crystals = 80;
+          } else
+          if (ship_level === 3){
+            crystals = 180;
+          } else
+          if (ship_level === 4){
+            crystals = 320;
+          } else
+          if (ship_level === 5){
+            crystals = 500;
+          } else
+          if (ship_level === 6){
+            crystals = 720;
+          } else {
+            crystals = 980;
+          }
+          if (ship.crystals + crystals / 4 > crystals){
+            ship.set({crystals:crystals});
+          } else {
+            ship.set({crystals:ship.crystals + crystals / 4});
+          }   
+        }
+      }
     break;
   }
 };
-
 
 var alien_types = [
   {code:10,level:0,points:10,crystal_drop:10},  
@@ -547,7 +842,9 @@ var alien_types = [
   {code:16,level:3,points:1750,crystal_drop:700}
 ];
 
-var firework_aliens_code = [14,17,18];  
+var firework_aliens_codes = [14,17,18];  
+
+var secondary_codes = [11,12,20,21];
 
 var quotes = [
   "A bargain is something you don’t need at a price you can’t resist.",
@@ -572,8 +869,7 @@ var quotes = [
 var Button = function(x, y, width, height, id, fill, bordercol, textcol, clickable, shortcut, visible, text, align){
   components = [];
   components = [
-  {type:"box",position:[0,0,0,0],fill:fill,stroke:bordercol,width:0},
-  {type:"text",position:[0,0,78,20],value:text,color:textcol,align:align},
+    {type:"text",position:[0,0,78,20],value:text,color:textcol,align:align},
   ];
   for (var ship of game.ships){
     if (ship.alive !== true){
@@ -592,7 +888,28 @@ var Button = function(x, y, width, height, id, fill, bordercol, textcol, clickab
   }
 };
 
-var firework = function(x, y, alienAmount, alienCode, alienLevel, alienCrystaldrop, asteroidAmount) {
+function clickableButton(x, id, visible, text){
+  components = [];
+  components = [
+    {type: "text",position:[10,35,80,30],value:text,color:"#FFFFFF"}
+  ];
+  for (var ship of game.ships){
+    if (ship.alive !== true){
+      visible = false;
+    } else {
+      visible = true;
+    }
+    ship.setUIComponent({
+      id: id,
+      position: [2+x,26,8.5,8.5],
+      clickable: true,
+      visible: visible,
+      components: components
+    });
+  }
+}
+
+function firework(x, y, alienAmount, alienCode, alienLevel, alienCrystaldrop, asteroidAmount) {
   for(let i = 0; i<alienAmount; i++){
     let dir = Math.random()*2*Math.PI;
     game.addAlien({code:alienCode, level: alienLevel, x:x, y:y, vx:Math.sin(dir),vy:Math.cos(dir),crystal_drop:alienCrystaldrop});
@@ -601,9 +918,9 @@ var firework = function(x, y, alienAmount, alienCode, alienLevel, alienCrystaldr
     let dir = Math.random()*2*Math.PI;
     game.addAsteroid({size:10, x:x + Math.sin(dir)*20, y:y + Math.cos(dir)*20,vx:Math.sin(dir),vy:Math.cos(dir)});
   }  
-};
+}
  
-var killaliensNasteroids = function(alienKill, x, y, asteroidSize, asteroidKill){
+function killaliensNasteroids(alienKill, x, y, asteroidSize, asteroidKill){
   for(let i=0; i<game.aliens.length; i++){ 
     game.aliens[i].set({kill:alienKill});
   }
@@ -613,19 +930,19 @@ var killaliensNasteroids = function(alienKill, x, y, asteroidSize, asteroidKill)
   for(let i=0; i<game.asteroids.length; i++){
     game.asteroids[i].set({kill:asteroidKill});
   }  
-};
+}
  
-var resetShip = function(ship){
+function resetShip(ship){
   if (ship != null) {
     ship.set({type:101});
   }  
-};
+}
  
-var healShip = function(ship){
+function healShip(ship){
   if (ship != null){
     ship.set({healing:!ship.healing});
   }
-};
+}
 
 var grey_alien = {
 id: "grey alien",
