@@ -1,7 +1,5 @@
 var This_mod = "Money's dueling mod";
  
-var duel_rooms = false;
-//Set duel rooms to true if you want duel rooms and vice versa
 var strafe = false;
 //Set strafe to true if you want strafe and vice versa
  
@@ -30,22 +28,6 @@ hide = function(){
 //Hides the instructor for all players
  
 //Don't change anything below this line unless you know what you're doing kay
-var a;
-var b;
-var aa;
-var bb;
- 
-if (duel_rooms === true){
-  a = "Duel room 1";
-  b = "Duel room 2";
-  aa = "\u00be";
-  bb = "\u00be";
-} else {
-  a = "Go away";
-  b = "Noob";
-  aa = "\u007f";
-  bb = "\u004a";
-}
  
 if (strafe === true){
   strafe = 1;
@@ -83,8 +65,7 @@ var vocabulary = [
   { text: "Heal", icon:"\u0037", key:"H" },  
   { text: "GG", icon:"\u00a3", key:"G" },
   { text: "Upgrade", icon:"\u0078", key:"L" },  
-  { text: a, icon:aa, key:"R"},
-  { text: b, icon:bb, key:"V"},
+  { text: "Lag", icon:"\u00be", key:"V"},
 ];
  
 var map = "";
@@ -144,27 +125,12 @@ this.tick = function(game) {
 //:D
  
 this.event = function(event, game){
-  var visibleA;
-  var visibleB;  
-  var A;
-  var B;
   var ship = event.ship;  
   var ship_level = Math.trunc(ship.type / 100);
   var max_crystals = 980;    
   var new_type;  
   var tree = ship.custom.tree;
   var index = -1;
-  if (duel_rooms === true){
-    visibleA = true;
-    A = 0;
-    visibleB = false;
-    B = 100;
-  } else if (duel_rooms === false){
-    visibleA = false;
-    A = 100;
-    visibleB = true;
-    B = 0;
-  }
   switch (event.name){
     case "ui_component_clicked":
       var component = event.id;
@@ -174,30 +140,10 @@ this.event = function(event, game){
           visible: false
         });          
         ship.setUIComponent({
-          id: "Duel room 1",
-          position: [28-A,35-A,12-A,10-A],
-          clickable: true,
-          visible: visibleA,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Duel room 1",color:"#CDE"},
-          ]
-        });  
-        ship.setUIComponent({
-          id: "Duel room 2",
-          position: [60-A,35-A,12-A,10-A],
-          clickable: true,
-          visible: visibleA,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Duel room 2",color:"#CDE"},
-          ]
-        });  
-        ship.setUIComponent({
           id: "Next ship",
-          position: [28-B,35-B,12-B,10-B],
+          position: [28,35,12,10],
           clickable: true,
-          visible: visibleB,
+          visible: true,
           components: [
             { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
             { type: "text",position:[5,35,90,40],value:"Next ship",color:"#CDE"},
@@ -205,9 +151,9 @@ this.event = function(event, game){
         });
         ship.setUIComponent({
           id: "Previous ship",
-          position: [60-B,35-B,12-B,10-B],
+          position: [60,35,12,10],
           clickable: true,
-          visible: visibleB,
+          visible: true,
           components: [
             { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
             { type: "text",position:[5,35,90,40],value:"Previous ship",color:"#CDE"},
@@ -446,14 +392,6 @@ this.event = function(event, game){
       }
       else if (component == "Options screen next page"){
         ship.setUIComponent({
-          id: "Duel room 1",
-          visible: false
-        });    
-        ship.setUIComponent({
-          id: "Duel room 2",
-          visible: false
-        });  
-        ship.setUIComponent({
           id: "Next ship",
           visible: false
         });
@@ -676,28 +614,8 @@ this.event = function(event, game){
           visible: false
         });          
         ship.setUIComponent({
-          id: "Duel room 1",
-          position: [28-A,35-A,12-A,10-A],
-          clickable: true,
-          visible: visibleA,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Duel room 1",color:"#CDE"},
-          ]
-        });  
-        ship.setUIComponent({
-          id: "Duel room 2",
-          position: [60-A,35-A,12-A,10-A],
-          clickable: true,
-          visible: visibleA,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Duel room 2",color:"#CDE"},
-          ]
-        });          
-        ship.setUIComponent({
           id: "Next ship",
-          position: [28-B,35-B,12-B,10-B],
+          position: [28,35,12,10],
           clickable: true,
           visible: visibleB,
           components: [
@@ -707,7 +625,7 @@ this.event = function(event, game){
         });
         ship.setUIComponent({
           id: "Previous ship",
-          position: [60-B,35-B,12-B,10-B],
+          position: [60,35,12,10],
           clickable: true,
           visible: visibleB,
           components: [
@@ -771,14 +689,6 @@ this.event = function(event, game){
         });            
       }
       else if (component == "Options screen exit"){
-        ship.setUIComponent({
-          id: "Duel room 1",
-          visible: false
-        });  
-        ship.setUIComponent({
-          id: "Duel room 2",
-          visible: false
-        });        
         ship.setUIComponent({
           id: "Next ship",
           visible: false
@@ -892,67 +802,4 @@ this.event = function(event, game){
     break;
   }
 };
- 
-var cube = {
-  id: "cube",
-  obj: "https://raw.githubusercontent.com/pmgl/starblast-modding/master/objects/cube/cube.obj",
-  diffuse: "https://raw.githubusercontent.com/pmgl/starblast-modding/master/objects/cube/diffuse.jpg",
-  diffuseColor:0xffffff,
-  physics: {
-    mass: 50,  
-    shininess: 20,
-    shape:[2.682,2.723,2.806,2.958,3.169,3.474,3.678,3.672,3.308,3.048,2.878,2.759,2.697,2.697,2.759,2.878,3.048,3.308,3.672,3.678,3.474,3.169,2.958,2.806,2.723,2.682,2.723,2.806,2.958,3.169,3.474,3.678,3.672,3.307,3.054,2.878,2.761,2.698,2.698,2.761,2.878,3.054,3.307,3.672,3.678,3.474,3.169,2.958,2.806,2.723],
-    fixed: true
-  }
-};
- 
-var addcube = function(x,y) {
-  game.setObject({
-    id: "cube"+x+y,
-    type: cube,
-    position: {x:x,y:y,z:0},
-    scale: {x:1,y:1,z:1},
-    rotation: {x:0,y:0,z:0},
-  });
-};
- 
-var floor = {
-  id: "floor",
-  obj: "https://starblast.data.neuronality.com/mods/objects/cube/cube.obj",
-  diffuse: "https://starblast.data.neuronality.com/mods/objects/cube/diffuse.jpg",
-  emissive: "https://starblast.data.neuronality.com/mods/objects/cube/emissive.jpg",
-  emissiveColor: 0xFFD080,
-  diffuseColor: 0x202020,
-  specularColor: 0x182028,
-  transparent: false
-};
- 
-var addfloor = function(x,y){
-  game.setObject({
-    id:"floor"+x+y,
-    type:floor,
-    position:{x:x,y:y,z:-20},
-    scale:{x:10,y:30,z:1.4},
-    rotation: {x:0,y:0,z:0}
-  });
-};
- 
-for (let i=0; i<1; i++){
-  if (duel_rooms === true){
-    for (let i=0; i<100; i++){
-      addfloor(30*i,250);  
-    }
-    for (let i=0; i<51; i++){
-      addcube(5*i,0);
-    }
-    for (let i=0; i<50; i++){
-      addcube(-5*i,0);
-    }
-    for (let i=0; i<49; i++){
-      addcube(5*i,170);
-      addcube(-5*i,170);
-      addcube(5*i,-170);
-      addcube(-5*i,-170);
-    }
-  }
-}
+
