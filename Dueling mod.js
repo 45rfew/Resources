@@ -3,13 +3,12 @@ var This_mod = "Money's dueling mod";
 var strafe = false;
 //Set strafe to true if you want strafe and vice versa
  
- 
 //Some nice little functions: :)  
 kick = function(i){
   game.ships[i].gameover({"":"Bye!"});
 };
 //eg: kick(1) into the console
-//Kicks the player an index of 1; the second player joined
+//Kicks the player an index of 1 - the second player joined
  
 say = function(saysWhat,instructor = "Zoltar"){
   for(var i=0; i<game.ships.length; i++){
@@ -100,16 +99,26 @@ this.tick = function(game) {
     if (game.step % 60 === 0){
       if (!ship.custom.options_button){
         ship.custom.options_button = true;
-        game.ships[i].setUIComponent({  
+        game.ships[i].setUIComponent({ 
           id: "Options",
-          position: [90.45,48,11,13],
+          position: [93,48,6,4],
           clickable: true,
           visible: true,
           components: [
-            {type: "text",position: [0,0,78,20],color: "#FFFFFF",value: "Options",align:"right"},
-            {type:"box",position:[32,0,50,25],fill:"rgba(68, 85, 102, 0)",stroke:"#FFFFFF",width:3},
+            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#FFFFFF",width:3},
+            { type: "text",position:[6,35,100,60],value:"Options",color:"#FFFFFF"},
           ]
-        });
+        });      
+        game.ships[i].setUIComponent({ 
+          id: "Restore",
+          position: [93,42,6,4],
+          clickable: true,
+          visible: true,
+          components: [
+            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#FFFFFF",width:3},
+            { type: "text",position:[6,35,100,60],value:"Restore",color:"#FFFFFF"},
+          ]
+        });         
         ship.custom.tree = 0;
         for (let tree = 0; tree < ship_list.length; tree++) {
           if (ship_list[tree].indexOf(ship.type) >= 0) {
@@ -785,21 +794,66 @@ this.event = function(event, game){
           id: "Aries",
           visible: false
         });        
-        ship.setUIComponent({
+        game.ships[i].setUIComponent({ 
           id: "Options",
-          position: [90.45,48,11,13],
+          position: [93,48,6,4],
           clickable: true,
           visible: true,
           components: [
-            {type: "text",position: [0,0,78,20],color: "#FFFFFF",value: "Options",align:"right"},
-            {type:"box",position:[32,0,50,25],fill:"rgba(68, 85, 102, 0)",stroke:"#FFFFFF",width:3},
+            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#FFFFFF",width:3},
+            { type: "text",position:[6,35,100,60],value:"Options",color:"#FFFFFF"},
           ]
         });                
       }
-      break;
+      else if (component == "Restore"){
+        if (ship_level === 1){
+          max_crystals = 20;
+        } else
+        if (ship_level === 2){
+          max_crystals = 80;
+        } else
+        if (ship_level === 3){
+          max_crystals = 180;
+        } else
+        if (ship_level === 4){
+          max_crystals = 320;
+        } else
+        if (ship_level === 5){
+          max_crystals = 500;
+        } else
+        if (ship_level === 6){
+          max_crystals = 720;
+        } else {
+          max_crystals = 980;
+        }
+        ship.set({crystals:max_crystals,sheild:999});  
+      }
+    break;      
     case "ship_spawned":
       ship.set({x:0,y:250,invulnerable:300});
     break;
+    case "ship_destroyed":
+      if (event.killer.level === 1){
+        max_crystals = 20;
+      } else
+      if (event.killer.level === 2){
+        max_crystals = 80;
+      } else
+      if (event.killer.level === 3){
+        max_crystals = 180;
+      } else
+      if (event.killer.level === 4){
+        max_crystals = 320;
+      } else
+      if (event.killer.level === 5){
+        max_crystals = 500;
+      } else
+      if (event.killer.level === 6){
+        max_crystals = 720;
+      } else {
+        max_crystals = 980;
+      }
+      event.killer.set({crystals:max_crystals,sheild:999});    
+    break;
   }
 };
-
