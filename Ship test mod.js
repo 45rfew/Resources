@@ -1,4 +1,4 @@
-let ships = [];
+var ships = [];
 
 ships.push();
  
@@ -10,7 +10,7 @@ this.options = {
   crystal_value: 10
 };
 
-let reset_button = {
+var reset_button = {
   id: "reset",
   position: [2,30,8,14],
   clickable: true,
@@ -22,7 +22,7 @@ let reset_button = {
 
 this.tick = function(game){
   if (game.step % 60 === 0){
-    for (let ship of game.ships){
+    for (var ship of game.ships){
       if (!ship.custom.reset_button_installed){
         ship.custom.reset_button_installed = true;
         ship.setUIComponent(reset_button);
@@ -34,8 +34,8 @@ this.tick = function(game){
 this.event = function(event,game){
   switch (event.name){
     case "ui_component_clicked":
-      let ship = event.ship;
-      let component = event.id;
+      var ship = event.ship;
+      var component = event.id;
       if (component == "reset"){
         ship.set({type:101});
       }
