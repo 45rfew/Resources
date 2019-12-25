@@ -154,6 +154,7 @@ this.options = {
   crystal_value: 10,
   survival_level: 8,
   max_level: 8,
+  radar_zoom: 1,
   shield_regen_factor: 0.8,
   power_regen_factor: 1,
   projectile_speed: 0.7,
