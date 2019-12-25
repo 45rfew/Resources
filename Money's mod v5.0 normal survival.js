@@ -268,15 +268,16 @@ this.options = {
   starting_ship: 101,
   starting_ship_maxed: true,
   custom_map: map,
-  map_size: 50,
+  map_size: 80,
   map_name: map_names [Math.floor(Math.random() * map_names.length)],  
-  asteroids_strength: 0.6,
+  asteroids_strength: 1,
   crystal_value: 4,
   survival_level: 8,
   max_level: 8,
   shield_regen_factor: 0.8,
   power_regen_factor: 1,
   projectile_speed: 0.7,
+  radar_zoom: 1,
   friendly_colors: 0,
   release_crystal: false,
   weapons_store: true,
@@ -284,9 +285,18 @@ this.options = {
 };
  
 function tick(game){
+  if (game.step % 15 ===0){
+    var max = game.ships.length * 15 - (5 * game.ships.length);
+    var spawn_delay = game.step / 885;
+    if (game.aliens.length < max) {
+      alien.x = Math.cos(Math.random() * Math.PI * 2) * 25;
+      alien.y = Math.sin(Math.random() * Math.PI * 2) * 25;
+      game.addAlien(alien_types[Math.floor(Math.random() * Math.min(alien_types.length, spawn_delay / 4))]);
+    }
+  }
   if (game.step % 60 === 0){
     Button(2, 29, 10, 11.5, "reset", "#FFFFFF", "#00000000", "#FFFFFF", true, null, true, "Reset",null);
-    Button(10, 29, 10, 11.5, "healer", "#FFFFFF", "#00000000", "#FFFFFF", true, null, true, "Healer",null);
+    //Button(10, 29, 10, 11.5, "healer", "#FFFFFF", "#00000000", "#FFFFFF", true, null, true, "Healer",null);
   }
   if (game.step % 400 === 0){
     Button(26.5, 10, 60, 25, "quote", "#FFFFFF", "#00000000", "#FFFFFF", false, null, true,quotes[Math.floor(quotes.length * Math.random())],null);
@@ -294,7 +304,6 @@ function tick(game){
   for (let ship of game.ships){
     if (game.step % 30 === 0){
       if (ship.alive === false){
-        stat_sheet(ship,false);
         facilityButton(ship,"shield",0,false,"I",ship.custom.hexA,"Shield refill");    
         facilityButton(ship,"energy",7,false,"J",ship.custom.hexB,"Energy refill");    
         facilityButton(ship,"secondary",14,false,"K",ship.custom.hexC,"Secondaries");    
@@ -309,7 +318,6 @@ function tick(game){
         if (ship.custom_c === undefined){
           ship.custom_c = 0;
         }      
-        stat_sheet(ship,true);
         facilityButton(ship,"shield",0,true,"I",ship.custom.hexA,"Shield refill [I]");    
         facilityButton(ship,"energy",7,true,"J",ship.custom.hexB,"Energy refill [J]");    
         facilityButton(ship,"secondary",14,true,"K",ship.custom.hexC,"Secondaries [K]");    
@@ -435,6 +443,19 @@ this.event = function(event, game){
     break;
   }
 };
+ 
+var alien_types = [
+  {code:10,level:0,points:10,crystal_drop:10},  
+  {code:10,level:1,points:20,crystal_drop:20},
+  {code:16,level:0,points:40,crystal_drop:40},
+  {code:10,level:2,points:50,crystal_drop:70},
+  {code:16,level:1,points:75,crystal_drop:75},
+  {code:10,level:3,points:1000,crystal_drop:200},
+  {code:12,level:0,points:1200,crystal_drop:200},
+  {code:19,level:0,points:1000,crystal_drop:250},
+  {code:15,level:0,points:1500,crystal_drop:250},
+  {code:16,level:3,points:1750,crystal_drop:700}
+]; 
  
 var quotes = [
   "A bargain is something you don’t need at a price you can’t resist.",
