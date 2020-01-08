@@ -111,9 +111,19 @@ this.tick = function(game) {
             {type:"box",position:[32,0,50,25],fill:"rgba(68, 85, 102, 0)",stroke:"#FFFFFF",width:3},
           ]
         });
+        game.ships[i].setUIComponent({  
+          id: "Restore",
+          position: [84.45,48,11,13],
+          clickable: true,
+          visible: true,
+          components: [
+            {type: "text",position: [0,0,78,20],color: "#FFFFFF",value: "Restore",align:"right"},
+            {type:"box",position:[32,0,50,25],fill:"rgba(68, 85, 102, 0)",stroke:"#FFFFFF",width:3},
+          ]
+        });        
         ship.custom.tree = 0;
-        for (let tree = 0; tree < ship_list.length; tree++) {
-          if (ship_list[tree].indexOf(ship.type) >= 0) {
+        for (let tree = 0; tree < ship_list.length; tree++){
+          if (ship_list[tree].indexOf(ship.type) >= 0){
             ship.custom.tree = tree;
             break;
           }
@@ -689,6 +699,29 @@ this.event = function(event, game){
           visible: false,
         });            
       }
+      else if (component == "Restore"){
+        if (ship_level === 1){
+          max_crystals = 20;
+        } else
+        if (ship_level === 2){
+          max_crystals = 80;
+        } else
+        if (ship_level === 3){
+          max_crystals = 180;
+        } else
+        if (ship_level === 4){
+          max_crystals = 320;
+        } else
+        if (ship_level === 5){
+          max_crystals = 500;
+        } else
+        if (ship_level === 6){
+          max_crystals = 720;
+        } else {
+          max_crystals = 980;
+        }
+        ship.set({shield:999, crystals:max_crystals});
+      }        
       else if (component == "Options screen exit"){
         ship.setUIComponent({
           id: "Next ship",
