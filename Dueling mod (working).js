@@ -3,7 +3,6 @@ var This_mod = "Money's dueling mod";
 var strafe = false;
 //Set strafe to true if you want strafe and vice versa
  
- 
 //Some nice little functions: :)  
 kick = function(i){
   game.ships[i].gameover({"":"Bye!"});
@@ -101,26 +100,26 @@ this.tick = function(game) {
     if (game.step % 60 === 0){
       if (!ship.custom.options_button){
         ship.custom.options_button = true;
-        game.ships[i].setUIComponent({  
+        game.ships[i].setUIComponent({ 
           id: "Options",
-          position: [90.45,48,11,13],
+          position: [65,0,6,4],
           clickable: true,
           visible: true,
           components: [
-            {type: "text",position: [0,0,78,20],color: "#FFFFFF",value: "Options",align:"right"},
-            {type:"box",position:[32,0,50,25],fill:"rgba(68, 85, 102, 0)",stroke:"#FFFFFF",width:3},
+            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#FFFFFF",width:5},
+            { type: "text",position:[0,30,100,60],value:"Options",color:"#FFFFFF"},
           ]
-        });
-        game.ships[i].setUIComponent({  
+        });      
+        game.ships[i].setUIComponent({ 
           id: "Restore",
-          position: [84.45,48,11,13],
+          position: [72,0,6,4],
           clickable: true,
           visible: true,
           components: [
-            {type: "text",position: [0,0,78,20],color: "#FFFFFF",value: "Restore",align:"right"},
-            {type:"box",position:[32,0,50,25],fill:"rgba(68, 85, 102, 0)",stroke:"#FFFFFF",width:3},
+            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#FFFFFF",width:5},
+            { type: "text",position:[0,30,100,60],value:"Restore",color:"#FFFFFF"},
           ]
-        });        
+        });       
         ship.custom.tree = 0;
         for (let tree = 0; tree < ship_list.length; tree++){
           if (ship_list[tree].indexOf(ship.type) >= 0){
@@ -133,8 +132,6 @@ this.tick = function(game) {
   }
 };
  
-//:D
- 
 this.event = function(event, game){
   var ship = event.ship;  
   var ship_level = Math.trunc(ship.type / 100);
@@ -146,10 +143,6 @@ this.event = function(event, game){
     case "ui_component_clicked":
       var component = event.id;
       if (component == "Options"){
-        ship.setUIComponent({
-          id: "Options",
-          visible: false
-        });          
         ship.setUIComponent({
           id: "Next ship",
           position: [28,35,12,10],
@@ -819,16 +812,6 @@ this.event = function(event, game){
           id: "Aries",
           visible: false
         });        
-        ship.setUIComponent({
-          id: "Options",
-          position: [90.45,48,11,13],
-          clickable: true,
-          visible: true,
-          components: [
-            {type: "text",position: [0,0,78,20],color: "#FFFFFF",value: "Options",align:"right"},
-            {type:"box",position:[32,0,50,25],fill:"rgba(68, 85, 102, 0)",stroke:"#FFFFFF",width:3},
-          ]
-        });                
       }
       break;
     case "ship_spawned":
@@ -836,3 +819,83 @@ this.event = function(event, game){
     break;
   }
 };
+
+addAliens = (ammount,x,y,code,level,points,crystals,weapon_drop) => {
+  for (let i = 0; i<ammount; i++){
+    game.addAlien({
+      x:x,y:y,
+      code:code,
+      level:level,
+      points:points,
+      crystals:crystals,
+      weapon_drop:weapon_drop
+    });
+  }
+  switch (code){
+    case 10:
+      alien_type = "Chicken";
+    break;  
+    case 11:
+      alien_type = "Crab";
+    break;  
+    case 12:
+      alien_type = "Fortress";
+    break;  
+    case 13:
+      alien_type = "Caterpillar";
+    break;        
+    case 14:
+      alien_type = "Candlestick";
+    break;        
+    case 15:
+      alien_type = "Hirsute";
+    break;        
+    case 16:
+      alien_type = "Piranha";
+    break;        
+    case 17:
+      alien_type = "Pointu";
+    break;        
+    case 18:
+      alien_type = "Fork";
+    break;        
+    case 19:
+      alien_type = "Saucer";
+    break;        
+    case 20:
+      alien_type = "FinalBoss";
+  }
+  switch(weapon_drop){
+    case 10:
+      collectible = "Rockets";
+    break;
+    case 11:
+      collectible = "Missiles";
+    break;
+    case 12:
+      collectible = "Torpedo";
+    break;
+    case 20:
+      collectible = "Light mines";
+    break;
+    case 21:
+      collectible = "Heavy mines";
+    break;
+    case 40:
+      collectible = "Mining pod";
+    break;
+    case 41:
+      collectible = "Attack pod";
+    break;
+    case 42:
+      collectible = "Defense pod";
+    break;
+    case 90:
+      collectible = "Energy refill";
+    break; 
+    case 91:
+      collectible = "Shield refill";
+  }  
+  return "\nSpawned "+ammount+" level "+level+" "+alien_type+" to coordinates x:"+x+" y:"+y+"\ndropping "+crystals+" crystals, "+points+" points, and a single\n"+collectible+" upon destruction\n";
+};
+
