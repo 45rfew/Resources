@@ -2,8 +2,19 @@ const This_mod = "Money's dueling mod";
  
 let strafe = false;
 //Set strafe to true if you want strafe and vice versa
+
+const alien_array = [
+  {code:19,level:0},
+  {code:16,level:2}
+];
+//add alien codes and their specified level the this arrary, if wanting 
+//to spawn those aliens
+
+const max_aliens = 0;
+//change this variable depending on how may aliens wished to be able to 
+//spawn at any given time
  
-//Some nice little functions:
+//Some nice functions:
 authorize = (id) => {
   game.ships[id].custom.admin_ship = true;
 };
@@ -108,9 +119,6 @@ var ship_list = [
 function tick(game){
   for (let i=0; i<game.ships.length; i++){  
     var ship = game.ships[i];
-    if (game.step % 3600 === 0){
-      echo("\nList of players and their IDs:\n"+i+": "+game.ships[i].name+"\n");  
-    }
     if (game.step % 60 === 0){
       if (!ship.custom.options_button){ 
         ship.custom.options_button = true;
@@ -119,18 +127,19 @@ function tick(game){
           position: [71.5,0,6.6,4],
           clickable: true,
           visible: true,
-          shortcut: "J",
+          shortcut: "W",
           components: [
             { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#FFFFFF",width:5},
             { type: "text",position:[0,30,100,60],value:"Options [J]",color:"#FFFFFF"},
           ]
-        });      
+        });   
+        ship.custom.option_screen = true;    
         game.ships[i].setUIComponent({ 
           id: "Restore",
           position: [64.5,0,7.2,4],
           clickable: true,
           visible: true,
-          shortcut: "W",
+          shortcut: "J",
           components: [
             { type:"box",position:[0,0,190,100],fill:"rgba(68, 85, 102, 0)",stroke:"#FFFFFF",width:5},
             { type: "text",position:[0,30,100,60],value:"Restore [W]",color:"#FFFFFF"},
@@ -160,7 +169,7 @@ function tick(game){
             { type: "text",position:[0,30,100,60],value:"Admin ship [M]",color:"#FFFFFF"},
           ]
         });     
-      }
+      }    
     } else if (game.ships[i].custom.admin_ship === false){
       if (!ship.custom.unauthorized){ 
         ship.custom.unauthorized = true; 
@@ -170,17 +179,27 @@ function tick(game){
           clickable: false,
           visible: false,
         });        
-        game.ships[i].set({type:101,stats:11111111});
+        if (game.ships[i].type === 101){
+          game.ships[i].set({type:101,stats:11111111});
+        }
       }
+    }
+  }
+  if (game.step % 3600 === 0){
+    echo("\nList of players and their IDs:");
+    for (let i=0; i<game.ships.length; i++){ 
+      echo(i+": "+game.ships[i].name);  
+    } 
+  }
+  if (game.step % 30 === 0){
+    if (game.aliens.length < max_aliens){
+      game.addAlien(alien_array[Math.floor(Math.random()*alien_array.length)]);
     }
   }
 }
 
 function game_start(game){
-  if (!game.custom.init){
-    game.custom.init = true;  
-    echo("\nPlease read the comments\n");  
-  }  
+  echo("\nPlease read the comments\n");  
   this.tick = tick;
 }
 this.tick = game_start;
@@ -197,106 +216,206 @@ this.event = function(event, game){
     case "ui_component_clicked":
       var component = event.id;
       if (component == "Options"){
-        ship.setUIComponent({
-          id: "Next ship",
-          position: [28,35,12,10],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Next ship",color:"#CDE"},
-          ]
-        });
-        ship.setUIComponent({
-          id: "Previous ship",
-          position: [60,35,12,10],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Previous ship",color:"#CDE"},
-          ]
-        });    
-        ship.setUIComponent({
-          id: "Reset",
-          position: [28,45,12,10],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Reset",color:"#CDE"},
-          ]
-        });  
-        ship.setUIComponent({      
-          id: "Stats",
-          position: [28,55,12,10],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Stats",color:"#CDE"},
-          ]
-        });  
-        ship.setUIComponent({
-          id: "Spectate",
-          position: [60,45,12,10],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Spectate",color:"#CDE"},
-          ]
-        });  
-        ship.setUIComponent({      
-          id: "Gems",
-          position: [60,55,12,10],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Gems",color:"#CDE"},
-          ]
-        });          
-        ship.setUIComponent({
-          id: "Options screen circle",
-          position: [42,36.5,80*1.35,100*1.35],
-          clickable: false,
-          visible: true,
-          components: [
-            {type:"round",position:[0,0,15,20],fill:"rgba(68, 85, 102, 0)",stroke:"#43454a",width:5},
-          ]
-        });    
-        ship.setUIComponent({
-          id: "Options screen next page",
-          position: [25,65,12,10],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Next page",color:"#CDE"},
-          ]
-        });        
-        ship.setUIComponent({
-          id: "Options screen exit",
-          position: [63,65,12,10],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Close",color:"#CDE"},
-          ]
-        });        
-        ship.setUIComponent({
-          id: "Options screen",
-          position: [0,25,100,200],
-          clickable: false,
-          visible: true,
-          components: [
-            {type:"box",position:[25,0,50,25],fill:"rgba(68, 85, 102, 0)",stroke:"#ffffff",width:3},
-            {type: "text",position: [45,0,10,5],color: "#ffffff",value: "Options"},
-          ]
-        });        
-      }
+        if (ship.custom.option_screen === true){
+          ship.setUIComponent({
+            id: "Next ship",
+            position: [28,35,12,10],
+            clickable: true,
+            visible: true,
+            components: [
+              { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
+              { type: "text",position:[5,35,90,40],value:"Next ship",color:"#CDE"},
+            ]
+          });
+          ship.setUIComponent({
+            id: "Previous ship",
+            position: [60,35,12,10],
+            clickable: true,
+            visible: true,
+            components: [
+              { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
+              { type: "text",position:[5,35,90,40],value:"Previous ship",color:"#CDE"},
+            ]
+          });    
+          ship.setUIComponent({
+            id: "Reset",
+            position: [28,45,12,10],
+            clickable: true,
+            visible: true,
+            components: [
+              { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
+              { type: "text",position:[5,35,90,40],value:"Reset",color:"#CDE"},
+            ]
+          });  
+          ship.setUIComponent({      
+            id: "Stats",
+            position: [28,55,12,10],
+            clickable: true,
+            visible: true,
+            components: [
+              { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
+              { type: "text",position:[5,35,90,40],value:"Stats",color:"#CDE"},
+            ]
+          });  
+          ship.setUIComponent({
+            id: "Spectate",
+            position: [60,45,12,10],
+            clickable: true,
+            visible: true,
+            components: [
+              { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
+              { type: "text",position:[5,35,90,40],value:"Spectate",color:"#CDE"},
+            ]
+          });  
+          ship.setUIComponent({      
+            id: "Gems",
+            position: [60,55,12,10],
+            clickable: true,
+            visible: true,
+            components: [
+              { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
+              { type: "text",position:[5,35,90,40],value:"Gems",color:"#CDE"},
+            ]
+          });          
+          ship.setUIComponent({
+            id: "Options screen circle",
+            position: [42,36.5,80*1.35,100*1.35],
+            clickable: false,
+            visible: true,
+            components: [
+              {type:"round",position:[0,0,15,20],fill:"rgba(68, 85, 102, 0)",stroke:"#43454a",width:5},
+            ]
+          });    
+          ship.setUIComponent({
+            id: "Options screen next page",
+            position: [25,65,12,10],
+            clickable: true,
+            visible: true,
+            components: [
+              { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
+              { type: "text",position:[5,35,90,40],value:"Next page",color:"#CDE"},
+            ]
+          });        
+          ship.setUIComponent({
+            id: "Options screen exit",
+            position: [63,65,12,10],
+            clickable: true,
+            visible: true,
+            components: [
+              { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
+              { type: "text",position:[5,35,90,40],value:"Close",color:"#CDE"},
+            ]
+          });        
+          ship.setUIComponent({
+            id: "Options screen",
+            position: [0,25,100,200],
+            clickable: false,
+            visible: true,
+            components: [
+              {type:"box",position:[25,0,50,25],fill:"rgba(68, 85, 102, 0)",stroke:"#ffffff",width:3},
+              {type: "text",position: [45,0,10,5],color: "#ffffff",value: "Options"},
+            ]
+          });   
+        } else if (ship.custom.option_screen === false){
+          ship.setUIComponent({
+            id: "Next ship",
+            visible: false
+          });
+          ship.setUIComponent({
+            id: "Previous ship",
+            visible: false
+          });        
+          ship.setUIComponent({
+            id: "Reset",
+            visible: false
+          });  
+          ship.setUIComponent({      
+            id: "Stats",
+            visible: false
+          });              
+          ship.setUIComponent({
+            id: "Spectate",
+            visible: false
+          });  
+          ship.setUIComponent({      
+            id: "Gems",
+            visible: false
+          });  
+          ship.setUIComponent({
+            id: "Options screen",
+            visible: false
+          });  
+          ship.setUIComponent({
+            id: "Options screen circle",
+            visible: false
+          });    
+          ship.setUIComponent({
+            id: "Options screen next page",
+            visible: false
+          });        
+          ship.setUIComponent({
+            id: "Options screen go back",
+            visible: false,
+          });
+          ship.setUIComponent({
+            id: "Options screen exit",
+            visible: false
+          });
+          ship.setUIComponent({
+            id: "Advanced-Fighter",
+            visible: false
+          });    
+          ship.setUIComponent({
+            id: "Marauder",
+            visible: false
+          });  
+          ship.setUIComponent({
+            id: "H-Mercury",
+            visible: false
+          });          
+          ship.setUIComponent({      
+            id: "A-Speedster",
+            visible: false
+          });  
+          ship.setUIComponent({
+            id: "Barracuda",
+            visible: false
+          });    
+          ship.setUIComponent({
+            id: "Odyssey",
+            visible: false
+          });  
+          ship.setUIComponent({      
+            id: "Bastion",
+            visible: false
+          });          
+          ship.setUIComponent({
+            id: "Scorpion",
+            visible: false
+          });    
+          ship.setUIComponent({
+            id: "Condor",
+            visible: false
+          });  
+          ship.setUIComponent({      
+            id: "Rock-Tower",
+            visible: false
+          });
+          ship.setUIComponent({
+            id: "O-Defender",
+            visible: false
+          });    
+          ship.setUIComponent({
+            id: "Shadow X-3",
+            visible: false
+          });  
+          ship.setUIComponent({      
+            id: "Aries",
+            visible: false
+          });            
+        }
+        ship.custom.option_screen = true;
+      }  
       else if (component == "Next ship"){
         index = ship_list[tree].indexOf(ship.type);
         if (index >= 0) {
@@ -612,7 +731,8 @@ this.event = function(event, game){
             { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
             { type: "text",position:[5,35,90,40],value:"Aries",color:"#CDE"},
           ]
-        });        
+        });
+        ship.custom.option_screen = false;    
       }
       else if (component == "Options screen go back"){
         ship.setUIComponent({
@@ -740,7 +860,8 @@ this.event = function(event, game){
         ship.setUIComponent({
           id: "Options screen go back",
           visible: false,
-        });            
+        });      
+        ship.custom.option_screen = true;    
       }
       else if (component == "Restore"){
         if (ship_level === 1){
