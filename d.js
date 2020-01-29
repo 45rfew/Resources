@@ -142,7 +142,7 @@ var vocabulary = [
  
 this.options = {
   root_mode: "survival",
-  ships: ships,
+  //ships: ships,
   reset_tree: true,
   vocabulary: vocabulary,
   survival_time: 13.5,
@@ -277,10 +277,7 @@ function tick(game){
             facilityButton(ship,"energy",7,true,"J",100,ship.custom.hexB,"Energy refill [J]");
             facilityButton(ship,"secondary",14,true,"K",100,ship.custom.hexC,"Secondaries [K]");    
             facilityButton(ship,"crystals",21,true,"L",100,ship.custom.hexD,"Crystals [L]");
-            if (!ship.custom.radar){
-              ship.custom.radar = true;
-              ship.setUIComponent(radar_background);
-            }
+            ship.setUIComponent(radar_background);
           }
         }
       } else if (game.step > survival_step){
@@ -457,15 +454,31 @@ function tick(game){
       }      
     }
     for (let alien of game.aliens){
-      if (game.step < (3600*10.5)){
+      if (game.step < 41400){
         if (alien.x**2 + alien.y**2 > alien_radius && alien.code !== 16){
-          alien.set({x:0,y:0});
+          alien.set({x:Math.cos(Math.random()*Math.PI*2)*5,y:Math.sin(Math.random()*Math.PI*2)*5});
         }
       }
     }
   }
+  if (game.step % 30 === 0){
+    for (let ship of game.ships){
+      if (!ship.custom.randTeams){
+        ship.custom.randTeams = true;
+        if (ship.team === 0){
+          ship.set({hue:team1});
+        } else {
+          ship.set({hue:team2});
+        }
+      }
+    }    
+  }
 }
- 
+
+var hues = [30,60,120,270];
+var hues2 = [90,150,240,300];
+var team1 = hues[Math.floor(Math.random()*hues.length)];
+var team2 = hues2[Math.floor(Math.random()*hues2.length)];
 var alien_radius = 0.25; 
 var survival_step;
  
@@ -824,7 +837,7 @@ var scale_size = 50 / this.options.map_size;
 //radarSpot function doesn't work in survival mode; only in team mode :/ 
 function addRadarSpot (x, y, width, height, alpha){
   radar_background.components.push({
-    type: "round",
+    type: "box",
     position: [
       50 + x * scale_pos - width * scale_size / 2,
       50 + y * scale_pos - height * scale_size / 2,
@@ -834,105 +847,89 @@ function addRadarSpot (x, y, width, height, alpha){
     fill: `rgba(255, 255, 255, ${alpha})`,
   });
 }
- 
+
+addRadarSpot(0,0,8,8,1);   
+
 var alien = {
   id: "alien",
   obj: "https://starblast.data.neuronality.com/models/aliens/19/model.obj",
   diffuse: "https://starblast.data.neuronality.com/models/aliens/19/lambert.jpg",
   emissive: "https://starblast.data.neuronality.com/models/aliens/19/emissive.jpg",
-  emissiveColor: 0x0e64e2,
-  transparent: false,
-  shininess: 10,
-  physics: {
-    mass: 569,
-    shape: [7.148,7.253,7.488,7.871,8.437,9.212,9.96,10.033,10.097,10.107,9.718,8.984,8.281,8.281,8.984,9.838,10.051,10.029,9.961,9.877,9.114,8.789,8.794,8.719,8.608,8.528,8.604,8.719,8.776,8.766,9.081,9.885,9.953,10.042,10.057,9.775,8.931,8.221,8.221,8.931,9.664,10.104,10.1,10.027,9.97,9.224,8.438,7.894,7.49,7.251],
-    fixed: true
-  }
-};
- /*
-game.setObject({
-  id: "alien",
-  type: alien,
-  position: {x:0,y:0,z:0},
-  rotation: {x:Math.PI/2,y:0,z:Math.PI/2},
-  scale: {x:2,y:2,z:2}
-});  
- 
-addRadarSpot(0,0,10,10,0.5);  
- */
-var alien2 = {
-  id: "alien2",
-  obj: "https://starblast.data.neuronality.com/models/aliens/19/model.obj",
-  diffuse: "https://starblast.data.neuronality.com/models/aliens/19/lambert.jpg",
-  emissive: "https://starblast.data.neuronality.com/models/aliens/19/emissive.jpg",
   emissiveColor: 0xff8000,
   transparent: false,
-  shininess: 10,
   physics: {
     mass: 369,
     shape: [7.148,7.253,7.488,7.871,8.437,9.212,9.96,10.033,10.097,10.107,9.718,8.984,8.281,8.281,8.984,9.838,10.051,10.029,9.961,9.877,9.114,8.789,8.794,8.719,8.608,8.528,8.604,8.719,8.776,8.766,9.081,9.885,9.953,10.042,10.057,9.775,8.931,8.221,8.221,8.931,9.664,10.104,10.1,10.027,9.97,9.224,8.438,7.894,7.49,7.251],
-    fixed: true
   }
 };
- 
-game.setObject({
-  id: "alien2",
-  type: alien2,
-  position: {x:50,y:50,z:0},
-  rotation: {x:Math.PI/2,y:0,z:Math.PI/2},
-  scale: {x:1,y:1,z:1}
-});  
- 
-addRadarSpot(50,50,5,5,0.3);  
- 
-game.setObject({
-  id: "alien2"+1,
-  type: alien2,
-  position: {x:-50,y:50,z:0},
-  rotation: {x:Math.PI/2,y:0,z:Math.PI/2},
-  scale: {x:1,y:1,z:1}
-});  
- 
-addRadarSpot(-50,50,5,5,0.3);  
- 
-game.setObject({
-  id: "alien2"+2,
-  type: alien2,
-  position: {x:50,y:-50,z:0},
-  rotation: {x:Math.PI/2,y:0,z:Math.PI/2},
-  scale: {x:1,y:1,z:1}
-});  
- 
-addRadarSpot(50,-50,5,5,0.3);  
- 
-game.setObject({
-  id: "alien2"+3,
-  type: alien2,
-  position: {x:-50,y:-50,z:0},
-  rotation: {x:Math.PI/2,y:0,z:Math.PI/2},
-  scale: {x:1,y:1,z:1}
-});  
- 
-addRadarSpot(-50,-50,5,5,0.3);  
 
 var floor = {
   id: "floor",
   obj: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Circuit.obj",
   diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Ship%20lambert.png",
   emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Ship%20emissive.png",
-  specularColor: 0x708090,
+  specularColor: 0x000000,
   emissiveColor: 0x00ff00,
   transparent: false,
 };
 
+var antenna = {
+  id: "antenna",
+  obj: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Antenna.obj",
+  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Ship%20Lambert%20Green.png",
+  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Ship%20emissive.png",
+  specularColor: 0x2f4f4f,
+  emissiveColor: 0x00ff00,
+  physics: {
+    mass: 300,
+    shape: [5.753,5.842,6.03,6.348,6.763,7.438,7.5,7.5,7.085,6.521,6.158,5.925,5.785,5.785,5.925,6.158,6.521,7.085,7.5,7.5,7.438,6.763,6.348,6.03,5.842,5.753,5.842,6.03,6.348,6.763,7.438,7.5,7.5,7.085,6.521,6.158,5.925,5.785,5.785,5.925,6.158,6.521,7.085,7.5,7.5,7.438,6.763,6.348,6.03,5.842]
+  }
+};
+
+game.setObject({
+  id: "alien",
+  type: alien,
+  position: {x:50,y:50,z:-7},
+  rotation: {x:Math.PI/2,y:0,z:Math.PI/2},
+  scale: {x:1,y:1,z:1}
+});  
+ 
+game.setObject({
+  id: "alien"+1,
+  type: alien,
+  position: {x:-50,y:50,z:-7},
+  rotation: {x:Math.PI/2,y:0,z:Math.PI/2},
+  scale: {x:1,y:1,z:1}
+});  
+
+game.setObject({
+  id: "alien"+2,
+  type: alien,
+  position: {x:50,y:-50,z:-7},
+  rotation: {x:Math.PI/2,y:0,z:Math.PI/2},
+  scale: {x:1,y:1,z:1}
+});  
+ 
+game.setObject({
+  id: "alien"+3,
+  type: alien,
+  position: {x:-50,y:-50,z:-7},
+  rotation: {x:Math.PI/2,y:0,z:Math.PI/2},
+  scale: {x:1,y:1,z:1}
+}); 
+
 game.setObject({
   id: "floor",
   type: floor,
-  position: {x:0,y:0,z:-20},
+  position: {x:0,y:0,z:-10},
   rotation: {x:0,y:0,z:0},
   scale: {x:15,y:15,z:15}
 });  
 
-
-
-
+game.setObject({
+  id: "antenna",
+  type: antenna,
+  position: {x:0,y:0,z:4},
+  rotation: {x:0,y:0,z:0},
+  scale: {x:1,y:1,z:1}
+});  
