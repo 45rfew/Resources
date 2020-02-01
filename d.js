@@ -142,7 +142,7 @@ var vocabulary = [
  
 this.options = {
   root_mode: "survival",
-  //ships: ships,
+  ships: ships,
   reset_tree: true,
   vocabulary: vocabulary,
   survival_time: 13.5,
@@ -293,7 +293,7 @@ function tick(game){
           }
         }
       }
-    }      
+    }   
     if (game.step % 400 === 0){
       Button(26.5,10,60,25,"quote","#FFFFFF","#00000000","#FFFFFF",false,null,true,quotes[Math.floor(quotes.length * Math.random())],null);
     }
@@ -411,45 +411,61 @@ function tick(game){
       if (game.step >= ship.custom.shield){  
         if (ship.custom.timer_lengthA < 100){
           ship.custom.hexA = "#ff0000";  
-          ship.custom.timer_lengthA++; ship.custom.timer_lengthA++; 
-          facilityButton(ship,"shield",0,true,"I",ship.custom.timer_lengthA,ship.custom.hexA,"Shield refill [I]");    
+          ship.custom.timer_lengthA++; ship.custom.timer_lengthA++;
+          if (ship.alive){
+            faciliityButton(ship,"shield",0,true,"I",ship.custom.timer_lengthA,ship.custom.hexA,"Shield refill [I]");    
+          }
           ship.custom.shield += 36;        
         } else {
           ship.custom.hexA = "#00ff00";
-          facilityButton(ship,"shield",0,true,"I",ship.custom.timer_lengthA,ship.custom.hexA,"Shield refill [I]");
+          if (ship.alive){
+            facilityButton(ship,"shield",0,true,"I",ship.custom.timer_lengthA,ship.custom.hexA,"Shield refill [I]");
+          }  
         }
       }  
       if (game.step >= ship.custom.energy){  
         if (ship.custom.timer_lengthB < 100){
           ship.custom.hexB = "#ff0000";  
           ship.custom.timer_lengthB++; ship.custom.timer_lengthB++;
-          facilityButton(ship,"energy",7,true,"J",ship.custom.timer_lengthB,ship.custom.hexB,"Energy refill [J]");    
+          if (ship.alive){
+            facilityButton(ship,"energy",7,true,"J",ship.custom.timer_lengthB,ship.custom.hexB,"Energy refill [J]");    
+          }
           ship.custom.energy += 36;        
         } else {
           ship.custom.hexB = "#00ff00";
-          facilityButton(ship,"energy",7,true,"J",ship.custom.timer_lengthB,ship.custom.hexB,"Energy refill [J]");
+          if (ship.alive){
+            facilityButton(ship,"energy",7,true,"J",ship.custom.timer_lengthB,ship.custom.hexB,"Energy refill [J]");
+          }
         }
       }  
       if (game.step >= ship.custom.secondary){  
         if (ship.custom.timer_lengthC < 100){
           ship.custom.hexC = "#ff0000";  
           ship.custom.timer_lengthC++; ship.custom.timer_lengthC++;
-          facilityButton(ship,"secondary",14,true,"K",ship.custom.timer_lengthC,ship.custom.hexC,"Secondaries [K]");    
+          if (ship.alive){
+            facilityButton(ship,"secondary",14,true,"K",ship.custom.timer_lengthC,ship.custom.hexC,"Secondaries [K]");    
+          }
           ship.custom.secondary += 36;        
         } else {
           ship.custom.hexC = "#00ff00";
-          facilityButton(ship,"secondary",14,true,"K",ship.custom.timer_lengthC,ship.custom.hexC,"Secondaries [K]");
+          if (ship.alive){
+            facilityButton(ship,"secondary",14,true,"K",ship.custom.timer_lengthC,ship.custom.hexC,"Secondaries [K]");
+          }
         }
       }  
       if (game.step >= ship.custom.crystals){  
         if (ship.custom.timer_lengthD < 100){
           ship.custom.hexD = "#ff0000";  
           ship.custom.timer_lengthD++; ship.custom.timer_lengthD++;
-          facilityButton(ship,"crystals",21,true,"L",ship.custom.timer_lengthD,ship.custom.hexD,"Crystals [L]");    
+          if (ship.alive){
+            facilityButton(ship,"crystals",21,true,"L",ship.custom.timer_lengthD,ship.custom.hexD,"Crystals [L]");    
+          }
           ship.custom.crystals += 36;        
         } else {
           ship.custom.hexD = "#00ff00";
-          facilityButton(ship,"crystals",21,true,"L",ship.custom.timer_lengthD,ship.custom.hexD,"Crystals [L]");
+          if (ship.alive){
+            facilityButton(ship,"crystals",21,true,"L",ship.custom.timer_lengthD,ship.custom.hexD,"Crystals [L]");
+          }
         }
       }      
     }
