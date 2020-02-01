@@ -1,3 +1,8 @@
+
+//var facilityButton = true;
+var resetHealerButton = true;
+var infoSheets = true;
+
 e = function(i,type){
   let gems = 0;
   const level = Math.trunc(type / 100);  
@@ -142,7 +147,7 @@ var vocabulary = [
  
 this.options = {
   root_mode: "survival",
-  ships: ships,
+  //ships: ships,
   reset_tree: true,
   vocabulary: vocabulary,
   survival_time: 13.5,
@@ -151,7 +156,7 @@ this.options = {
   //map_id: 4994,
   custom_map: map,
   map_size: 70,
-  map_name: map_names [Math.floor(Math.random() * map_names.length)],  
+  map_name: map_names[Math.floor(Math.random()*map_names.length)],  
   asteroids_strength: 1,
   crystal_value: 2,
   survival_level: 8,
@@ -163,7 +168,7 @@ this.options = {
   friendly_colors: 2,
   release_crystal: true,
   weapons_store: false,
-  soundtrack: music [Math.floor(Math.random() * music.length)],
+  soundtrack: music[Math.floor(Math.random()*music.length)],
 };
  
 function tick(game){
@@ -171,7 +176,7 @@ function tick(game){
     if (game.ships.length !== 0){
       if (game.step % 15 === 0){  
         var ALhex;
-        if (game.aliens.length > Math.round(game.options.map_size / 3 * 1.15)){
+        if (game.aliens.length > Math.max(10,Math.min(50,game.ships.length*3))+ 2){
           ALhex = "#ffaea8";  
         } else {
           ALhex = "#FFFFFF";
@@ -185,12 +190,12 @@ function tick(game){
         }
         Button(89, 42, 13, 15, "Asteroid", "#FFFFFF", "#00000000", AShex, false, null, true, "Asteroid count:" + game.asteroids.length,"right");
         if (game.step <= (43100 - 10800)){
-          var max = Math.round(game.options.map_size / 3);
+          var max = Math.max(10,Math.min(50,game.ships.length*3))
           var spawn_delay = game.step / Math.round(1800 / 1.7);
-          if (game.aliens.length < max) {
-            alien.x = Math.cos(Math.random() * Math.PI * 2) * 25;
-            alien.y = Math.sin(Math.random() * Math.PI * 2) * 25;
-            game.addAlien(alien_types[Math.floor(Math.random() * Math.min(alien_types.length, spawn_delay / 4))]);
+          if (game.aliens.length < max){
+            alien.x = Math.cos(Math.random()*Math.PI*2)*25;
+            alien.y = Math.sin(Math.random()*Math.PI*2)*25;
+            game.addAlien(alien_types[Math.floor(Math.random()*Math.min(alien_types.length,spawn_delay/4))]);
           }
           var asteroid_step;
           if (game.ships.length < 4){
@@ -284,7 +289,7 @@ function tick(game){
         for (let ship of game.ships){
           if (!ship.custom.survival){
             ship.custom.survival = true;
-            ship.set({x:Math.cos(Math.random() * Math.PI * 2) * 360,y:Math.sin(Math.random() * Math.PI * 2) * 360,team:ship.id * 1e-6,healing:false,hue:1,invulnerable:400});
+            ship.set({x:Math.cos(Math.random()*Math.PI*2)*360,y:Math.sin(Math.random()*Math.PI*2)*360,team:ship.id*1e-6,healing:false,hue:1,invulnerable:400});
             if (ship.custom.init){
               Button(0,0,0,0,"timer","#00000000","#00000000","#00000000",false,null,false,".",null);
               Button(0,0,0,0,"reset","#00000000","#00000000","#00000000",false,null,false,"Reset",null);
@@ -366,8 +371,8 @@ function tick(game){
   }
   if (game.step == survival_step){
     //game.setCustomMap(map);
-    killaliensNasteroids(true, 0, 0, 10, true);
-    firework(0, 0, null, null, null, null, 50);
+    killaliensNasteroids(true,0,0,10,true);
+    firework(0,0,null,null,null,null,50);
     const firework_aliens_codes = [14,17,18];      
     for (let i = 0; i < 40; i++){
       var dir = Math.random()*2*Math.PI;
@@ -381,7 +386,7 @@ function tick(game){
   if (game.step % 30 === 0 && game.step > (survival_step - 10800)){
     for (let alien of game.aliens){
       if (alien.code == 20){
-        alien.set({rate:0.3, damage:510, laser_speed:180, regen:1});
+        alien.set({rate:0.3,damage:510,laser_speed:180,regen:1});
       }
       if (game.step % 600 === 0){
         if (game.aliens.length === 1){  
@@ -394,18 +399,6 @@ function tick(game){
       }      
     }
   }
-  if (survival_step === true && game.step % 30 === 0){
-    if (game.ships.length === 1){
-      facilityButton(ship,"shield",0,false,"I",100,ship.custom.hexA,"Shield refill [I]");    
-      facilityButton(ship,"energy",7,false,"J",100,ship.custom.hexB,"Energy refill [J]");
-      facilityButton(ship,"secondary",14,false,"K",100,ship.custom.hexC,"Secondaries [K]");    
-      facilityButton(ship,"crystals",21,false,"L",100,ship.custom.hexD,"Crystals [L]");
-      Button(0,0,0,0,"quote","#FFF","#000","#fff",false, null, false,"A",null);
-      Button(0,0,0,0,"Alien","#FFF","#000","#fff",false, null, false, "A","right");
-      Button(0,0,0,0,"Asteroid","#FFF","#000","#fff", false, null, false, "A","right");
-      stat_sheet(ship,false);  
-    }
-  } 
   if (game.step % 30 === 0){
     for (let ship of game.ships){
       if (game.step >= ship.custom.shield){  
@@ -501,7 +494,7 @@ var survival_step;
 function game_start(game){
   echo("Map size: " + game.options.map_size);  
   echo("Map name: " + game.options.map_name);
-  echo("Max aliens: " + Math.round(game.options.map_size / 3));
+  //echo("Max aliens: " + Math.round(game.options.map_size / 3));
   alien_radius = (alien_radius * game.options.map_size * 5) ** 2
   survival_step = game.options.survival_time * 3600;
   this.tick = tick;
