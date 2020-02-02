@@ -1,6 +1,6 @@
 const This_mod = "Money's dueling mod";
  
-const strafe = false;
+let strafe = false;
 //Set strafe to true if you want strafe and false if not
 const alien_array = [
   {code:19,level:0}
@@ -121,6 +121,12 @@ var vocabulary = [
  
 var map = "";
  
+if (strafe === true){
+  strafe = 1;
+} else {
+  strafe = 0;
+}
+ 
 this.options = {
   ships: ships,
   custom_map: map,
@@ -221,6 +227,11 @@ function tick(game){
   if (game.step % 30 === 0){
     if (game.aliens.length < max_aliens && alien_portal === true){
       game.addAlien(alien_array[Math.floor(Math.random()*alien_array.length)]);
+    }
+    if (alien_portal === false){
+      for (let alien of game.aliens){
+        alien.set({kill:true});
+      }
     }
   }
 }
