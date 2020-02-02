@@ -1,40 +1,45 @@
 const This_mod = "Money's dueling mod";
  
-let strafe = false;
-//Set strafe to true if you want strafe and vice versa
- 
+const strafe = false;
+//Set strafe to true if you want strafe and false if not
 const alien_array = [
   {code:19,level:0}
 ];
 //add alien codes and their specified level the this arrary, if wanting 
 //to spawn those aliens
-
-const max_aliens = 0;
+const max_aliens = 1;
 //change this variable depending on how may aliens wished to be able to 
 //spawn at any given time
- 
+const alien_portal = false;
+//aliens will only be able to spawn if alien_portal is set to true; 
+//set to false to stop aliens from spawning 
+
 //Some nice functions:
-authorize = (id) => {
+killAliens => {
+  for (let alien of game.aliens){
+    alien.set({kill:true});
+  }
+};
+//Function to kill all aliens
+//To use, just type into the console: killAliens()
+authorize = id => {
   game.ships[id].custom.admin_ship = true;
   return game.ships[id].name + " was granted admin ship\n";
 };
 //Function allowing to enable admin ship, for yourself or other players
 //To use execute authorize(id) where id is the id of the ship wanted to 
 //authorize, via console
-
-unauthorize = (id) => {
+unauthorize = id => {
   game.ships[id].custom.admin_ship = false;
   return "Admin ship was disabled for " + game.ships[id].name + "\n";  
 };
 //Same as the authorize function, just disables admin ship for a certain player
-
-kick = (id) => {
+kick = id => {
   game.ships[id].gameover({"":""});
   return game.ships[id].name + " was kicked\n";
 };
 //eg: kick(1) into the console
 //Kicks the player an id of 1 - the second player joined
- 
 say = (saysWhat,instructor = "Zoltar") => {
   for (let ship of game.ships){
     ship.instructorSays(saysWhat, instructor);
@@ -42,8 +47,7 @@ say = (saysWhat,instructor = "Zoltar") => {
 };
 //eg: say('Yo wazup') into the console
 //Zoltar will pop up and say Yo wazup for all players
- 
-hide = () => {
+hide => {
   for (let ship of game.ships){
     ship.hideInstructor();
   }
@@ -52,13 +56,7 @@ hide = () => {
 //Hides the instructor for all players
  
 //Don't change anything below this line unless you know what you're doing kay
- 
-if (strafe === true){
-  strafe = 1;
-} else {
-  strafe = 0;
-}
- 
+
 const hues = [0xff0000,0xff00ff,0x0000ff,0x00ff00,0xffff00,0xff8000,0x00ffff];
 
 const cow = {
@@ -221,7 +219,7 @@ function tick(game){
     } 
   }
   if (game.step % 30 === 0){
-    if (game.aliens.length < max_aliens){
+    if (game.aliens.length < max_aliens && alien_portal === true){
       game.addAlien(alien_array[Math.floor(Math.random()*alien_array.length)]);
     }
   }
