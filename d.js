@@ -1,7 +1,4 @@
-
-//var facilityButton = true;
-var resetHealerButton = true;
-var infoSheets = true;
+const facilityButtons = true;
 
 e = function(i,type){
   let gems = 0;
@@ -147,7 +144,7 @@ var vocabulary = [
  
 this.options = {
   root_mode: "survival",
-  //ships: ships,
+  ships: ships,
   reset_tree: true,
   vocabulary: vocabulary,
   survival_time: 13.5,
@@ -274,14 +271,26 @@ function tick(game){
           if (!ship.custom.facility_button){
             ship.custom.facility_button = true;
             ship.set({idle:false});
-            ship.custom.hexA = "#00ff00";
-            ship.custom.hexB = "#00ff00";
-            ship.custom.hexC = "#00ff00";
-            ship.custom.hexD = "#00ff00";        
-            facilityButton(ship,"shield",0,true,"I",100,ship.custom.hexA,"Shield refill [I]");    
-            facilityButton(ship,"energy",7,true,"J",100,ship.custom.hexB,"Energy refill [J]");
-            facilityButton(ship,"secondary",14,true,"K",100,ship.custom.hexC,"Secondaries [K]");    
-            facilityButton(ship,"crystals",21,true,"L",100,ship.custom.hexD,"Crystals [L]");
+            if (facilityButtons === true){
+              ship.custom.hexA = "#00ff00";
+              ship.custom.hexB = "#00ff00";
+              ship.custom.hexC = "#00ff00";
+              ship.custom.hexD = "#00ff00";        
+              facilityButton(ship,"shield",0,true,"I",100,ship.custom.hexA,"Shield refill [I]");    
+              facilityButton(ship,"energy",7,true,"J",100,ship.custom.hexB,"Energy refill [J]");
+              facilityButton(ship,"secondary",14,true,"K",100,ship.custom.hexC,"Secondaries [K]");    
+              facilityButton(ship,"crystals",21,true,"L",100,ship.custom.hexD,"Crystals [L]");
+            }
+            if (ship.custom_a == undefined){
+              ship.custom_a = 0;
+            }  
+            if (ship.custom_b == undefined){
+              ship.custom_b = 0;
+            }
+            if (ship.custom_c == undefined){
+              ship.custom_c = 0;
+            }   
+            stat_sheet(ship,true);
             ship.setUIComponent(radar_background);
           }
         }
@@ -308,28 +317,23 @@ function tick(game){
           if (!ship.custom.dead){
             ship.custom.dead = true;
             stat_sheet(ship,false);
-            facilityButton(ship,"shield",0,false,"I",100,ship.custom.hexA,"Shield refill [I]");    
-            facilityButton(ship,"energy",7,false,"J",100,ship.custom.hexB,"Energy refill [J]");
-            facilityButton(ship,"secondary",14,false,"K",100,ship.custom.hexC,"Secondaries [K]");    
-            facilityButton(ship,"crystals",21,false,"L",100,ship.custom.hexD,"Crystals [L]");
+            if (facilityButtons === true){
+              facilityButton(ship,"shield",0,false,"I",100,ship.custom.hexA,"Shield refill [I]");    
+              facilityButton(ship,"energy",7,false,"J",100,ship.custom.hexB,"Energy refill [J]");
+              facilityButton(ship,"secondary",14,false,"K",100,ship.custom.hexC,"Secondaries [K]");    
+              facilityButton(ship,"crystals",21,false,"L",100,ship.custom.hexD,"Crystals [L]");
+            }
           }
         } else {
-          if (ship.custom_a === undefined){
-            ship.custom_a = 0;
-          }  
-          if (ship.custom_b === undefined){
-            ship.custom_b = 0;
-          }
-          if (ship.custom_c === undefined){
-            ship.custom_c = 0;
-          }      
           if (ship.custom.dead){
             ship.custom.dead = false;
             stat_sheet(ship,true);
-            facilityButton(ship,"shield",0,true,"I",100,ship.custom.hexA,"Shield refill [I]");    
-            facilityButton(ship,"energy",7,true,"J",100,ship.custom.hexB,"Energy refill [J]");
-            facilityButton(ship,"secondary",14,true,"K",100,ship.custom.hexC,"Secondaries [K]");    
-            facilityButton(ship,"crystals",21,true,"L",100,ship.custom.hexD,"Crystals [L]");
+            if (facilityButtons === true){
+              facilityButton(ship,"shield",0,true,"I",100,ship.custom.hexA,"Shield refill [I]");    
+              facilityButton(ship,"energy",7,true,"J",100,ship.custom.hexB,"Energy refill [J]");
+              facilityButton(ship,"secondary",14,true,"K",100,ship.custom.hexC,"Secondaries [K]");    
+              facilityButton(ship,"crystals",21,true,"L",100,ship.custom.hexD,"Crystals [L]");
+            }
           }
         }
       }    
@@ -400,64 +404,66 @@ function tick(game){
     }
   }
   if (game.step % 30 === 0){
-    for (let ship of game.ships){
-      if (game.step >= ship.custom.shield){  
-        if (ship.custom.timer_lengthA < 100){
-          ship.custom.hexA = "#ff0000";  
-          ship.custom.timer_lengthA++; ship.custom.timer_lengthA++;
-          if (ship.alive){
-            faciliityButton(ship,"shield",0,true,"I",ship.custom.timer_lengthA,ship.custom.hexA,"Shield refill [I]");    
+    if (facilityButtons === true){
+      for (let ship of game.ships){
+        if (game.step >= ship.custom.shield){  
+          if (ship.custom.timer_lengthA < 100){
+            ship.custom.hexA = "#ff0000";  
+            ship.custom.timer_lengthA++; ship.custom.timer_lengthA++;
+            if (ship.alive){
+              faciliityButton(ship,"shield",0,true,"I",ship.custom.timer_lengthA,ship.custom.hexA,"Shield refill [I]");    
+            }
+            ship.custom.shield += 36;        
+          } else {
+            ship.custom.hexA = "#00ff00";
+            if (ship.alive){
+              facilityButton(ship,"shield",0,true,"I",ship.custom.timer_lengthA,ship.custom.hexA,"Shield refill [I]");
+            }  
           }
-          ship.custom.shield += 36;        
-        } else {
-          ship.custom.hexA = "#00ff00";
-          if (ship.alive){
-            facilityButton(ship,"shield",0,true,"I",ship.custom.timer_lengthA,ship.custom.hexA,"Shield refill [I]");
-          }  
-        }
-      }  
-      if (game.step >= ship.custom.energy){  
-        if (ship.custom.timer_lengthB < 100){
-          ship.custom.hexB = "#ff0000";  
-          ship.custom.timer_lengthB++; ship.custom.timer_lengthB++;
-          if (ship.alive){
-            facilityButton(ship,"energy",7,true,"J",ship.custom.timer_lengthB,ship.custom.hexB,"Energy refill [J]");    
+        }  
+        if (game.step >= ship.custom.energy){  
+          if (ship.custom.timer_lengthB < 100){
+            ship.custom.hexB = "#ff0000";  
+            ship.custom.timer_lengthB++; ship.custom.timer_lengthB++;
+            if (ship.alive){
+              facilityButton(ship,"energy",7,true,"J",ship.custom.timer_lengthB,ship.custom.hexB,"Energy refill [J]");    
+            }
+            ship.custom.energy += 36;        
+          } else {
+            ship.custom.hexB = "#00ff00";
+            if (ship.alive){
+              facilityButton(ship,"energy",7,true,"J",ship.custom.timer_lengthB,ship.custom.hexB,"Energy refill [J]");
+            }
           }
-          ship.custom.energy += 36;        
-        } else {
-          ship.custom.hexB = "#00ff00";
-          if (ship.alive){
-            facilityButton(ship,"energy",7,true,"J",ship.custom.timer_lengthB,ship.custom.hexB,"Energy refill [J]");
+        }  
+        if (game.step >= ship.custom.secondary){  
+          if (ship.custom.timer_lengthC < 100){
+            ship.custom.hexC = "#ff0000";  
+            ship.custom.timer_lengthC++; ship.custom.timer_lengthC++;
+            if (ship.alive){
+              facilityButton(ship,"secondary",14,true,"K",ship.custom.timer_lengthC,ship.custom.hexC,"Secondaries [K]");    
+            }
+            ship.custom.secondary += 36;        
+          } else {
+            ship.custom.hexC = "#00ff00";
+            if (ship.alive){
+              facilityButton(ship,"secondary",14,true,"K",ship.custom.timer_lengthC,ship.custom.hexC,"Secondaries [K]");
+            }
           }
-        }
-      }  
-      if (game.step >= ship.custom.secondary){  
-        if (ship.custom.timer_lengthC < 100){
-          ship.custom.hexC = "#ff0000";  
-          ship.custom.timer_lengthC++; ship.custom.timer_lengthC++;
-          if (ship.alive){
-            facilityButton(ship,"secondary",14,true,"K",ship.custom.timer_lengthC,ship.custom.hexC,"Secondaries [K]");    
-          }
-          ship.custom.secondary += 36;        
-        } else {
-          ship.custom.hexC = "#00ff00";
-          if (ship.alive){
-            facilityButton(ship,"secondary",14,true,"K",ship.custom.timer_lengthC,ship.custom.hexC,"Secondaries [K]");
-          }
-        }
-      }  
-      if (game.step >= ship.custom.crystals){  
-        if (ship.custom.timer_lengthD < 100){
-          ship.custom.hexD = "#ff0000";  
-          ship.custom.timer_lengthD++; ship.custom.timer_lengthD++;
-          if (ship.alive){
-            facilityButton(ship,"crystals",21,true,"L",ship.custom.timer_lengthD,ship.custom.hexD,"Crystals [L]");    
-          }
-          ship.custom.crystals += 36;        
-        } else {
-          ship.custom.hexD = "#00ff00";
-          if (ship.alive){
-            facilityButton(ship,"crystals",21,true,"L",ship.custom.timer_lengthD,ship.custom.hexD,"Crystals [L]");
+        }  
+        if (game.step >= ship.custom.crystals){  
+          if (ship.custom.timer_lengthD < 100){
+            ship.custom.hexD = "#ff0000";  
+            ship.custom.timer_lengthD++; ship.custom.timer_lengthD++;
+            if (ship.alive){
+              facilityButton(ship,"crystals",21,true,"L",ship.custom.timer_lengthD,ship.custom.hexD,"Crystals [L]");    
+            }
+            ship.custom.crystals += 36;        
+          } else {
+            ship.custom.hexD = "#00ff00";
+            if (ship.alive){
+              facilityButton(ship,"crystals",21,true,"L",ship.custom.timer_lengthD,ship.custom.hexD,"Crystals [L]");
+            }
           }
         }
       }      
@@ -488,7 +494,7 @@ var hues = [30,60,120,270];
 var hues2 = [90,150,240,300];
 var team1 = hues[Math.floor(Math.random()*hues.length)];
 var team2 = hues2[Math.floor(Math.random()*hues2.length)];
-var alien_radius = 0.25; 
+var alien_radius = 0.3; 
 var survival_step;
  
 function game_start(game){
@@ -500,6 +506,13 @@ function game_start(game){
   this.tick = tick;
 }
 this.tick = game_start;
+
+game.modding.tick = function(t){
+  this.game.tick(t);
+  if (this.context.tick != null){
+    this.context.tick(this.game);
+  }
+}; 
  
 this.event = function(event, game){
   const killer = event.killer;
@@ -599,11 +612,11 @@ this.event = function(event, game){
       let asteroid = event.asteroid
       switch (rand_num){
         case 1:
-        //case 2:
+        case 2:
           game.addAlien({code:13,x:asteroid.x,y:asteroid.y,crystal_drop:50}); 
           break; 
         case 3:
-        //case 4: 
+        case 4: 
           game.addCollectible({code:secondary_codes[Math.floor(Math.random() * secondary_codes.length)],x:asteroid.x,y:asteroid.y}); 
         break;
       }
@@ -636,8 +649,8 @@ this.event = function(event, game){
       }        
       else if (component == "energy"){
         if (ship.custom.hexB === "#00ff00"){
-          ship.set({generator:3000});
           ship.custom.hexB = "#ff0000";
+          ship.set({generator:3000});
           ship.custom.timer_lengthB = 0;
           facilityButton(ship,"energy",7,true,"J",ship.custom.timer_lengthB,ship.custom.hexB,"Energy refill [J]");    
           ship.custom.energy = game.step + 36;
@@ -751,28 +764,7 @@ function Button(x, y, width, height, id, fill, bordercol, textcol, clickable, sh
     });
   }
 }
- 
-function clickableButton(x, id, visible, text){
-  components = [];
-  components = [
-    {type: "text",position:[10,35,80,30],value:text,color:"#FFFFFF"}
-  ];
-  for (var ship of game.ships){
-    if (ship.alive !== true){
-      visible = false;
-    } else {
-      visible = true;
-    }
-    ship.setUIComponent({
-      id: id,
-      position: [2+x,26,8.5,8.5],
-      clickable: true,
-      visible: visible,
-      components: components
-    });
-  }
-}
- 
+
 function stat_sheet(ship, visible){
   ship.setUIComponent({
     id: "Stat sheet",
@@ -787,18 +779,20 @@ function stat_sheet(ship, visible){
 }
  
 function facilityButton(ship,id,y,visible,shortcut,timer_length,hex,text){
-  ship.setUIComponent({
-    id: id,
-    position: [4.5,33+y,10,8],
-    clickable: true,
-    visible: visible,
-    shortcut: shortcut,
-    components: [
-      {type:"box",position:[0,70,0+timer_length,3],fill:"#00000000",stroke:hex,width:4},
-      {type:"box",position:[0,25,100,50],fill:"#00000000",stroke:"#ffffff",width:4},
-      {type: "text",position:[10,35,80,30],value:text,color:"#ffffff"}
-    ]
-  });
+  if (facilityButtons === true){
+    ship.setUIComponent({
+      id: id,
+      position: [4.5,33+y,10,8],
+      clickable: true,
+      visible: visible,
+      shortcut: shortcut,
+      components: [
+        {type:"box",position:[0,70,0+timer_length,3],fill:"#00000000",stroke:hex,width:4},
+        {type:"box",position:[0,25,100,50],fill:"#00000000",stroke:"#ffffff",width:4},
+        {type: "text",position:[10,35,80,30],value:text,color:"#ffffff"}
+      ]
+    });
+  }
 }
 
 function firework(x, y, alienAmount, alienCode, alienLevel, alienCrystaldrop, asteroidAmount) {
@@ -825,8 +819,8 @@ function killaliensNasteroids(alienKill, x, y, asteroidSize, asteroidKill){
 }
  
 function resetShip(ship){
-  if (ship != null) {
-    ship.set({type:101,crystals:20,invulnerable:360});
+  if (ship != null && ship.type != 101){
+    ship.set({type:101,crystals:20,invulnerable:360,shield:300});
   }  
 }
  
