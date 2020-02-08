@@ -221,6 +221,7 @@ game.modding.tick = function(t){
 };  
  
 this.event = function(event, game){
+  const killer = event.killer;
   const ship = event.ship;      
   switch (event.name){
     case "ui_component_clicked":
