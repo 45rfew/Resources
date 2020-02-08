@@ -57,6 +57,14 @@ hide => {
  
 //Don't change anything below this line unless you know what you're doing kay
 
+playerList => {
+  echo("\nList of players and their IDs:");
+  for (let i=0; i<game.ships.length; i++){ 
+    echo(i+": "+game.ships[i].name);  
+  } 
+  echo("\n");
+};
+
 const hues = [0xff0000,0xff00ff,0x0000ff,0x00ff00,0xffff00,0xff8000,0x00ffff];
 
 const cow = {
@@ -219,10 +227,7 @@ function tick(game){
     }
   }
   if (game.step % 3600 === 0){
-    echo("\nList of players and their IDs:");
-    for (let i=0; i<game.ships.length; i++){ 
-      echo(i+": "+game.ships[i].name);  
-    } 
+    playerList();
   }
   if (game.step % 30 === 0){
     if (game.aliens.length < max_aliens && alien_portal === true){
@@ -242,6 +247,12 @@ function game_start(game){
 }
 this.tick = game_start;
  
+game.modding.tick = function(t){
+  this.game.tick(t);
+  if (this.context.tick != null){
+    this.context.tick(this.game);
+  }
+};  
  
 this.event = function(event, game){
   var ship = event.ship;  
