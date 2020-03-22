@@ -169,9 +169,9 @@ var ship_list = [
 ];
  
 function tick(game){
-  for (let i=0; i<game.ships.length; i++){  
-    var ship = game.ships[i];
-    if (game.step % 60 === 0){
+  if (game.step % 60 === 0){
+    for (let i=0; i<game.ships.length; i++){  
+      var ship = game.ships[i];
       if (!ship.custom.options_button){ 
         ship.custom.options_button = true;
         game.ships[i].setUIComponent({ 
@@ -205,42 +205,37 @@ function tick(game){
           }
         }        
       }
-    }
-    if (game.ships[i].custom.admin_ship === true){
-      if (!ship.custom.authorized){ 
-        ship.custom.authorized = true;   
-        ship.custom.unauthorized = false; 
-        game.ships[i].setUIComponent({ 
-          id: "Admin ship",
-          position: [27,0,8,4],
-          clickable: true,
-          visible: true,
-          shortcut: "M",
-          components: [
-            { type:"box",position:[0,0,190,100],fill:"rgba(68, 85, 102, 0)",stroke:"#FFFFFF",width:5},
-            { type: "text",position:[0,30,100,60],value:"Admin ship [M]",color:"#FFFFFF"},
-          ]
-        });     
-      }    
-    } else if (game.ships[i].custom.admin_ship === false){
-      if (!ship.custom.unauthorized){ 
-        ship.custom.unauthorized = true; 
-        ship.custom.authorized = false;  
-        game.ships[i].setUIComponent({ 
-          id: "Admin ship",
-          clickable: false,
-          visible: false,
-        });        
-        if (game.ships[i].type === 101){
-          game.ships[i].set({type:101,stats:11111111});
+      if (game.ships[i].custom.admin_ship === true){
+        if (!ship.custom.authorized){ 
+          ship.custom.authorized = true;   
+          ship.custom.unauthorized = false; 
+          game.ships[i].setUIComponent({ 
+            id: "Admin ship",
+            position: [27,0,8,4],
+            clickable: true,
+            visible: true,
+            shortcut: "M",
+            components: [
+              { type:"box",position:[0,0,190,100],fill:"rgba(68, 85, 102, 0)",stroke:"#FFFFFF",width:5},
+              { type: "text",position:[0,30,100,60],value:"Admin ship [M]",color:"#FFFFFF"},
+            ]
+          });     
+        }    
+      } else if (game.ships[i].custom.admin_ship === false){
+        if (!ship.custom.unauthorized){ 
+          ship.custom.unauthorized = true; 
+          ship.custom.authorized = false;  
+          game.ships[i].setUIComponent({ 
+            id: "Admin ship",
+            clickable: false,
+            visible: false,
+          });        
+          if (game.ships[i].type === 101){
+            game.ships[i].set({type:101,stats:11111111});
+          }
         }
       }
     }
-  }
-  if (game.step % 3600 === 0){
-    playerList();
-  }
-  if (game.step % 30 === 0){
     if (game.aliens.length < max_aliens && alien_portal === true){
       game.addAlien(alien_array[Math.floor(Math.random()*alien_array.length)]);
     }
@@ -249,6 +244,9 @@ function tick(game){
         alien.set({kill:true});
       }
     }
+  }
+  if (game.step % 3600 === 0){
+    playerList();
   }
 }
 
