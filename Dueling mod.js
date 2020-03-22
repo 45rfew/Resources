@@ -57,13 +57,24 @@ hide => {
  
 //Don't change anything below this line unless you know what you're doing kay
 
-playerList => {
+playerList = function(){
   echo("\nList of players and their IDs:");
   for (let i=0; i<game.ships.length; i++){ 
     echo(i+": "+game.ships[i].name);  
   } 
   echo("\n");
 };
+
+findPlayerByName = function(name){
+	for (let i=0; i<game.ships.length; i++){
+		if (game.ships[i].name == name){
+		  return game.ships[i];
+		}
+	}
+	return null;
+};
+
+//findPlayerByName(name).gameover({"":""});
 
 const hues = [0xff0000,0xff00ff,0x0000ff,0x00ff00,0xffff00,0xff8000,0x00ffff];
 
@@ -73,7 +84,7 @@ const cow = {
   emissiveColor: hues[0]
 }; 
  
-for (let i=0; i<10; i++){
+for (let i=0; i<3; i++){
   let rand = Math.random()*2;
   game.setObject({
     id: "cow"+i,
@@ -364,7 +375,8 @@ this.event = function(event, game){
               {type:"box",position:[25,0,50,25],fill:"rgba(68, 85, 102, 0)",stroke:"#ffffff",width:3},
               {type: "text",position: [45,0,10,5],color: "#ffffff",value: "Options"},
             ]
-          });   
+          });
+          ship.custom.option_screen = false;
         } else if (ship.custom.option_screen === false){
           ship.setUIComponent({
             id: "Next ship",
