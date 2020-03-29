@@ -376,37 +376,17 @@ var antenna = {
   }
 };
 
-game.setObject({
-  id: "alien",
-  type: alien,
-  position: {x:50,y:50,z:-7},
-  rotation: {x:Math.PI/2,y:0,z:Math.PI/2},
-  scale: {x:1,y:1,z:1}
-});  
- 
-game.setObject({
-  id: "alien"+1,
-  type: alien,
-  position: {x:-50,y:50,z:-7},
-  rotation: {x:Math.PI/2,y:0,z:Math.PI/2},
-  scale: {x:1,y:1,z:1}
-});  
-
-game.setObject({
-  id: "alien"+2,
-  type: alien,
-  position: {x:50,y:-50,z:-7},
-  rotation: {x:Math.PI/2,y:0,z:Math.PI/2},
-  scale: {x:1,y:1,z:1}
-});  
- 
-game.setObject({
-  id: "alien"+3,
-  type: alien,
-  position: {x:-50,y:-50,z:-7},
-  rotation: {x:Math.PI/2,y:0,z:Math.PI/2},
-  scale: {x:1,y:1,z:1}
-}); 
+for (let i=0; i>4; i++){
+  const arr = [50,-50,50,-50];
+  const arr2 = [50,50,-50,-50];
+  game.setObject({
+    id: "alien"+i,
+    type: alien,
+    position: {x:arr[i],y:arr2[i],z:-7},
+    rotation: {x:Math.PI/2,y:0,z:Math.PI/2},
+    scale: {x:1,y:1,z:1}
+  });  
+}   
 
 game.setObject({
   id: "floor",
