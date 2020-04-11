@@ -80,13 +80,13 @@ var music = ["red_mist.mp3","civilisation.mp3","procedurality.mp3","argon.mp3","
  
 var map_names = ["Switzerland","Canada","Japan","Germany","UnitedKingdom","Sweden","Australia","UnitedStates","Norway","France","Netherlands","NewZealand","Denmark","Finland","Singapore","China","Belgium","Italy","Luxembourg","Spain","Ireland","SouthKorea","UnitedArabEmirates","Russia","Portugal","Thailand","India","Brazil","Israel","Greece","Qatar","SaudiArabia","Poland","Turkey","Mexico","Croatia","SouthAfrica","Malaysia","Vietnam","Egypt","CzechRepublic","Morocco","Indonesia","CostaRica","SriLanka","Peru","Hungary","Argentina","DominicanRepublic","Philippines","Estonia","Panama","Chile","Tanzania","Latvia","Slovenia","Lithuania","Ecuador","Slovakia","Uruguay","Myanmar","Romania","Oman","Guatemala","Ukraine","Colombia","Bulgaria","Kazakhstan","Ghana","Azerbaijan","Jordan","Tunisia","Belarus","Nigeria","Pakistan"];
 
-var hues = [[270,160],[60,300],[240,40]]; 
+var hues = [[160,270],[60,300],[30,240]]; 
 
 this.options = {
   root_mode: "team",
   ships: ships,
   reset_tree: true,
-  starting_ship: 705,
+  starting_ship: 101,
   starting_ship_maxed: true,
   map_id: 4994,
   map_size: 90,
@@ -96,13 +96,13 @@ this.options = {
   shield_regen_factor: 0.8,
   power_regen_factor: 1,
   friendly_colors: 2,
-  hues: hues[Math.floor(Math.random() * hues.length)],
+  hues: [160,270],
   soundtrack: music[Math.floor(Math.random() * music.length)],
   station_regeneration: 2,
   station_crystal_capacity: 0.5,
   station_repair_threshold: 0.14,
 };
- 
+
 function tick(game){
   if (game.step % 15 === 0){  
     if (game.ships.length !== 0){
@@ -117,8 +117,6 @@ function tick(game){
     }
   }
   if (game.step % 20 === 0){
-    //Button(2, 29, 10, 11.5, "reset", "#FFFFFF", "#00000000", "#FFFFFF", true, null, true, "Reset",null);
-    //Button(10, 29, 10, 11.5, "healer", "#FFFFFF", "#00000000", "#FFFFFF", true, null, true, "Healer",null);
     for (let alien of game.aliens){
       if (Math.abs(alien.x) > alien_radius || Math.abs(alien.y) > alien_radius){//if (alien.x**2 + alien.y**2 > alien_radius && alien.code !== 16){
         if (alien.code != 16){
@@ -129,20 +127,29 @@ function tick(game){
   }
   if (game.step % 60 === 0){
     for (let ship of game.ships){
+      if (ship.team === 0){
+        ship.custom.status_hue = "#b5eae2";
+      } else
+      if (ship.team === 1){
+        ship.custom.status_hue = "#cdb3fd";
+      } 
+      if (ship.healing === true){
+        ship.custom.status_text = "You are in healing mode ⚕";
+        status_button(ship,20,true);
+      } else {
+        ship.custom.status_text = "You are in offensive mode 🗡";
+        status_button(ship,22,true);
+      }
       if (!ship.custom.radar){
         ship.custom.radar = true;
         ship.setUIComponent(radar_background);
       }
     } 
     let missile_tick = 720;
-    let torpedo_tick = 1800;
     let heavy_mine_tick = 2200; 
     if (game.collectibles.length < 40){ 
       if (game.step >= 10800){
         missile_tick -= 60;
-      } else
-      if (game.step >= 18000){            
-        torpedo_tick -= 60;
       } else
       if (game.step >= 27000){            
         heavy_mine_tick -= 60;
@@ -154,15 +161,12 @@ function tick(game){
     if (game.step % missile_tick === 0){
       game.addCollectible({code:11,x:Math.cos(Math.random()*Math.PI*2)*50,y:Math.sin(Math.random()*Math.PI*2)*50});
     }
-    if (game.step % torpedo_tick === 0){
-      game.addCollectible({code:12,x:Math.cos(Math.random()*Math.PI*2)*50,y:Math.sin(Math.random()*Math.PI*2)*50});
-    }
     if (game.step % heavy_mine_tick === 0){
       game.addCollectible({code:21,x:Math.cos(Math.random()*Math.PI*2)*50,y:Math.sin(Math.random()*Math.PI*2)*50});
     }
   }    
   if (game.step % 400 === 0){
-    button(26.5, 10, 60, 25, "quote", "#FFFFFF", "#00000000", "#FFFFFF", false, null, true,quotes[Math.floor(quotes.length * Math.random())],null);
+    button(26.5,10,60,25,"quote",false,true,quotes[Math.floor(quotes.length*Math.random())]);
   }
 }
 
@@ -190,16 +194,6 @@ game.modding.commands.a = function(){
  
 this.event = function(event, game){
   switch (event.name){
-    case "ui_component_clicked":
-      const ship = event.ship;    
-      const component = event.id;
-      if (component == "reset"){
-        resetShip(ship);
-      }
-      else if (component == "healer"){
-        healShip(ship);
-      }
-    break;
     case "alien_destroyed":
       const alien = event.alien;
       if (alien.code == 10 && alien.level === 1){
@@ -269,22 +263,33 @@ function rand(min, max){
   return Math.floor(Math.random() * (max - min + 1)) + min;
 } 
  
-function button(x, y, width, height, id, fill, bordercol, textcol, clickable, shortcut, visible, text, align){
-  components = [];
+function button(x, y, width, height, id, clickable, visible, text){
   components = [
-    {type:"text",position:[0,0,78,20],value:text,color:textcol,align:align},
+    {type:"text",position:[0,0,78,20],value:text,color:"ffffff"},
   ];
-  for (var ship of game.ships){
-    ship.setUIComponent({
+  for (let ship of game.ship){
+    game.ships[ship].setUIComponent({
       id: id,
       position: [x,y,width,height],
       clickable: clickable,
-      shortcut: shortcut,      
       visible: visible,
       components: components
     });
-  }
-}
+  }    
+} 
+
+function status_button(ship, width, visible){
+  components = [
+    {type:"text",position:[0,0,78,20],value:ship.custom.status_text,color:ship.custom.status_hue},
+  ];
+  ship.setUIComponent({
+    id: ship.id,
+    position: [2.5,29,width,15],
+    clickable: false,
+    visible: visible,
+    components: components
+  });
+} 
 
 function resetShip(ship){
   if (ship != null && ship.type != 101){
