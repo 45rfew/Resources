@@ -86,7 +86,7 @@ this.options = {
   root_mode: "team",
   ships: ships,
   reset_tree: true,
-  starting_ship: 705,
+  starting_ship: 101,
   starting_ship_maxed: true,
   map_id: 4994,
   map_size: 80,
