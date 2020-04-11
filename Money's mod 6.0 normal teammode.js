@@ -86,10 +86,10 @@ this.options = {
   root_mode: "team",
   ships: ships,
   reset_tree: true,
-  starting_ship: 101,
+  starting_ship: 705,
   starting_ship_maxed: true,
   map_id: 4994,
-  map_size: 80,
+  map_size: 90,
   map_name: map_names[Math.floor(Math.random() * map_names.length)],  
   asteroids_strength: 1.3,
   crystal_value: 3,
@@ -99,7 +99,7 @@ this.options = {
   hues: hues[Math.floor(Math.random() * hues.length)],
   soundtrack: music[Math.floor(Math.random() * music.length)],
   station_regeneration: 2,
-  station_crystal_capacity: 0.6,
+  station_crystal_capacity: 0.5,
   station_repair_threshold: 0.14,
 };
  
