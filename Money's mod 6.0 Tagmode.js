@@ -329,7 +329,16 @@ deco = function(ship,stats,score) {
   let origin=[...scoreboard.components];
   scoreboard.components.splice(line*2+2,0,new PlayerBox((line+1)*10));
   line=score.indexOf(game.ships.indexOf(ship));
-  scoreboard.components.splice((line+teams+2)*2+1,0,new PlayerBox((line+teams+2)*10));
+  if (line == -1) {
+    scoreboard.components.splice(scoreboard.components.length-2,2,
+      new PlayerBox(90),
+      new Tag("text",ship.score,91,hexcolorcode[ship.team],"right",5),
+      new Tag("player",ship.id,91,hexcolorcode[ship.team],"left")
+    );
+  }
+  else {
+    scoreboard.components.splice((line+teams+2)*2+1,0,new PlayerBox((line+teams+2)*10));
+  }
   ship.setUIComponent(scoreboard);
   scoreboard.components=[...origin];
 };
