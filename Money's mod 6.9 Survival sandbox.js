@@ -189,58 +189,33 @@ this.options = {
   custom_map: map,
   ships: ships,
   reset_tree: true,
-  survival_level: 8,
-  survival_time: 45,
+  radar_zoom: 2,
   starting_ship: 101,
+  survival_time: 30,
+  survival_level: 8,
   starting_ship_maxed: true,
   map_size: 100,
   map_name: map_names[~~(Math.random()*map_names.length)],  
   asteroids_strength: 1.5,
   lives: 5,
-  crystal_value: 4,
+  crystal_value: 3,
   shield_regen_factor: 0.8,
-  power_regen_factor: 1,
+  power_regen_factor: 1, 
+  ship_speed: 1.5,
   soundtrack: music[~~(Math.random()*music.length)],
 };
 
 function tick(game){
-  if (game.ships.length !== 0){
-    if (game.step % 15 === 0){  
-      var max = Math.max(10,Math.min(35,game.ships.length*2.5));
-      var spawn_delay = game.step / Math.round(1800 / 1.5);
+  if (game.step % 15 === 0){  
+    if (game.ships.length !== 0){
+      var max = Math.max(12,Math.min(27,~~(game.ships.length*2.2)));
       if (game.aliens.length < max){
-        alien.x = Math.cos(Math.random()*Math.PI*2)*25;
-        alien.y = Math.sin(Math.random()*Math.PI*2)*25;
-        game.addAlien(alien_types[Math.floor(Math.random()*Math.min(alien_types.length,spawn_delay/4))]);
+        var spawn_delay = game.step / ~~(1800 / 1.5 * 2);
+        var alien = alien_types[~~(Math.random()*Math.min(alien_types.length,spawn_delay/4))];
+        alien.x = Math.cos(Math.random()*Math.PI*2)*45;
+        alien.y = Math.sin(Math.random()*Math.PI*2)*45;
+        game.addAlien(alien);
       }
-    }
-  }
-  if (game.step % 60 === 0){
-    for (let ship of game.ships){
-      if (ship.healing === true){
-        ship.custom.status_text = "You are in healing mode ⚕";
-        status_button(ship,20,true);
-      } else {
-        ship.custom.status_text = "You are in offensive mode 🗡";
-        status_button(ship,22,true);
-      }
-      if (!ship.custom.radar){
-        ship.custom.radar = true;
-        ship.setUIComponent(radar_background); 
-        button(2, 29, 10, 11.5, "reset", "#FFFFFF", "#00000000", "#FFFFFF", true, null, true, "Reset",null);
-        button(10, 29, 10, 11.5, "healer", "#FFFFFF", "#00000000", "#FFFFFF", true, null, true, "Healer",null);
-      }
-    }
-    if (game.step < survival_step){
-      var steps = survival_step - game.step;
-      var minutes = Math.floor(steps / 3600);
-      var seconds = Math.floor((steps % 3600) / 60);
-      if (seconds < 10) seconds = "0" + seconds;
-      if (minutes < 10) minutes = "0" + minutes;
-      var Thex = "#ffffff";
-      if (minutes < 3) Thex = "#ffaea8";
-      if (minutes < 1) Thex = "#ff0000";
-      button(2.2,31,20,20,"timer", "#FFFFFF", "#00000000", Thex, false, null, true, "Time till survival: " + minutes + ":" + seconds,null);
     }
   }
   if (game.step % 20 === 0){
@@ -251,6 +226,23 @@ function tick(game){
         }
       }
     }
+  }
+  if (game.step % 60 === 0){
+    if (game.step < survival_step){
+      var steps = survival_step - game.step;
+      var minutes = Math.floor(steps / 3600);
+      var seconds = Math.floor((steps % 3600) / 60);
+      if (seconds < 10) seconds = "0" + seconds;
+      if (minutes < 10) minutes = "0" + minutes;
+      button(2.2,31,20,20,"timer",false,true,"Time till survival: "+minutes+":"+seconds);
+    }    
+    for (let ship of game.ships){
+      if (!ship.custom.radar){
+        ship.custom.radar = true;
+        ship.setUIComponent(radar_background);
+        button(4,29,15,16.5,"reset",true,true,"Reset");
+      }
+    } 
     let missile_tick = 720, heavy_mine_tick = 2200; 
     if (game.collectibles.length < 40){ 
       if (game.step >= 10800) missile_tick -= 60;
@@ -260,11 +252,11 @@ function tick(game){
     if (game.step % missile_tick === 0) game.addCollectible({code:11,x:Math.cos(Math.random()*Math.PI*2)*50,y:Math.sin(Math.random()*Math.PI*2)*50});
     if (game.step % heavy_mine_tick === 0) game.addCollectible({code:21,x:Math.cos(Math.random()*Math.PI*2)*50,y:Math.sin(Math.random()*Math.PI*2)*50});
   }    
-  if (game.step % 600 === 0) button(26.5,10,60,25,"quote",false,true,quotes[~~(quotes.length*Math.random())]);    
+  if (game.step % 600 === 0) button(26.5,10,60,25,"quote",false,true,quotes[~~(quotes.length*Math.random())]);
 }
 
-var alien_radius = 0.3;  
-var survival_step; 
+var alien_radius = 0.23;  
+var survival_step;
 
 function game_start(game){
   survival_step = game.options.survival_time * 3600;
@@ -277,9 +269,16 @@ game.modding.tick = function(t){
   this.game.tick(t);
   if (this.context.tick != null){
     this.context.tick(this.game);
-  }
+  } 
 };  
- 
+
+game.modding.commands.a = function(){
+  for (let alien of game.aliens){
+    alien.set({kill:true});
+  }
+  echo("Aliens cleared");
+};
+
 this.event = function(event, game){
   switch (event.name){
     case "ui_component_clicked":
@@ -291,7 +290,7 @@ this.event = function(event, game){
       else if (component == "healer"){
         healShip(ship);
       }
-    break;
+    break;    
     case "alien_destroyed":
       const alien = event.alien;
       if (alien.code == 10 && alien.level === 1){
@@ -320,15 +319,15 @@ this.event = function(event, game){
     break;
   }
 };
- 
+
 var alien_types = [
-  {code:10,level:0,points:10,crystal_drop:10},  
-  {code:10,level:1,points:20,crystal_drop:20},
-  {code:16,level:0,points:40,crystal_drop:40},
-  {code:10,level:2,points:50,crystal_drop:70},
-  {code:16,level:1,points:75,crystal_drop:75},
-  {code:10,level:3,points:1000,crystal_drop:200},
-  {code:19,level:0,points:1000,crystal_drop:250}
+  {code:10,level:0,points:5,crystal_drop:7},  
+  {code:10,level:1,points:10,crystal_drop:15},
+  {code:16,level:0,points:20,crystal_drop:24},
+  {code:10,level:2,points:25,crystal_drop:30},
+  {code:16,level:1,points:35,crystal_drop:35},  
+  {code:10,level:2,points:25,crystal_drop:30},
+  {code:10,level:3,points:300,crystal_drop:250},
 ];
 
 var quotes = [
@@ -350,41 +349,6 @@ var quotes = [
   "Never go to a doctor whose office plants have died.",
   "If your life has no problems, then you're not really living it."
 ];
- 
-function button(x, y, width, height, id, fill, bordercol, textcol, clickable, shortcut, visible, text, align){
-  components = [];
-  components = [
-    {type:"text",position:[0,0,78,20],value:text,color:textcol,align:align},
-  ];
-  for (var ship of game.ships){
-    if (ship.alive !== true){
-      visible = false;
-    } else {
-      visible = true;
-    }
-    ship.setUIComponent({
-      id: id,
-      position: [x,y,width,height],
-      clickable: clickable,
-      shortcut: shortcut,      
-      visible: visible,
-      components: components
-    });
-  }
-}
-
-function status_button(ship, width, visible){
-  components = [
-    {type:"text",position:[0,0,78,20],value:ship.custom.status_text,color:ship.custom.status_hue},
-  ];
-  ship.setUIComponent({
-    id: ship.id,
-    position: [2.5,29,width,15],
-    clickable: false,
-    visible: visible,
-    components: components
-  });
-} 
 
 e = function(i,type){
   let gems = 0;
@@ -404,7 +368,22 @@ function healShip(ship){
     ship.set({healing:!ship.healing});
   }
 }
- 
+
+function button(x, y, width, height, id, clickable, visible, text){
+  components = [
+    {type:"text",position:[0,0,78,20],value:text,color:"#ffffff"},
+  ];
+  for (let ship of game.ships){
+    ship.setUIComponent({
+      id: id,
+      position: [x,y,width,height],
+      clickable: clickable,
+      visible: visible,
+      components: components
+    });
+  }    
+} 
+
 var radar_background = {
   id: "radar_background",
   components: [],
@@ -412,10 +391,10 @@ var radar_background = {
  
 var scale_pos = 100 / (this.options.map_size * 10);
 var scale_size = 50 / this.options.map_size;
-//radarSpot function doesn't work in survival mode; only in team mode :/ 
-function addRadarSpot (x, y, width, height, alpha){
+
+function addRadarSpot (x, y, type, width, height, alpha){
   radar_background.components.push({
-    type: "box",
+    type: type,
     position: [
       50 + x * scale_pos - width * scale_size / 2,
       50 + y * scale_pos - height * scale_size / 2,
@@ -485,4 +464,3 @@ game.setObject({
   rotation: {x:0,y:0,z:1},
   scale: {x:10/1.5,y:10/1.5,z:10/1.5}
 }); 
-
