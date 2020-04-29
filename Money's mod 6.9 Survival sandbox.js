@@ -70,7 +70,7 @@ ships.push(Lancephorhynchus);
 ships.push(Epiloguer_701);
 ships.push(Vanquisher_702);
 ships.push(Raigeki);
-ships.push(Netflix);
+ships.push(Tsimtsum);
 ships.push(Nirvana_705);
 ships.push(Pusat);
 ships.push(Trisbaena);
