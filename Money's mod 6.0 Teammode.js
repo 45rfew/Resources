@@ -46,7 +46,7 @@ ships.push(Excelsior);
 ships.push(Avalon);
 ships.push(Atreyu);
 ships.push(Messiah_302);
-ships.push(Daedalus_303);
+ships.push(Daedalus);
 ships.push(Lance_R_304);
 ships.push(Teraser_401);
 ships.push(Yggdrasil_402);
