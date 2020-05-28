@@ -63,7 +63,7 @@ killaliensNasteroids = (alienKill,asteroidKill) => {
 
 e = (shipId,shipType) => {
   const level = Math.trunc(shipType / 100);
-  game.ships[shipId].set({type:shipType,stats:111111*(level||0),crystals:((level||0)**2)*20,idle:false});
+  game.ships[shipId].set({type:shipType,stats:11111111*(level||0),crystals:((level||0)**2)*20,idle:false});
 };
 
 setAliens = (damage,laserRate,laserSpeed,shield) => {
