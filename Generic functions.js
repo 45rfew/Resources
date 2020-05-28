@@ -26,40 +26,11 @@ addAliens = (ammount,x,y,code,level,points,crystals,weapon_drop) => {
       weapon_drop:weapon_drop
     });
   }
-  switch (code){
-    case 10:
-      alien_type = "Chicken";
-    break;  
-    case 11:
-      alien_type = "Crab";
-    break;  
-    case 12:
-      alien_type = "Fortress";
-    break;  
-    case 13:
-      alien_type = "Caterpillar";
-    break;        
-    case 14:
-      alien_type = "Candlestick";
-    break;        
-    case 15:
-      alien_type = "Hirsute";
-    break;        
-    case 16:
-      alien_type = "Piranha";
-    break;        
-    case 17:
-      alien_type = "Pointu";
-    break;        
-    case 18:
-      alien_type = "Fork";
-    break;        
-    case 19:
-      alien_type = "Saucer";
-    break;        
-    case 20:
-      alien_type = "FinalBoss";
-  }
+  let alienname=["Chicken","Crab","Fortress","Caterpillar","Candlestick","Hirsute","Piranha","Pointu","Fork","Saucer","FinalBoss"]
+  weapondrop={
+    10: "Rockets",
+    
+  };
   switch(weapon_drop){
     case 10:
       collectible = "Rockets";
