@@ -27,42 +27,19 @@ addAliens = (ammount,x,y,code,level,points,crystals,weapon_drop) => {
     });
   }
   let alienname=["Chicken","Crab","Fortress","Caterpillar","Candlestick","Hirsute","Piranha","Pointu","Fork","Saucer","FinalBoss"]
-  weapondrop={
-    10: "Rockets",
-    
-  };
-  switch(weapon_drop){
-    case 10:
-      collectible = "Rockets";
-    break;
-    case 11:
-      collectible = "Missiles";
-    break;
-    case 12:
-      collectible = "Torpedo";
-    break;
-    case 20:
-      collectible = "Light mines";
-    break;
-    case 21:
-      collectible = "Heavy mines";
-    break;
-    case 40:
-      collectible = "Mining pod";
-    break;
-    case 41:
-      collectible = "Attack pod";
-    break;
-    case 42:
-      collectible = "Defense pod";
-    break;
-    case 90:
-      collectible = "Energy refill";
-    break; 
-    case 91:
-      collectible = "Shield refill";
-  }  
-  return "\nSpawned "+ammount+" level "+level+" "+alien_type+" to coordinates x:"+x+" y:"+y+"\ndropping "+crystals+" crystals, "+points+" points, and a single\n"+collectible+" upon destruction\n";
+  weapondrop= new Map([
+    [10,"Rockets"],
+    [11,"Missiles"],
+    [12,"Torpedo"],
+    [20,"Light mines"],
+    [21,"Heavy mines"],
+    [40,"Mining pod"],
+    [41,"Attack pod"],
+    [42,"Defense pod"],
+    [90,"Energy refill"],
+    [91,"Shield refill"]
+  ]);
+  return "\nSpawned "+ammount+" level "+level+" "+(alienname[code-10]||"unknown alien")+" to coordinates x:"+x+" y:"+y+"\ndropping "+crystals+" crystals, "+points+" points, and a single\n"+(weapondrop.get(weapon_drop)||"unknown collectible")+" upon destruction\n";
 };
 
 firework = (x, y, alienAmount, alienCode, alienLevel, alienCrystaldrop, asteroidAmount) => {
@@ -72,44 +49,22 @@ firework = (x, y, alienAmount, alienCode, alienLevel, alienCrystaldrop, asteroid
   }
   for(let i = 0; i<asteroidAmount; i++){
     game.addAsteroid({size:10,x:x+Math.sin(dir)*20,y:y+Math.cos(dir)*20,vx:Math.sin(dir),vy:Math.cos(dir)});
-  }  
+  }
 }
- 
+
 killaliensNasteroids = (alienKill,asteroidKill) => {
   for(let alien of game.aliens){
     alien.set({kill:alienKill});
   }
   for(let asteroid of game.asteroids){
     game.asteroid.set({kill:asteroidKill});
-  }  
+  }
 }
 
 e = (shipId,shipType) => {
   let gems = 0;
-  const level = Math.trunc(shipType / 100);  
-  switch (level){
-    case 1: 
-      gems = 20;     
-    break;
-    case 2: 
-      gems = 80;     
-    break;
-    case 3: 
-      gems = 180;     
-    break;
-    case 4: 
-      gems = 320;    
-    break;
-    case 5: 
-      gems = 500;   
-    break;
-    case 6: 
-      gems = 720;   
-    break;
-    case 7: 
-      gems = 980;     
-    game.ships[shipId].set({type:shipType,stats:88888888,crystals:gems,idle:false}); 
-  }
+  const level = Math.trunc(shipType / 100);
+  game.ships[shipId].set({type:shipType,stats:88888888,crystals:(level**2)*20,idle:false});
 };
 
 setAliens = (damage,laserRate,laserSpeed,shield) => {
@@ -126,9 +81,3 @@ setAliens = (damage,laserRate,laserSpeed,shield) => {
 killPlayer = shipId => {
   game.ships[shipId].set({kill:true});
 };
-
-
-
-
-
-
