@@ -400,7 +400,7 @@ this.event = function(event, game){
           new_type = ship_list[tree][index];
           shipLevel = Math.trunc(new_type / 100);
           max_crystals = 20 * shipLevel ** 2; 
-          ship.set({crystals:max_crystals});    
+          ship.set({ crystals:((ship_level||0)**2)*20});    
           if (ship_level < 7) ship.set({shield:999, stats:88888888});      
           ship.set({type:new_type, shield:999});
         }
@@ -412,7 +412,7 @@ this.event = function(event, game){
           new_type = ship_list[tree][index];
           shipLevel = Math.trunc(new_type / 100);
           max_crystals = 20 * shipLevel ** 2; 
-          ship.set({crystals:max_crystals});            
+          ship.set({crystals:((ship_level||0)**2)*20});            
           if (ship_level < 7) ship.set({shield:999, stats:88888888});      
           ship.set({type:new_type, shield:999});
         }
@@ -421,8 +421,7 @@ this.event = function(event, game){
         ship.set({type:102, crystals:20, stats:11111111});
       }
       else if (component == "Gems"){
-        max_crystals = 20 * shipLevel ** 2; 
-        ship.set({crystals:max_crystals});
+        ship.set({ crystals:((ship_level||0)**2)*20});
       }
       else if (component == "Reset"){
         ship.set({type:101, crystals:20, shield:100, stats:11111111});
@@ -691,8 +690,7 @@ this.event = function(event, game){
         ship.custom.option_screen = true;    
       }
       else if (component == "Restore"){
-        max_crystals = 20 * shipLevel ** 2; 
-        ship.set({shield:999, crystals:max_crystals,generator:999});
+        ship.set({type:ship.type,shield:999, crystals:((ship_level||0)**2)*20,generator:999,stats:ship.stats});
       }        
       else if (component == "Options screen exit"){
         ship.setUIComponent({id: "Next ship",visible: false});
@@ -725,8 +723,7 @@ this.event = function(event, game){
       }
       break;
     case "ship_spawned": 
-      max_crystals = 20 * shipLevel ** 2; 
-      ship.set({x:0,y:250,invulnerable:300,crystals:max_crystals});
+      ship.set({x:0,y:250,invulnerable:300,crystals:((ship_level||0)**2)*20});
     break;
   }
 };
