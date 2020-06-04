@@ -446,14 +446,14 @@ this.event = function (event,game){
       var ship_level = Math.trunc(ship.type / 100);  
       if (component == "ship1"){
         ship.set({type:605,invulnerable:400,stats:88888888,idle:false,shield:999});
-        ship.set({crystals:((Math.round(ship_level||0)**2)*20/3)});
+        ship.set({crystals:((Math.round(6||0)**2)*20/3)});
         ship.setUIComponent({id:"ship1",visible:false});      
         ship.setUIComponent({id:"ship2",visible:false});      
         ship.setUIComponent({id:"ship text",visible:false});    
         ship.custom.shiped = true;
       } else if (component == "ship2"){
         ship.set({type:604,invulnerable:400,stats:88888888,idle:false,shield:999});
-        ship.set({crystals:((Math.round(ship_level||0)**2)*20/3)});
+        ship.set({crystals:((Math.round(6||0)**2)*20/3)});
         ship.setUIComponent({id:"ship1",visible:false});      
         ship.setUIComponent({id:"ship2",visible:false});      
         ship.setUIComponent({id:"ship text",visible:false});
