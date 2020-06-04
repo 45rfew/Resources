@@ -254,18 +254,26 @@ function splitIntoTeams(){
     let team = i%2;
     ship.set({hue:teams[team].hue,team:team,x:teams[team].x,y:teams[team].y});*/
   for (let ship of game.ships){
-    if (ship.team === 0) ship.set({x:200,y:0}); else if (ship.team === 1) ship.set({x:-200,y:0});
+    if (ship.team === 0){
+      ship.set({x:200,y:0,stats:88888888,crystals:((Math.round(ship_level||0)**2)*20/3),invulnerable:200});
+    } else if (ship.team === 1){
+      ship.set({x:-200,y:0,stats:88888888,crystals:((Math.round(ship_level||0)**2)*20/3),invulnerable:200});
+    }
     updatescoreboard(game);
   }
 }
-//todo: bruh 
+
 function setteam(ship){
   /*var teams = [
     {hue:0,x:200,y:0}, {hue:240,x:-200,y:0} 
   ];
   for(var i = 0; i<game.ships.length; i++) var team = i%2;  
   ship.set({hue:teams[team].hue,team:team,x:teams[team].x,y:teams[team].y});*/
-  if (ship.team === 0) ship.set({x:200,y:0}); else if (ship.team === 1) ship.set({x:-200,y:0});
+  if (ship.team === 0){
+    ship.set({x:200,y:0,stats:88888888,crystals:((Math.round(ship_level||0)**2)*20/3),invulnerable:200});
+  } else if (ship.team === 1){
+    ship.set({x:-200,y:0,stats:88888888,crystals:((Math.round(ship_level||0)**2)*20/3),invulnerable:200});
+  }  
 }
 
 function spawnSecondary(){
@@ -293,9 +301,14 @@ function resetgame(game){
         {type: "text",position:[0,0,80,33],value:text,color:color},
       ]
     });
-  }   
-  gamelength += 5; 
-  splitIntoTeams();
+  } 
+  setTimeout(function(){
+    for (let ship of game.ships){
+      ship.setUIComponent({id: "gamestat", visible: false});
+    }   
+    //gamelength += 5; 
+    splitIntoTeams();
+  }, 10000);  
 }
 
 function chooseship(ship){
@@ -366,6 +379,7 @@ this.tick = function (game){
           });
         }
       } else {
+        gamelength += 5.1; 
         resetgame(game);
       }
     }        
@@ -384,7 +398,7 @@ this.event = function (event,game){
       var ship = event.ship;
       var ship_level = Math.trunc(ship.type / 100);
       if (ship !== null){
-        if (ship.team === 0) ship.set({x:200,y:0,crystals:((Math.round(ship_level||0)**2)*20/3),invulnerable:20});  
+        if (ship.team === 0) ship.set({x:200,y:0,crystals:((Math.round(ship_level||0)**2)*20/3),invulnerable:200});  
           else 
         if (ship.team === 1) ship.set({x:-200,y:0,crystals:((Math.round(ship_level||0)**2)*20/3),invulnerable:200});
       }
