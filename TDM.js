@@ -1,3 +1,16 @@
+/*TDM mod! 
+Coding - Money & Bhpsngum
+Author of idea - L.gaming & Nex
+Changelog 0.5.1:
+- Added ship selection screens - only 2 ships avalible currently 
+- Torp rarity buffed 
+- Added leaderboard 
+- Added chat
+- Round length increased to 6 minutes 
+ Bug fixes: 
+- Fixed spawning, hues 
+- Fixed round over message
+*/
 var map = 
 "99999999999999999999999999999999999999999999999999\n"+
 "99999999999999999999999999999999999999999999999999\n"+
@@ -19,7 +32,7 @@ var map =
 "99                                              99\n"+
 "999999            99          99    8888    999999\n"+
 "999999         1  99999    99999    8       999999\n"+
-"956788             99999  99999       1     887659\n"+
+"999999             99999  99999       1     999999\n"+
 "9          8888    99999  99999        1         9\n"+
 "9                  99999  99999                  9\n"+
 "9                   999    999                   9\n"+
@@ -28,7 +41,7 @@ var map =
 "9                   999    999                   9\n"+
 "9                  99999  99999                  9\n"+
 "9                  99999  99999                  9\n"+
-"956788       8     99999  99999    9   88   887659\n"+
+"999999       8     99999  99999    9   88   999999\n"+
 "999999            99999    99999   9   8    999999\n"+
 "999999  2    8    99          99   9        999999\n"+
 "99       9      9                        91     99\n"+
@@ -85,6 +98,7 @@ this.options = {
   weapons_store: false,
   soundtrack: "argon.mp3",
   hues: colors,
+  speed_speed: 1.2
 };
 
 function distance(x,y){
@@ -219,9 +233,9 @@ function outputscoreboard(game,tm){
       }
     }
     if (j == team.length) scoreboard.components.splice((20+ship.team)*2,2,
-        new PlayerBox(ship.team*50,90),
-        new Tag("text",ship.score,ship.team*50,90,ship.team,"right",2),
-        new Tag("player",ship.id,ship.team*50,90,ship.team,"left")
+      new PlayerBox(ship.team*50,90),
+      new Tag("text",ship.score,ship.team*50,90,ship.team,"right",2),
+      new Tag("player",ship.id,ship.team*50,90,ship.team,"left")
     );
     ship.setUIComponent(scoreboard);
     console.log(JSON.stringify(scoreboard));
@@ -229,7 +243,7 @@ function outputscoreboard(game,tm){
   }
 }
 
-var redpoints = 0, bluepoints = 0, gamelength = 5;
+var redpoints = 0, bluepoints = 0, gamelength = 6.3;
 function updatescore(game){
   for (let ship of game.ships){
     ship.setUIComponent({
@@ -253,11 +267,13 @@ function splitIntoTeams(){
     let ship = game.ships[i];
     let team = i%2;
     ship.set({hue:teams[team].hue,team:team,x:teams[team].x,y:teams[team].y});*/
-  for (let ship of game.ships){
+
+  for (let ship of game.ships){ 
+    var ship_level = Math.trunc(ship.type / 100);    
     if (ship.team === 0){
-      ship.set({x:200,y:0,stats:88888888,crystals:((Math.round(ship_level||0)**2)*20/3),invulnerable:200});
+      ship.set({x:220,y:0,vx:0,invulnerable:500});
     } else if (ship.team === 1){
-      ship.set({x:-200,y:0,stats:88888888,crystals:((Math.round(ship_level||0)**2)*20/3),invulnerable:200});
+      ship.set({x:-220,y:0,vx:0,invulnerable:600,hue:240});
     }
     updatescoreboard(game);
   }
@@ -269,10 +285,11 @@ function setteam(ship){
   ];
   for(var i = 0; i<game.ships.length; i++) var team = i%2;  
   ship.set({hue:teams[team].hue,team:team,x:teams[team].x,y:teams[team].y});*/
+  var ship_level = Math.trunc(ship.type / 100);  
   if (ship.team === 0){
-    ship.set({x:200,y:0,stats:88888888,crystals:((Math.round(ship_level||0)**2)*20/3),invulnerable:200});
+    ship.set({x:220,y:0,stats:88888888,crystals:((Math.round(ship_level||0)**2)*20/3),invulnerable:600});
   } else if (ship.team === 1){
-    ship.set({x:-200,y:0,stats:88888888,crystals:((Math.round(ship_level||0)**2)*20/3),invulnerable:200});
+    ship.set({x:-220,y:0,stats:88888888,crystals:((Math.round(ship_level||0)**2)*20/3),invulnerable:600,hue:240});
   }  
 }
 
@@ -295,55 +312,57 @@ function resetgame(game){
   for (let ship of game.ships){
     ship.setUIComponent({
       id: "gamestat",
-      position: [32,26,42,40],
+      position: [32,18,42,40],
       visible: true,
       components: [
         {type: "text",position:[0,0,80,33],value:text,color:color},
       ]
     });
+    ship.frag = 0; redpoints = 0; bluepoints = 0;
   } 
   setTimeout(function(){
     for (let ship of game.ships){
-      ship.setUIComponent({id: "gamestat", visible: false});
+      ship.setUIComponent({id: "gamestat", visible: false});      
+      selectship(ship);
     }   
-    //gamelength += 5; 
-    splitIntoTeams();
-  }, 10000);  
+  }, 5000);  
 }
 
-function chooseship(ship){
-  for (let ship of game.ships){
-    ship.setUIComponent({ 
-      id: "ship choice text", position: [39,22,22,50], visible: true,
-      components: [
-        { type: "text",position:[0,0,100,60],value:"Choose your ship for this round",color:"#FFFFFF"},
-      ]
-    });    
-    ship.setUIComponent({
-      id: "ship choice1", position: [22.5,39,22,45], clickable: true, visible: true,
-      components: [
-        { type:"box",position:[0,0,100,100],fill:"#00000000",stroke:"#fff",width:10},
-        { type: "text",position:[0,0,100,60],value:"ship",color:"#FFFFFF"},
-      ]
-    });    
-    ship.setUIComponent({ 
-      id: "ship choice2", position: [55,39,22,45], clickable: true, visible: true,
-      components: [
-        { type:"box",position:[0,0,100,100],fill:"#00000000",stroke:"#fff",width:10},
-        { type: "text",position:[0,0,100,60],value:"ship",color:"#FFFFFF"},
-      ]
-    });        
-  }
-}
-
-game.__proto__.disconnectedShips = [];
-lOlO0.prototype.shipDisconnected = function(t) {
-  var e=this.modding.game.findShip(t.id);
-  if (e != null) {
-    this.context.event != null && this.context.event({name:"ship_disconnected",ship:e},this.modding.game);
-    this.modding.game.disconnectedShips.push(e);
-    return e.lI101 = !0
-  }
+function selectship(ship){
+  ship.custom.shiped = false;
+  ship.set({idle:true});
+  ship.setUIComponent({ 
+    id: "ship text", position: [39,20,22,50], visible: true,
+    components: [
+      { type: "text",position:[0,0,100,60],value:"Choose your ship for this round",color:"#FFFFFF"},
+    ]
+  });   
+  ship.setUIComponent({
+    id: "ship1", position: [22.5,39,22,45], clickable: true, visible: true,
+    components: [
+      { type:"box",position:[0,0,100,100],fill:"rgb(54,57,64,0.6)",stroke:"#fff",width:10},
+      { type: "text",position:[22.5,0,50,30],value:"A-Speedster",color:"#FFFFFF"},
+    ]
+  });
+  ship.setUIComponent({
+    id: "ship2", position: [55,39,22,45], clickable: true, visible: true,
+    components: [
+      { type:"box",position:[0,0,100,100],fill:"rgb(54,57,64,0.6)",stroke:"#fff",width:10},
+      { type: "text",position:[22.5,0,50,30],value:"Condor",color:"#FFFFFF"},
+    ]
+  });  
+  setTimeout(function(){
+    ship.setUIComponent({id:"ship text",visible:false});
+    ship.setUIComponent({id:"ship1",visible:false});
+    ship.setUIComponent({id:"ship2",visible:false});
+    if (!ship.custom.shiped){
+      let rand = Math.floor(Math.random()*2);
+      var ship_level = Math.trunc(ship.type / 100);  
+      ship.set({type:604+rand,crystals:((Math.round(ship_level||0)**2)*20/3),invulnerable:400,stats:88888888,idle:false});
+      ship.custom.shiped = true;
+    }
+  }, 10000);     
+  splitIntoTeams();
 }
 
 this.tick = function (game){
@@ -352,6 +371,7 @@ this.tick = function (game){
       if (!ship.custom.init){
         ship.custom.init = true;
         setteam(ship);
+        selectship(ship);
         ship.frag=0;
         ship.death=0;
         updatescoreboard(game);
@@ -363,9 +383,9 @@ this.tick = function (game){
     var gametimer = gamelength * 3600;
     if (game.step % 30 === 0){
       if (game.step <= gametimer){
-        var steps = gametimer - game.step;
-        var minutes = Math.floor(steps / 3600);
-        var seconds = Math.floor((steps % 3600) / 60);
+        let steps = gametimer - game.step;
+        let minutes = Math.floor(steps / 3600);
+        let seconds = Math.floor((steps % 3600) / 60);
         if (seconds < 10) seconds = "0" + seconds;
         if (minutes < 10) minutes = "0" + minutes;
         for (let ship of game.ships){
@@ -379,7 +399,7 @@ this.tick = function (game){
           });
         }
       } else {
-        gamelength += 5.1; 
+        gamelength += 6.3; 
         resetgame(game);
       }
     }        
@@ -414,7 +434,22 @@ this.event = function (event,game){
         bluepoints++;
       }
     break;
-    case "ship_disconnected":
-      echo("oof");
+    case "ui_component_clicked":
+      var ship = event.ship;
+      var component = event.id;
+      var ship_level = Math.trunc(ship.type / 100);  
+      if (component == "ship1"){
+        ship.set({type:605,crystals:((Math.round(ship_level||0)**2)*20/3),invulnerable:400,stats:88888888,idle:false});
+        ship.setUIComponent({id:"ship1",visible:false});      
+        ship.setUIComponent({id:"ship2",visible:false});      
+        ship.setUIComponent({id:"ship text",visible:false});    
+        ship.custom.shiped = true;
+      } else if (component == "ship2"){
+        ship.set({type:604,crystals:((Math.round(ship_level||0)**2)*20/3),invulnerable:400,stats:88888888,idle:false});
+        ship.setUIComponent({id:"ship1",visible:false});      
+        ship.setUIComponent({id:"ship2",visible:false});      
+        ship.setUIComponent({id:"ship text",visible:false});
+        ship.custom.shiped = true;
+      }   
   }
 };
