@@ -6,11 +6,13 @@ Changelog 0.5.1:
 - Torp rarity buffed 
 - Added leaderboard 
 - Added chat
+- Added base background 
 - Round length increased to 6 minutes 
  Bug fixes:
 - Score count resets after each round
 - Fixed spawning, hues 
 - Fixed round over message
+- Ship spawns with full shield
 */
 var map = 
 "99999999999999999999999999999999999999999999999999\n"+
@@ -80,6 +82,8 @@ var vocabulary = [
   {text: "GoodGame", icon:"\u00a3", key:"G"},
   {text: "Wait", icon:"\u0048", key:"T"},
   {text: "Base", icon:"\u0034", key:"B"},
+  {text: "Follow", icon:"\u0050", key:"F"},
+
 ],colors=[0,240];
 
 this.options = {
@@ -95,7 +99,6 @@ this.options = {
   crystal_value: 0,
   friendly_colors: 2,
   lives: 0,
-  starting_ship: 801,
   weapons_store: false,
   soundtrack: "argon.mp3",
   hues: colors,
@@ -288,9 +291,11 @@ function setteam(ship){
   ship.set({hue:teams[team].hue,team:team,x:teams[team].x,y:teams[team].y});*/
   var ship_level = Math.trunc(ship.type / 100);  
   if (ship.team === 0){
-    ship.set({x:220,y:0,stats:88888888,crystals:((Math.round(ship_level||0)**2)*20/3),invulnerable:600});
+    ship.set({x:220,y:0,stats:88888888,invulnerable:600});
+    ship.set({crystals:((Math.round(ship_level||0)**2)*20/3)});
   } else if (ship.team === 1){
     ship.set({x:-220,y:0,stats:88888888,crystals:((Math.round(ship_level||0)**2)*20/3),invulnerable:600,hue:240});
+    ship.set({crystals:((Math.round(ship_level||0)**2)*20/3)});
   }  
 }
 
@@ -377,7 +382,6 @@ this.tick = function (game){
         ship.death=0;
         updatescoreboard(game);
       }
-      ship.set({score:ship.frag})
     }
     updatescore(game);
     updatescoreboard(game);
@@ -411,6 +415,7 @@ this.tick = function (game){
     for (let ship of game.ships) ship.setUIComponent(killstats);
   }
   if (game.step % 700 === 0) spawnSecondary();
+  for (let ship of game.ships) ship.set({score:ship.frag});
 };
 
 this.event = function (event,game){
@@ -440,13 +445,15 @@ this.event = function (event,game){
       var component = event.id;
       var ship_level = Math.trunc(ship.type / 100);  
       if (component == "ship1"){
-        ship.set({type:605,crystals:((Math.round(ship_level||0)**2)*20/3),invulnerable:400,stats:88888888,idle:false});
+        ship.set({type:605,invulnerable:400,stats:88888888,idle:false,shield:999});
+        ship.set({crystals:((Math.round(ship_level||0)**2)*20/3)});
         ship.setUIComponent({id:"ship1",visible:false});      
         ship.setUIComponent({id:"ship2",visible:false});      
         ship.setUIComponent({id:"ship text",visible:false});    
         ship.custom.shiped = true;
       } else if (component == "ship2"){
-        ship.set({type:604,crystals:((Math.round(ship_level||0)**2)*20/3),invulnerable:400,stats:88888888,idle:false});
+        ship.set({type:604,invulnerable:400,stats:88888888,idle:false,shield:999});
+        ship.set({crystals:((Math.round(ship_level||0)**2)*20/3)});
         ship.setUIComponent({id:"ship1",visible:false});      
         ship.setUIComponent({id:"ship2",visible:false});      
         ship.setUIComponent({id:"ship text",visible:false});
@@ -454,3 +461,36 @@ this.event = function (event,game){
       }   
   }
 };
+
+var base = {
+  id: "base",
+  obj: "https://starblast.data.neuronality.com/mods/objects/plane.obj",
+  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/base.png",
+  //emissiveColor: 0xff8c00,
+  transparent: false
+};
+
+game.setObject({
+  id: "base",
+  type: base,
+  position: {x:-216,y:0,z:-1},
+  rotation: {x:0,y:0,z:0},
+  scale: {x:58,y:90,z:0}
+});
+
+var base2 = {
+  id: "base2",
+  obj: "https://starblast.data.neuronality.com/mods/objects/plane.obj",
+  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/base2.png",
+  transparent: false
+};
+
+game.setObject({
+  id: "base2",
+  type: base2,
+  position: {x:216,y:0,z:-1},
+  rotation: {x:0,y:0,z:0},
+  scale: {x:58,y:90,z:0}
+});
+
+
