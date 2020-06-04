@@ -7,7 +7,8 @@ Changelog 0.5.1:
 - Added leaderboard 
 - Added chat
 - Round length increased to 6 minutes 
- Bug fixes: 
+ Bug fixes:
+- Score count resets after each round
 - Fixed spawning, hues 
 - Fixed round over message
 */
