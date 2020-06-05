@@ -185,7 +185,7 @@ function tick(game){
       }
     }
   }
-  if (game.step % 20 === 0){
+  if (game.step % 30 === 0){
     for (let alien of game.aliens){
       if (Math.abs(alien.x) > alien_radius || Math.abs(alien.y) > alien_radius){
         if (alien.code != 16){
