@@ -38,7 +38,7 @@ function tick(game){
         basetimer(game);
       }
     }
-    if (rip <= 0){
+    if (rip <= 79){
       game.setUIComponent({
         id: "wtf",
         position: [32,5,42-8,40-8],
