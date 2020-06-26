@@ -96,7 +96,7 @@ this.options = {
   asteroids_strength: 10
 };
  
-function tick(game){  
+function tick(game){     
   if (game.step % 3600 === 0){
     if (game.ships.length === 1||2){
       rip += 1;
@@ -144,13 +144,13 @@ function tick(game){
         for (let alien of game.aliens) alien.set({kill:true});
         game.setUIComponent({
           id: "lol",
-          position: [32,5,42-8,40-8],
+          position: [31,10,42-8,40-8],
           visible: true,
           components: [
-            {type: "text",position:[0,0,80,33],value:"Purple Saucer has been killed",color:"#fff"},
-            {type: "text",position:[0,14,80,33],value:"GG, thanks for playing!",color:"#fff"},
+            {type: "text",position:[0,-8,100,53],value:"Purple Saucer has been killed",color:"#fff"},
+            {type: "text",position:[9,17,80,33],value:"GG, thanks for playing!",color:"#fff"},
           ]
-        });          
+        });            
         setTimeout(function(){ //don't make functions within a loop well FUCK YOU  
           for (let ship of game.ships) ship.gameover({"Nice":""});
           game.modding.I1I0I.send({name:"stop"});
@@ -199,11 +199,50 @@ function joinmessage(ship){
     position: [32,8,42-8,40-8],
     visible: true,
     components: [
-      {type: "text",position:[0,0,80,33],value:"Kill the purple Saucer to win",color:"#fff"},
-      {type: "text",position:[0,16,80,33],value:"Good luck and have fun!",color:"#fff"},
+      {type: "text",position:[0,0,85+3,38+3],value:"Kill the purple Saucer to win",color:"#fff"},
+      {type: "text",position:[5.5,20,80-4,33-4],value:"Good luck and have fun!",color:"#fff"},
     ]
   });      
   setTimeout(function(){  
     ship.setUIComponent({id:"yeet",visible:false});
   },5000);
 }
+
+game.configImageUI = function(opt, handler){
+  let image = {
+    id: opt.id,
+    visible: (opt.visible != void 0)?opt.visible:true,
+    clickable: (opt.clickable != void 0)?opt.clickable:false,
+    components: []
+  };
+  if (opt.url){
+    let img = $("#img_test")[0];
+    if (!img){
+      img = document.createElement("img");
+      img.setAttribute("id","img_test");
+      img.setAttribute("style","display:none");
+      img.crossOrigin = "anonymous";
+      $('body').append(img);
+    }
+    img.onload = function(){
+      this.canvas = $('<canvas />')[0];
+      this.canvas.width = img.width;
+      this.canvas.height = img.height;
+      this.canvas.getContext('2d').drawImage(this, 0, 0, this.width, this.height);
+      for (let i=0;i<this.height;i++)
+        for (let j=0;j<this.width;j++){
+          let data = $("#img_test")[0].canvas.getContext('2d').getImageData(j,i,1,1).data;
+          image.components.push({type:"box",position:[j*0.5,i,0.5,1],fill:`rgba(${data[0]},${data[1]},${data[2]},${data[3]/255*(opt.opacity||1)})`});
+        }
+      image.position = [opt.x||0,opt.y||0,this.width/2,this.height/2];
+      (typeof handler == "function") && handler(image);
+    };
+    img.onerror = function(){throw new Error("Failed to fetch the image")};
+    img.setAttribute("src",opt.url);
+  }
+  else throw new Error("No Image Url detected!");
+};
+
+
+
+
