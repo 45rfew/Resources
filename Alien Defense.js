@@ -86,7 +86,6 @@ this.options = {
   root_mode: "team",
   friendly_colors: 1,
   map_size: 60,
-  asteroid_strength: 0.3,
   radar_zoom: 1,
   crystal_value: 0,
   soundtrack: "argon.mp3",
@@ -108,7 +107,7 @@ function tick(game){
     }
   }
   if (game.step % 30 === 0){
-    var max = Math.max(14,Math.min(26,~~(game.ships.length*4.2))); 
+    var max = Math.max(14,Math.min(26,~~(game.ships.length*2.2))); 
     if (game.aliens.length < max){
       var aliens = [{code:11,crystal_drop:10},{code:11,level:1,crystal_drop:20},{code:17,crystal_drop:15},{code:11,level:2,crystal_drop:45},{code:17,level:1,crystal_drop:30}];
       var spawn_delay = game.step / ~~(1800 / 1.5 * 2);
