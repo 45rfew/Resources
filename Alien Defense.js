@@ -156,10 +156,10 @@ function tick(game){
           game.modding.I1I0I.send({name:"stop"});
         },5000);
       }
-      if (game.aliens[i].code == 12){
-      } else {
-        for (let i=0; i<2; i++) game.addAlien({code:19,level:1,crystals:2000,points:2000,x:game.aliens[0].x,y:game.aliens[0].y,vy:-1});
-      }
+      //if (game.aliens[i].code == 12){
+      //} else {
+        //for (let i=0; i<2; i++) game.addAlien({code:19,level:1,crystals:2000,points:2000,x:game.aliens[0].x,y:game.aliens[0].y,vy:-1});
+      //}
     }
   }
 }
