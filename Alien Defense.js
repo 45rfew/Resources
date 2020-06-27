@@ -109,11 +109,12 @@ function tick(game){
   if (game.step % 30 === 0){
     var max = Math.max(14,Math.min(26,~~(game.ships.length*2.2))); 
     if (game.aliens.length < max){
-      var aliens = [{code:11,crystal_drop:10},{code:11,level:1,crystal_drop:20},{code:17,crystal_drop:15},{code:11,level:2,crystal_drop:45},{code:17,level:1,crystal_drop:30}];
-      var spawn_delay = game.step / ~~(1800 / 1.5 * 2);
+      var spawn_delay = game.step / ~~(1800/2*2.5);
       var alien = aliens[~~(Math.random()*Math.min(aliens.length,spawn_delay/4))];
-      alien.x = game.aliens[0].x+Math.cos(Math.random()*Math.PI*2)*10;
-      alien.y = game.aliens[0].y+Math.sin(Math.random()*Math.PI*2)*10;
+      var coords = [[300,50],[300,-50],[250,0],[-250,0]];
+      oof = coords[~~(Math.random()*coords.length)];
+      alien.x = oof[1]+Math.cos(Math.random()*Math.PI*2)*5;
+      alien.y = oof[0]+Math.sin(Math.random()*Math.PI*2)*5;
       game.addAlien(alien);
     }
     for (let ship of game.ships){
@@ -167,7 +168,8 @@ function tick(game){
 function game_start(game){
   if (!game.custom.init){
     game.custom.init = true;
-    game.addAlien({code:19,level:2,crystals:4000,points:4000,shield:10000,regen:5,x:0,y:300});
+    game.addAlien({code:19,level:2,crystals:4000,points:4000,x:0,y:300});
+    game.aliens[0].set({shield:10000,regen:5});
     for (let i=0; i<40; i+=10) game.addAlien({code:12,crystals:1200,points:1200,x:Math.cos(Math.random()*Math.PI*2)*i,y:250+Math.sin(Math.random()*Math.PI*2)*i});
   }
   this.tick = tick;
@@ -177,8 +179,31 @@ this.tick = game_start;
 var rip = 1;
 
 yeetalien = function(game){
-  for (let alien of game.aliens) alien.set({kill:true});
+  for(let i=0; i<game.aliens.length; i++){
+    game.aliens[i].set({kill:true});
+  }
 };
+
+var aliens = [
+{code:10,level:0,points:20,crystal_drop:5},
+{code:11,level:0,points:30,crystal_drop:10},
+{code:10,level:1,points:40,crystal_drop:10},
+{code:17,level:0,points:30,crystal_drop:10},
+{code:16,level:0,points:30,crystal_drop:10},
+{code:17,level:1,points:50,crystal_drop:20},
+{code:16,level:1,points:50,crystal_drop:20}, 
+{code:11,level:2,points:120,crystal_drop:50}, 
+{code:10,level:2,points:70,crystal_drop:20}, 
+{code:14,level:1,points:70,crystal_drop:30}, 
+{code:16,level:2,points:150,crystal_drop:75},
+{code:17,level:3,points:100,crystal_drop:75}, 
+{code:19,level:0,points:400,crystal_drop:200},
+{code:16,level:3,points:1000,crystal_drop:500}
+];
+
+function rand(lol){
+  return ~~((Math.random() * lol));
+}
 
 function basetimer(game){
   game.setUIComponent({
@@ -242,5 +267,3 @@ game.configImageUI = function(opt, handler){
   }
   else throw new Error("No Image Url detected!");
 };
-
-
