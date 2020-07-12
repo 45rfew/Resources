@@ -1,4 +1,4 @@
-const divider = 2;
+const divider = 1;
 const modifier = {
   map_size: 60/(divider/2),
   crystal_value: 5,
