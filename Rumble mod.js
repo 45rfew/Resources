@@ -1,10 +1,13 @@
-const divider = 4;
+const divider = 3;
 const modifier = {
-  map_size: 60/(divider/2),
-  crystal_value: 5,
-  max_players: 120/divider,
-  kills_to_win: 200/divider,
-  healer_button: false
+  map_size: ~~(60/(divider/2)),
+  crystal_value: 4,
+  max_players: ~~(120/divider),
+  kills_to_win: ~~(200/divider),
+  yeet_gems: true,
+  healer_button: false,//setting this to true will do nothing lol
+  round_timer: 30,
+  round_ship_tier: 6 //choose from 5,6,7 or random
 };
 //Thanks to Destroy & Dimed for the idea
 var a = {};
@@ -38,7 +41,6 @@ a.Pulse_Fighter_301 = '{"name":"Pulse-Fighter","level":3,"model":1,"size":1.3,"n
 a.Trident_202 = '{"name":"Trident","level":2,"model":2,"size":1.2,"next":[null,null],"specs":{"shield":{"capacity":[125,175],"reload":[3,5]},"generator":{"capacity":[50,80],"reload":[15,20]},"ship":{"mass":100,"speed":[110,135],"rotation":[70,85],"acceleration":[90,110]}},"bodies":{"main":{"section_segments":8,"offset":{"x":0,"y":0,"z":0},"position":{"x":[0,0,0,0,0,0],"y":[-100,-50,0,30,70,100,90],"z":[0,0,0,0,0,0,0]},"width":[1,25,15,30,30,20,10],"height":[1,20,20,30,30,10,0],"texture":[1,1,10,2,3],"propeller":true},"cockpit":{"section_segments":8,"offset":{"x":0,"y":-40,"z":10},"position":{"x":[0,0,0,0,0,0,0],"y":[-20,-10,0,30,40],"z":[0,0,0,0,0]},"width":[0,10,10,10,0],"height":[0,10,15,12,0],"texture":[9],"propeller":false},"cannons":{"section_segments":12,"offset":{"x":50,"y":40,"z":0},"position":{"x":[0,0,0,0,0,0,0],"y":[-50,-45,-20,0,20,50,55],"z":[0,0,0,0,0,0,0]},"width":[0,5,10,10,15,10,0],"height":[0,5,15,15,10,5,0],"angle":0,"laser":{"damage":[4,8],"rate":2.5,"type":1,"speed":[100,120],"number":1,"angle":0,"error":0},"propeller":false,"texture":[4,4,10,4,63,4]}},"wings":{"main":{"offset":{"x":0,"y":60,"z":0},"length":[80,30],"width":[70,50,60],"texture":[4,63],"angle":[0,0],"position":[10,-20,-50],"bump":{"position":-10,"size":15}},"winglets":{"length":[30,20],"width":[10,30,0],"angle":[50,20],"position":[90,80,50],"texture":[63],"bump":{"position":10,"size":30},"offset":{"x":0,"y":0,"z":0}}},"typespec":{"name":"Trident","level":2,"model":2,"code":202,"specs":{"shield":{"capacity":[125,175],"reload":[3,5]},"generator":{"capacity":[50,80],"reload":[15,20]},"ship":{"mass":100,"speed":[110,135],"rotation":[70,85],"acceleration":[90,110]}},"shape":[2.4,2.164,1.784,1.529,1.366,0.981,0.736,0.601,0.516,0.457,0.415,2.683,2.66,2.66,2.724,2.804,2.763,2.605,2.502,2.401,2.596,2.589,2.426,2.448,2.443,2.52,2.443,2.448,2.426,2.589,2.596,2.401,2.502,2.605,2.763,2.804,2.724,2.66,2.66,2.683,0.415,0.457,0.516,0.601,0.736,0.981,1.366,1.529,1.784,2.164],"lasers":[{"x":1.2,"y":-0.24,"z":0,"angle":0,"damage":[4,8],"rate":2.5,"type":1,"speed":[100,120],"number":1,"spread":0,"error":0,"recoil":0},{"x":-1.2,"y":-0.24,"z":0,"angle":0,"damage":[4,8],"rate":2.5,"type":1,"speed":[100,120],"number":1,"spread":0,"error":0,"recoil":0}],"radius":2.804,"next":[null,null]}}';
 a.Delta_Fighter_201 = '{"name":"Delta-Fighter","level":2,"model":1,"size":1.3,"next":[null,null],"specs":{"shield":{"capacity":[100,150],"reload":[3,4]},"generator":{"capacity":[50,80],"reload":[15,25]},"ship":{"mass":80,"speed":[110,135],"rotation":[80,100],"acceleration":[110,120]}},"bodies":{"cockpit":{"angle":0,"section_segments":8,"offset":{"x":0,"y":-20,"z":12},"position":{"x":[0,0,0,0,0],"y":[-20,-10,0,10,20],"z":[-7,-3,0,5,3]},"width":[3,12,18,16,3],"height":[3,6,8,6,3],"texture":[9]},"cockpit2":{"angle":0,"section_segments":8,"offset":{"x":0,"y":-10,"z":12},"position":{"x":[0,0,0,0],"y":[-10,0,10,40],"z":[0,0,5,3]},"width":[5,18,16,3],"height":[5,12,10,5],"texture":[9,2,11]},"propulsor":{"section_segments":8,"offset":{"x":0,"y":35,"z":10},"position":{"x":[0,0,0,0,0,0],"y":[0,10,20,30,40,30],"z":[0,0,0,0,0]},"width":[5,15,10,10,10,0],"height":[15,15,15,15,10,0],"texture":[63,63,4,5,12],"propeller":true},"bumps":{"section_segments":8,"offset":{"x":40,"y":40,"z":5},"position":{"x":[0,0,0,0,0,0],"y":[-40,-10,0,10,40,45],"z":[0,0,0,0,0,0]},"width":[0,5,8,12,5,0],"height":[0,25,28,22,15,0],"texture":[63]},"gunsupport":{"section_segments":8,"offset":{"x":30,"y":-40,"z":5},"position":{"x":[-30,-20,-10,0,0,0],"y":[-20,-15,-5,10,40,55],"z":[-20,-20,-10,0,0,0]},"width":[3,5,8,4,5,0],"height":[3,5,8,12,15,0],"texture":63},"gun":{"section_segments":8,"offset":{"x":0,"y":-60,"z":-15},"position":{"x":[0,0,0,0],"y":[-20,-10,5,10],"z":[0,0,0,0]},"width":[3,7,8,3],"height":[3,7,8,3],"texture":[6,4,5],"laser":{"damage":[3,5],"rate":3,"type":1,"speed":[100,120],"number":3,"angle":15,"error":0}}},"wings":{"main":{"doubleside":true,"offset":{"x":0,"y":-25,"z":5},"length":[100],"width":[120,30,40],"angle":[0,20],"position":[30,90,85],"texture":11,"bump":{"position":30,"size":20}}},"typespec":{"name":"Delta-Fighter","level":2,"model":1,"code":201,"specs":{"shield":{"capacity":[100,150],"reload":[3,4]},"generator":{"capacity":[50,80],"reload":[15,25]},"ship":{"mass":80,"speed":[110,135],"rotation":[80,100],"acceleration":[110,120]}},"shape":[2.081,1.969,1.501,1.455,1.403,1.368,1.263,1.192,1.095,1.063,1.128,1.209,1.352,1.545,1.85,2.348,2.965,3.211,3.33,2.93,2.496,2.442,2.441,1.866,1.967,1.954,1.967,1.866,2.441,2.442,2.496,2.93,3.33,3.211,2.965,2.348,1.85,1.545,1.352,1.209,1.128,1.063,1.095,1.192,1.263,1.368,1.403,1.455,1.501,1.969],"lasers":[{"x":0,"y":-2.08,"z":-0.39,"angle":0,"damage":[3,5],"rate":3,"type":1,"speed":[100,120],"number":3,"spread":15,"error":0,"recoil":0}],"radius":3.33,"next":[null,null]}}';
 a.Fly_101 = '{"name":"Fly","level":1,"model":1,"size":1.05,"next":[null,null],"specs":{"shield":{"capacity":[75,100],"reload":[2,3]},"generator":{"capacity":[40,60],"reload":[10,15]},"ship":{"mass":60,"speed":[125,145],"rotation":[110,130],"acceleration":[100,120]}},"bodies":{"main":{"section_segments":12,"offset":{"x":0,"y":0,"z":10},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[-65,-60,-50,-20,10,30,55,75,60],"z":[0,0,0,0,0,0,0,0,0]},"width":[0,8,10,30,25,30,18,15,0],"height":[0,6,8,12,20,20,18,15,0],"propeller":true,"texture":[4,63,10,1,1,1,12,17]},"cockpit":{"section_segments":12,"offset":{"x":0,"y":0,"z":20},"position":{"x":[0,0,0,0,0,0,0],"y":[-15,0,20,30,60],"z":[0,0,0,0,0]},"width":[0,13,17,10,5],"height":[0,18,25,18,5],"propeller":false,"texture":[7,9,9,4,4]},"cannon":{"section_segments":6,"offset":{"x":0,"y":-15,"z":-10},"position":{"x":[0,0,0,0,0,0],"y":[-40,-50,-20,0,20,30],"z":[0,0,0,0,0,20]},"width":[0,5,8,11,7,0],"height":[0,5,8,11,10,0],"angle":0,"laser":{"damage":[5,6],"rate":4,"type":1,"speed":[160,180],"number":1,"error":2.5},"propeller":false,"texture":[3,3,10,3]}},"wings":{"main":{"length":[60,20],"width":[100,50,40],"angle":[-10,10],"position":[0,20,10],"doubleside":true,"offset":{"x":0,"y":10,"z":5},"bump":{"position":30,"size":20},"texture":[11,63]}},"typespec":{"name":"Fly","level":1,"model":1,"code":101,"specs":{"shield":{"capacity":[75,100],"reload":[2,3]},"generator":{"capacity":[40,60],"reload":[10,15]},"ship":{"mass":60,"speed":[125,145],"rotation":[110,130],"acceleration":[100,120]}},"shape":[1.368,1.368,1.093,0.965,0.883,0.827,0.791,0.767,0.758,0.777,0.847,0.951,1.092,1.667,1.707,1.776,1.856,1.827,1.744,1.687,1.525,1.415,1.335,1.606,1.603,1.578,1.603,1.606,1.335,1.415,1.525,1.687,1.744,1.827,1.856,1.776,1.707,1.667,1.654,0.951,0.847,0.777,0.758,0.767,0.791,0.827,0.883,0.965,1.093,1.368],"lasers":[{"x":0,"y":-1.365,"z":-0.21,"angle":0,"damage":[5,6],"rate":4,"type":1,"speed":[160,180],"number":1,"spread":0,"error":2.5,"recoil":0}],"radius":1.856,"next":[null,null]}}';
-
 var ships = [];
 for (let ship in a) ships.push(a[ship]);
 
@@ -61,8 +63,10 @@ var vocabulary = [
   {text: "Follow", icon:"\u0050", key:"F"},
 ];
 
-var maps = [1761,1749,77,45,4360,3604,5575];
-var rand_ships = [601,602,603,604,605,606,607,608,609]; 
+var maps = [1761,1749,77,45,4360,3604,5575],rand_ships,ship_name,yeetus;
+if (modifier.round_ship_tier === 5){yeetus = 4; rand_ships = [501,502,503,504,505,506,507]; ship_name = ["U-Sniper","Furystar","T-Warrior","Aetos","Shadow X-2","Howler","Bat-Defender","Toscain"];} else
+if (modifier.round_ship_tier === 6){yeetus = 5; rand_ships = [601,602,603,604,605,606,607,608,609]; ship_name = ["Advanced-Fighter","Scorpion","Marauder","Condor","A-Speedster","Rock-Tower","Baracuda","O-Defender","H-Mercury"];} else
+if (modifier.round_ship_tier === 7){yeetus = 5; rand_ships = [701,702,703,704]; ship_name = ["Odyssey","Shadow X-3","Bastion","Aries"];} 
 
 function shuffle(array){
   var tmp, current, top = array.length;
@@ -72,7 +76,7 @@ function shuffle(array){
     array[current] = array[top];
     array[top] = tmp;
   }
-  array.splice(0,5);
+  array.splice(0,yeetus);
   return array;
 }
 
@@ -83,18 +87,18 @@ this.options = {
   soundtrack: "argon.mp3",
   weapons_store: false,
   friendly_colors: 2,
-  radar_zoom: 1.4,
+  radar_zoom: 2,
   map_size: modifier.map_size,
   starting_ship: 801,
   lives: 5,
   crystal_value: modifier.crystal_value,
   speed_mod: 1.2,
   max_players: modifier.max_players,
-  max_level: 6,
+  max_level: modifier.round_ship_tier,
   ships: ships,
   starting_ship_maxed: true,
   choose_ship: shuffle(rand_ships),
-  release_crystal: true
+  release_crystal: modifier.yeet_gems
 };
 
 this.tick = function(game){
@@ -106,6 +110,7 @@ this.tick = function(game){
         tm = setteam(ship);
         checkscores(game);
         ship.frags = 0;
+        ship.deaths = 0;
         joinmessage(ship);
         echo(`${ship.name} spawned`);
       }  
@@ -122,16 +127,14 @@ this.tick = function(game){
         });  
         for (let ship of game.ships){
           if (ship.team != teams.points[i]){
-            ship.gameover({"Winner":`${teams.name[i]} team`,"Score:":ship.score,"Frags":ship.frags});
+            ship.gameover({"Winner":`${teams.names[i]} team`,"Score:":ship.score,"Frags":ship.frags});
           }
         }
         setTimeout(function(){
           for (let ship of game.ships){
-            ship.gameover({"Winner":`${teams.name[i]} team`,"Score:":ship.score,"Frags":ship.frags});
-            setTimeout(function(){
-              echo(`${teams.names[i]} team wins!`);
-              game.modding.I1I0I.send({name:"stop"});
-            }, 5000);
+            ship.gameover({"Winner":`${teams.names[i]} team`,"Frags:":ship.frags,"Deaths:":ship.deaths});
+            echo(`${teams.names[i]} team wins!`);
+            ship.gameover({"Score:":ship.score,"Frags":ship.frags});
           }
         }, 5000);
       }
@@ -213,7 +216,7 @@ function drawmenu(ship){
       clickable: true,
       components: [
         {type: "box",position:[0,0,88,40],stroke:"#191919",fill:"#333333",width:5},
-        {type: "text",position:[0,4,88/1.2,40/1.2],value:arr[i],color:"#cde"},
+        {type: "text",position:[0,4,88/1.2,40/1.2],value:rand[i],color:"#cde"},
       ]
     });    
   }
@@ -223,8 +226,8 @@ function drawmenu(ship){
 }
 
 function removemenu(ship){
-  let arr = ["Advanced-Fighter","Scorpion","Marauder","Condor","A-Speedster","Rock-Tower","Baracuda","O-Defender","H-Mercury"];
-  for (let i=0; i<9; i++){
+  let arr = ["Advanced-Fighter","Scorpion","Marauder","Condor","A-Speedster","Rock-Tower","Baracuda","O-Defender","H-Mercury"],rand,bruh;
+  for (let i=0; i<arr.length; i++){
     ship.setUIComponent({id:arr[i],visible:false});    
   }
 }
@@ -237,6 +240,7 @@ this.event = function(event, game){
       ship.set({score:ship.score/2});
       teams.points[killer.team]++;
       killer.frags++;
+      ship.deaths++;
       checkscores(game);
       ship.custom.hasbeenkilled = true;
       echo(`${killer.name} killed ${ship.name}`);
