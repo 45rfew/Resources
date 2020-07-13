@@ -134,7 +134,6 @@ this.tick = function(game){
           for (let ship of game.ships){
             ship.gameover({"Winner":`${teams.names[i]} team`,"Frags:":ship.frags,"Deaths:":ship.deaths});
             echo(`${teams.names[i]} team wins!`);
-            ship.gameover({"Score:":ship.score,"Frags":ship.frags});
           }
         }, 5000);
       }
@@ -146,7 +145,7 @@ var teams = {
   names: ["Red","Blue"],
   hues: [0,240],
   points: [0,0],
-  count: [0,0],  
+  count: [0,0]  
 };
 
 let teamcount = [0,0], ts = [
@@ -205,8 +204,7 @@ function optionopenmenu(ship){
 
 function drawmenu(ship){
   let arr = ["Advanced-Fighter","Scorpion","Marauder","Condor","A-Speedster","Rock-Tower","Baracuda","O-Defender","H-Mercury"],rand,bruh;
-  rand = shuffle(arr);
-  bruh = Math.round(Math.random()*0.5);
+  rand = shuffle(ship_name);
   for (let i=0; i<3; i++){
     ship.setUIComponent({id:"open",visible:false});   
     ship.setUIComponent({
@@ -226,9 +224,8 @@ function drawmenu(ship){
 }
 
 function removemenu(ship){
-  let arr = ["Advanced-Fighter","Scorpion","Marauder","Condor","A-Speedster","Rock-Tower","Baracuda","O-Defender","H-Mercury"],rand,bruh;
-  for (let i=0; i<arr.length; i++){
-    ship.setUIComponent({id:arr[i],visible:false});    
+  for (let i=0; i<ship_name.length; i++){
+    ship.setUIComponent({id:ship_name[i],visible:false});    
   }
 }
 
