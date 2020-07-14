@@ -1,13 +1,13 @@
-const divider = 1;
+const divider = 2;
 const modifier = {
   map_size: ~~(60/(Math.round(divider/3))),
   crystal_value: 4,
   max_players: ~~(120/divider),
-  kills_to_win: ~~(200/divider),
+  kills_to_win: ~~(100/divider),
   yeet_gems: true,
   healer_button: false,//setting this to true will do nothing lol
-  round_timer: 30,
-  round_ship_tier: 5 //choose from 5,6,7
+  round_timer: 15,
+  round_ship_tier: 6 //choose from 5,6,7
 };
 //Thanks to Destroy & Dimed for the idea
 var a = {};
