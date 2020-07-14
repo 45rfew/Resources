@@ -1,4 +1,4 @@
-const divider = 2;
+const divider = 1;
 const modifier = {
   map_size: ~~(60/(Math.round(divider/3))),
   crystal_value: 4,
