@@ -3,10 +3,10 @@ const modifier = {
   map_size: ~~(60/(Math.round(divider/2))),
   crystal_value: 4,
   max_players: ~~(120/divider),
-  kills_to_win: ~~(100/divider),
+  kills_to_win: ~~(200/divider),
   yeet_gems: true,
   healer_button: false,//setting this to true will do nothing lol
-  round_timer: 15,
+  round_timer: 30,
   round_ship_tier: "random",//choose from 5,6,7, or "random"
   gems_upon_respawning: 69
 };
@@ -24,7 +24,7 @@ var vocabulary = [
   {text: "Kill", icon:"\u007f", key:"K"},
   {text: "Sorry", icon:"\u00a1", key:"S"},
   {text: "Thanks", icon:"\u0041", key:"X"},
-  {text: "You", icon:"\u004e", key:"I"},
+  {text: "You", icon:"\u004e", key:"O"},
   {text: "Me", icon:"\u004f", key:"E"},
   {text: "No Problem", icon:"\u0047", key:"P"},
   {text: "Attack", icon:"\u0049", key:"A"},
@@ -54,6 +54,10 @@ function shuffle(array,yeetus){
   return array;
 }
 
+function swap(id){
+  if(game.ships[id].team===0)game.ships[id].set({hue:240,team:1});else game.ships[id].set({hue:0,team:0});
+}
+
 this.options = {
   map_id: maps[~~(Math.random()*maps.length)],
   root_mode: "",
@@ -75,6 +79,7 @@ this.options = {
 
 this.tick = function(game){
   if (game.step % 30 === 0){
+    updatescoreboard(game); 
     for (let ship of game.ships){
       let tm; 
       if (!ship.custom.lol){
@@ -85,8 +90,10 @@ this.tick = function(game){
         ship.deaths = 0;
         joinmessage(ship);
         echo(`${ship.name} spawned`);  
-      } updatescoreboard(game); 
-      teamcount[tm||ship.team]++;
+      } 
+      //teamcount[tm||ship.team]++;
+      teams.ships[ship.custom.team].push(ship);
+      teams.count[ship.custom.team]++;
       ship.set({score:ship.frags});
     }
     for (let i=0; i<2; i++){
@@ -154,7 +161,8 @@ var teams = {
   names: ["Red","Blue"],
   hues: [0,240],
   points: [0,0],
-  count: [0,0]  
+  count: [0,0],
+  ships: [[],[]]
 };
 
 let teamcount = [0,0], ts = [
@@ -191,14 +199,14 @@ function Tag(indtext,param,posx,posy,hex,al,size) {
 function sort(arr){
   let array=[...arr],i=0;
   while (i<array.length-1) {
-    if (array[i].frag<array[i+1].frag) {
+    if (array[i].frags<array[i+1].frags) {
       array[i+1]=[array[i],array[i]=array[i+1]][0];
       if (i>0) i-=2;
     }
     i++;
   }
   return array;
-};
+}
  
 function updatescoreboard(game){
   let t=[[],[]];
@@ -238,7 +246,7 @@ function outputscoreboard(game,tm){
     }
     if (j == team.length) scoreboard.components.splice((20+ship.team)*2,2,
       new PlayerBox(ship.team*50,90),
-      new Tag("text",ship.frag,ship.team*50,90,ship.team,"right",2),
+      new Tag("text",ship.frags,ship.team*50,90,ship.team,"right",2),
       new Tag("player",ship.id,ship.team*50,90,ship.team,"left")
     );
     ship.setUIComponent(scoreboard);
@@ -246,7 +254,20 @@ function outputscoreboard(game,tm){
   }
 }
 
+function configship(ship, team){
+  ship.set({hue:teams.hues[team],team:team,invulnerable:600
+  });
+}
+
 function setteam(ship){
+  let t;
+  if ([...new Set(teams.count)].length == 1) t=teams.points.indexOf(Math.min(...teams.points));
+  else t = teams.count.indexOf(Math.min(...teams.count));
+  ship.custom.team = t;
+  configship(ship, t);
+}
+
+function notsetteam(ship){
   let t = teamcount.indexOf(Math.min(...teamcount));
   ship.set({hue:ts[t].hue,team:t,invulnerable:600,stats:88888888,shield:999});
   return t;
@@ -286,9 +307,10 @@ function optionopenmenu(ship){
     position: [3,33,16,20],
     visible: true,
     clickable: true,
+    shortcut: "J",
     components: [
       {type: "box",position:[0,0,88,40],stroke:"#191919",fill:"#333333",width:5},
-      {type: "text",position:[6,4,88/1.2,40/1.2],value:"Select ship",color:"#cde"},
+      {type: "text",position:[6,4,88/1.2,40/1.2],value:"Select ship [J]",color:"#cde"},
     ]
   });    
   setTimeout(function(){  
@@ -299,6 +321,7 @@ function optionopenmenu(ship){
 function drawmenu(ship){
   let rand;
   rand = shuffle(ship_name);
+  let shortcut = ["I","M","B"];
   for (let i=0; i<3; i++){
     ship.setUIComponent({id:"open",visible:false});   
     ship.setUIComponent({
@@ -306,9 +329,10 @@ function drawmenu(ship){
       position: [36,26+i*7,34,18],
       visible: true,
       clickable: true,
+      shortcut: shortcut[i],
       components: [
         {type: "box",position:[0,0,88,40],stroke:"#191919",fill:"#333333",width:5},
-        {type: "text",position:[0,4,88/1.2,40/1.2],value:rand[i],color:"#cde"},
+        {type: "text",position:[0,4,88/1.2,40/1.2],value:`${rand[i]} [${shortcut[i]}]`,color:"#cde"},
       ]
     });
   }
@@ -317,9 +341,10 @@ function drawmenu(ship){
     position: [43,26+4*7,34/2,18],
     visible: true,
     clickable: true,
+    shortcut: "L",
     components: [
       {type: "box",position:[0,0,88,40],stroke:"#191919",fill:"#333333",width:5},
-      {type: "text",position:[0,4,88/1.2,40/1.2],value:"Close",color:"#cde"},
+      {type: "text",position:[0,4,88/1.2,40/1.2],value:"Close [L]",color:"#cde"},
     ]
   });   
   setTimeout(function(){  
