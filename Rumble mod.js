@@ -5,10 +5,10 @@ const modifier = {
   max_players: ~~(120/divider),
   kills_to_win: ~~(200/divider),
   yeet_gems: true,
-  healer_button: false,//setting this to true will do nothing lol
+  healer_button: true,
   round_timer: 30,
   round_ship_tier: "random",//choose from 5,6,7, or "random"
-  gems_upon_respawning: 69
+  gems_upon_spawning: 69
 };
 //Thanks to Destroy & Dimed for the idea
 var a = {};
@@ -54,9 +54,9 @@ function shuffle(array,yeetus){
   return array;
 }
 
-function swap(id){
+swap = function(id){
   if(game.ships[id].team===0)game.ships[id].set({hue:240,team:1});else game.ships[id].set({hue:0,team:0});
-}
+};
 
 this.options = {
   map_id: maps[~~(Math.random()*maps.length)],
@@ -65,7 +65,7 @@ this.options = {
   soundtrack: "argon.mp3",
   weapons_store: false,
   friendly_colors: 2,
-  radar_zoom: 2,
+  radar_zoom: 1,
   map_size: modifier.map_size,
   starting_ship: 801,
   crystal_value: modifier.crystal_value,
@@ -74,7 +74,9 @@ this.options = {
   max_level: modifier.round_ship_tier,
   ships: ships,
   choose_ship: shuffle(rand_ships,yeetus),
-  release_crystal: modifier.yeet_gems
+  release_crystal: modifier.yeet_gems,
+  healing_enabled: true,
+  healing_ratio: 0.35
 };
 
 this.tick = function(game){
@@ -106,7 +108,7 @@ this.tick = function(game){
         });  
         setTimeout(function(){
           for (let ship of game.ships){
-            ship.gameover({"Winner":`${teams.names[i]} team`,"Frags:":ship.frags,"Deaths:":ship.deaths});
+            ship.gameover({"Winner":`${teams.names[i]} team`,"Frags":ship.frags,"Deaths":ship.deaths});
             echo(`${teams.names[i]} team wins!`);
           }
         }, 5000);
@@ -255,8 +257,7 @@ function outputscoreboard(game,tm){
 }
 
 function configship(ship, team){
-  ship.set({hue:teams.hues[team],team:team,invulnerable:600
-  });
+  ship.set({hue:teams.hues[team],team:team,invulnerable:600,stats:88888888});
 }
 
 function setteam(ship){
@@ -313,8 +314,22 @@ function optionopenmenu(ship){
       {type: "text",position:[6,4,88/1.2,40/1.2],value:"Select ship [J]",color:"#cde"},
     ]
   });    
+  if (modifier.healer_button){
+    ship.setUIComponent({
+      id: "heal",
+      position: [3,42,16,20],
+      visible: true,
+      clickable: true,
+      shortcut: "W",
+      components: [
+        {type: "box",position:[0,0,88,40],stroke:"#191919",fill:"#333333",width:5},
+        {type: "text",position:[6,4,88/1.2,40/1.2],value:"Healer [W]",color:"#cde"},
+      ]
+    });     
+  }
   setTimeout(function(){  
     ship.setUIComponent({id:"open",visible:false});   
+    ship.setUIComponent({id:"heal",visible:false});   
   },9000);    
 }
 
@@ -377,13 +392,14 @@ this.event = function(event, game){
     break;
     case "ship_spawned":
       if (event.ship.custom.hasbeenkilled === true) optionopenmenu(event.ship);
-      event.ship.set({stats:88888888,invulnerable:600,shield:999,crystals:modifier.gems_upon_respawning});
+      event.ship.set({stats:88888888,invulnerable:600,shield:999,crystals:modifier.gems_upon_spawning});
       updatescoreboard(game);
     break;
     case "ui_component_clicked":
       let component = event.id;
       switch (component){
         case "open": drawmenu(event.ship); break;
+        case "heal": event.ship.set({healing:!event.ship.healing}); break;
         case "close": removemenu(event.ship); break;
         case "U-Sniper": event.ship.set({type:501,stats:88888888,shield:999}); removemenu(event.ship); break;
         case "Furystar": event.ship.set({type:502,stats:88888888,shield:999}); removemenu(event.ship); break;
