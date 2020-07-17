@@ -169,6 +169,7 @@ this.options = {
   map_size: 100,
   map_name: map_names[~~(Math.random()*map_names.length)],  
   asteroids_strength: 1,
+  speed_mod: 1.2,
   lives: 5,
   crystal_value: 3,
   friendly_colors: 2,
