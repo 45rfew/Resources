@@ -8,7 +8,7 @@ const modifier = {
   healer_button: true,
   round_timer: 30,
   round_ship_tier: "random",//choose from 5,6,7, or "random"
-  gems_upon_spawning: 69
+  gems_upon_spawning: 169
 };
 //Thanks to Destroy & Dimed for the idea
 var a = {};
