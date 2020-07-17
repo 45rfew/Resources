@@ -181,7 +181,7 @@ this.options = {
 function tick(game){
   if (game.step % 15 === 0){  
     if (game.ships.length !== 0){  
-      var max = Math.max(10,Math.min(27,~~(game.ships.length*2.2))); 
+      var max = Math.max(10,Math.min(22,~~(game.ships.length*2))); 
       if (game.aliens.length < max){
         var spawn_delay = game.step / ~~(1800 / 1.5 * 2);
         var alien = aliens[~~(Math.random()*Math.min(aliens.length,spawn_delay/4))];
@@ -216,24 +216,6 @@ function tick(game){
       if (!ship.custom.yeet){
         ship.custom.yeet = true;
         ship.setUIComponent(radar_background);
-        game.configImageUI({
-          id: "very important",
-          visible: true,
-          clickable: false,
-          url: "https://raw.githubusercontent.com/Bhpsngum/img-src/master/yeet.jpg",
-          position: {x:5,y:33.5},
-          scale: {x:1,y:1.5},
-          opacity: 1
-        },ship.setUIComponent);
-        game.configImageUI({
-          id: "very important2",
-          visible: true,
-          clickable: false,
-          url: "https://raw.githubusercontent.com/Bhpsngum/img-src/master/yeet2.jpg",
-          position: {x:8,y:33.5},
-          scale: {x:1,y:1.5},
-          opacity: 1
-        },ship.setUIComponent);             
       }
     } 
     if (game.step % 3600/1.5 === 0) game.addCollectible({code:10,x:Math.cos(Math.random()*Math.PI*2)*50,y:Math.sin(Math.random()*Math.PI*2)*50});
@@ -250,13 +232,6 @@ function game_start(game){
   this.tick = tick;
 }
 this.tick = game_start;
- 
-game.modding.tick = function(t){
-  this.game.tick(t);
-  if (this.context.tick != null){
-    this.context.tick(this.game);
-  } 
-};  
 
 game.modding.commands.a = function(){
   for (let alien of game.aliens){
@@ -333,23 +308,17 @@ e = function(i,type){
   game.ships[i].set({type:type,stats:88888888,crystals:gems});
 }; 
 
-function rand(min, max){
-  return ~~(Math.random() * (max - min + 1)) + min;
-} 
-
 function button(x, y, width, height, id, clickable, visible, text){
   components = [
     {type:"text",position:[0,0,78,20],value:text,color:"#ffffff"},
   ];
-  for (let ship of game.ships){
-    ship.setUIComponent({
-      id: id,
-      position: [x,y,width,height],
-      clickable: clickable,
-      visible: visible,
-      components: components
-    });
-  }    
+  game.setUIComponent({
+    id: id,
+    position: [x,y,width,height],
+    clickable: clickable,
+    visible: visible,
+    components: components
+  });
 } 
 
 function status_button(ship, width, visible){
@@ -445,53 +414,3 @@ game.setObject({
   rotation: {x:0,y:0,z:1},
   scale: {x:10/1.5,y:10/1.5,z:10/1.5}
 }); 
-
-game.configImageUI = function(opt, handler){
-  let image = {
-    id: opt.id,
-    visible: opt.visible,
-    clickable: opt.clickable,
-    components: []
-  };
-  if (opt.url){
-    let img = $("#"+opt.id)[0];
-    if (!img){
-      img = document.createElement("img");
-      img.setAttribute("id",opt.id);
-      img.setAttribute("style","display:none");
-      img.crossOrigin = "anonymous";
-      $('body').append(img);
-    }
-    img.onload = function(){
-      this.canvas = $('<canvas />')[0];
-      this.canvas.width = img.width;
-      this.canvas.height = img.height;
-      this.canvas.getContext('2d').drawImage(this, 0, 0, this.width, this.height);
-      let mx,my,h=100/this.height,w=100/this.width,d=[],pos=opt.position||{x:0,y:0},scale = opt.scale||{x:1,y:1};
-      function round(num){
-        return parseFloat(num.toFixed(2));
-      }
-      if (["scoreboard","radar_background"].indexOf(opt.id) != -1){
-        d=[0,0];
-        mx=(pos.x||0)/100;
-        my=(pos.y||0)/100;
-      } else {
-        d = [pos.x||0,pos.y||0];
-        mx=0;
-        my=0;
-      }
-      image.position = [d,[round(w*(scale.x||1)),round(h*(scale.y||1))]].flat();
-      for (let i=0;i<this.height;i++){
-        for (let j=0;j<this.width;j++){
-          let data = img.canvas.getContext('2d').getImageData(j,i,1,1).data;
-          image.components.push({type:"box",position:[round(w*j+mx),round(h*i+my),round(w*1.5),round(h*1.5)],fill:`rgba(${data[0]},${data[1]},${data[2]},${data[3]/255*(opt.opacity||1)})`});
-        }
-      }
-      (typeof handler == "function") && handler(image);
-    };
-    img.onerror = function(){throw new Error("Failed to fetch the image")};
-    img.setAttribute("src",opt.url);
-  }
-  else throw new Error("No Image Url detected");
-};
-
