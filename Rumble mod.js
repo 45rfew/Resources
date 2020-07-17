@@ -6,7 +6,7 @@ const modifier = {
   kills_to_win: ~~(200/divider),
   yeet_gems: true,
   healer_button: true,
-  round_timer: 30,
+  round_timer: 15,
   round_ship_tier: "random",//choose from 5,6,7, or "random"
   gems_upon_spawning: 169
 };
@@ -262,16 +262,9 @@ function configship(ship, team){
 
 function setteam(ship){
   let t;
-  if ([...new Set(teams.count)].length == 1) t=teams.points.indexOf(Math.min(...teams.points));
-  else t = teams.count.indexOf(Math.min(...teams.count));
+  t = teams.count.indexOf(Math.min(...teams.count));
   ship.custom.team = t;
   configship(ship, t);
-}
-
-function notsetteam(ship){
-  let t = teamcount.indexOf(Math.min(...teamcount));
-  ship.set({hue:ts[t].hue,team:t,invulnerable:600,stats:88888888,shield:999});
-  return t;
 }
 
 function checkscores(game){
@@ -392,7 +385,8 @@ this.event = function(event, game){
     break;
     case "ship_spawned":
       if (event.ship.custom.hasbeenkilled === true) optionopenmenu(event.ship);
-      event.ship.set({stats:88888888,invulnerable:600,shield:999,crystals:modifier.gems_upon_spawning});
+      vet ship = Math.trunc(event.ship.type/100)
+      event.ship.set({stats:88888888,invulnerable:600,shield:999,crystals:modifier.gems_upon_spawning+(level-5)*100});
       updatescoreboard(game);
     break;
     case "ui_component_clicked":
