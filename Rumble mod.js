@@ -1,4 +1,4 @@
-const divider = 1;
+const divider = 4;
 const modifier = {
   map_size: ~~(60/(Math.round(divider/2))),
   crystal_value: 4,
@@ -385,7 +385,7 @@ this.event = function(event, game){
     break;
     case "ship_spawned":
       if (event.ship.custom.hasbeenkilled === true) optionopenmenu(event.ship);
-      vet ship = Math.trunc(event.ship.type/100)
+      let level = Math.trunc(event.ship.type/100)
       event.ship.set({stats:88888888,invulnerable:600,shield:999,crystals:modifier.gems_upon_spawning+(level-5)*100});
       updatescoreboard(game);
     break;
