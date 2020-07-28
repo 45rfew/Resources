@@ -258,29 +258,23 @@ this.event = function(event, game){
     break;    
     case "alien_destroyed":
       const alien = event.alien;
-      if (alien.code == 10 && alien.level === 1){
-        for (let i = 0; i<2; i++) game.addAlien({code:10,level:0,x:alien.x+alien.vy*3,y:alien.y+alien.vx*3,vx:-1*alien.vy,vy:alien.vx,crystal_drop:7,points:5});
-      }
-      else if (alien.code == 10 && alien.level === 2){
-        for (let i = 0; i<4; i++) game.addAlien({code:10,level:0,x:alien.x+alien.vy*3,y:alien.y+alien.vx*3,vx:-1*alien.vy,vy:alien.vx,crystal_drop:7,points:5});
-      }
+      if (alien.code == 10 && alien.level === 1) for (let i=0; i<2; i++) game.addAlien({code:10,level:0,x:alien.x+alien.vy*3,y:alien.y+alien.vx*3,vx:-1*alien.vy,vy:alien.vx,crystal_drop:10,points:5});
+      else if (alien.code == 10 && alien.level === 2) for (let i=0; i<4; i++) game.addAlien({code:10,level:0,x:alien.x+alien.vy*3,y:alien.y+alien.vx*3,vx:-1*alien.vy,vy:alien.vx,crystal_drop:10,points:5});
       else if (alien.code == 10 && alien.level === 3){
-        for (let i = 0; i<4; i++){    
+        for (let i=0; i<4; i++){    
           let spread = 4;
           let x = alien.x + Math.random()*spread*3-spread;
           let y = alien.y + Math.random()*spread*3-spread;
-          game.addAlien({code:10,level:1,x:x,y:y,vx:-1*alien.vy,vy:alien.vx,crystal_drop:15,points:15});
+          game.addAlien({code:10,level:1,x:x,y:y,vx:-1*alien.vy,vy:alien.vx,crystal_drop:20,points:15});
         }
-        for (let i = 0; i<6; i++){
+        for (let i=0; i<6; i++){
           let spread = 4;
           let x = alien.x + Math.random()*spread*3-spread;
           let y = alien.y + Math.random()*spread*3-spread;            
-          game.addAlien({code:10,level:0,x:x,y:y,vx:-1*alien.vy,vy:alien.vx,crystal_drop:7,points:5});
+          game.addAlien({code:10,level:0,x:x,y:y,vx:-1*alien.vy,vy:alien.vx,crystal_drop:10,points:5});
         }
       }
-      else if (alien.code == 16 && alien.level === 1){
-        for (let i = 0; i<2; i++) game.addAlien({code:16,level:0,x:alien.x+alien.vy*3,y:alien.y+alien.vx*3,vx:-1*alien.vy,vy:alien.vx,crystal_drop:24,points:20});
-      } 
+      else if (alien.code == 16 && alien.level === 1) for (let i=0; i<2; i++) game.addAlien({code:16,level:0,x:alien.x+alien.vy*3,y:alien.y+alien.vx*3,vx:-1*alien.vy,vy:alien.vx,crystal_drop:30,points:20});
     break;
   }
 };
@@ -288,7 +282,7 @@ this.event = function(event, game){
 var alien_types = [
   {code:10,level:0,points:5,crystal_drop:10},  
   {code:10,level:1,points:10,crystal_drop:20},
-  {code:16,level:0,points:20,crystal_drop:35},
+  {code:16,level:0,points:20,crystal_drop:30},
   {code:10,level:2,points:25,crystal_drop:40},
   {code:16,level:1,points:35,crystal_drop:45},  
   {code:10,level:2,points:25,crystal_drop:40},
