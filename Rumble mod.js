@@ -7,8 +7,8 @@ const modifier = {
   yeet_gems: true,
   healer_button: true,
   round_timer: 15,
-  round_ship_tier: "random",//choose from 5,6,7, or "random"
-  gems_upon_spawning: 169
+  round_ship_tier: "random",//choose from 4,5,6,7, or "random"
+  gems_upon_spawning: 269
 };
 //Thanks to Destroy & Dimed for the idea
 var a = {};
@@ -38,9 +38,27 @@ var vocabulary = [
 
 var maps = [1761,1749,77,45,4360,3604,5575],rand_ships,ship_name,yeetus,lmao=false;
 if (modifier.round_ship_tier === "random") modifier.round_ship_tier = 5+~~(Math.random()*3);
-if (modifier.round_ship_tier === 5){yeetus=4; rand_ships = [501,502,503,504,505,506,507]; ship_name = ["U-Sniper","Furystar","T-Warrior","Aetos","Shadow X-2","Howler","Bat-Defender","Toscain"];} else
-if (modifier.round_ship_tier === 6){yeetus=5; rand_ships = [601,602,603,604,605,606,607,608,609]; ship_name = ["Advanced-Fighter","Scorpion","Marauder","Condor","A-Speedster","Rock-Tower","Baracuda","O-Defender","H-Mercury"];} else
-if (modifier.round_ship_tier === 7){yeetus=5; lmao=true; rand_ships = [701,702,703,704]; ship_name = ["Odyssey","Shadow X-3","Bastion","Aries"];} 
+//if (modifier.round_ship_tier === 5){yeetus=4; rand_ships = [501,502,503,504,505,506,507]; ship_name = ["U-Sniper","Furystar","T-Warrior","Aetos","Shadow X-2","Howler","Bat-Defender","Toscain"];} else
+//if (modifier.round_ship_tier === 6){yeetus=5; rand_ships = [601,602,603,604,605,606,607,608,609]; ship_name = ["Advanced-Fighter","Scorpion","Marauder","Condor","A-Speedster","Rock-Tower","Baracuda","O-Defender","H-Mercury"];} else
+//if (modifier.round_ship_tier === 7){yeetus=5; lmao=true; rand_ships = [701,702,703,704]; ship_name = ["Odyssey","Shadow X-3","Bastion","Aries"];} 
+switch (modifier.round_ship_tier){
+  case 4: 
+    yeetus = 4; rand_ships = [401,402,403,404,405,406];
+    ship_name = ["Vanguard","Mercury","X-Warrior","Side-Intercepter","Pioneer","Crusader"];
+  break; 
+  case 5: 
+    yeetus = 4; rand_ships = [501,502,503,504,505,506,507];
+    ship_name = ["U-Sniper","Furystar","T-Warrior","Aetos","Shadow X-2","Howler","Bat-Defender","Toscain"];
+  break;
+  case 6:
+    yeetus = 5; rand_ships = [601,602,603,604,605,606,607,608,609]; 
+    ship_name = ["Advanced-Fighter","Scorpion","Marauder","Condor","A-Speedster","Rock-Tower","Baracuda","O-Defender","H-Mercury"];
+  break;
+  case 7: 
+    yeetus = 5; lmao = true; rand_ships = [701,702,703,704];
+    ship_name = ["Odyssey","Shadow X-3","Bastion","Aries"];
+  break;
+}
 
 function shuffle(array,yeetus){
   var tmp, current, top = array.length;
@@ -69,7 +87,7 @@ this.options = {
   map_size: modifier.map_size,
   starting_ship: 801,
   crystal_value: modifier.crystal_value,
-  speed_mod: 1.2,
+  speed_mod: 2,
   max_players: modifier.max_players,
   max_level: modifier.round_ship_tier,
   ships: ships,
@@ -86,7 +104,7 @@ this.tick = function(game){
       let tm; 
       if (!ship.custom.lol){
         ship.custom.lol = true;
-        tm = setteam(ship);
+        setteam(ship);
         checkscores(game);
         ship.frags = 0;
         ship.deaths = 0;
@@ -94,8 +112,8 @@ this.tick = function(game){
         echo(`${ship.name} spawned`);  
       } 
       //teamcount[tm||ship.team]++;
-      teams.ships[ship.custom.team].push(ship);
-      teams.count[ship.custom.team]++;
+      //teams.ships[ship.custom.team].push(ship);
+      //teams.count[ship.custom.team]++;
       ship.set({score:ship.frags});
     }
     for (let i=0; i<2; i++){
@@ -261,6 +279,12 @@ function configship(ship, team){
 }
 
 function setteam(ship){
+  var ts = [{hue:0},{hue:240}];
+  for(let i=0; i<game.ships.length; i++) t=i%2;
+  ship.set({hue:ts[t].hue,team:t,invulnerable:600,stats:88888888});
+}
+
+function notsetteam(ship){
   let t;
   t = teams.count.indexOf(Math.min(...teams.count));
   ship.custom.team = t;
@@ -368,7 +392,9 @@ function removemenu(ship){
   }
 }
 
-this.event = function(event, game){
+function typeset(type){event.ship.set({type:type,stats:88888888,shield:999});}
+
+this.event = function(event,game){
   switch (event.name){
     case "ship_destroyed":
       let ship = event.ship;
@@ -385,8 +411,7 @@ this.event = function(event, game){
     break;
     case "ship_spawned":
       if (event.ship.custom.hasbeenkilled === true) optionopenmenu(event.ship);
-      let level = Math.trunc(event.ship.type/100)
-      event.ship.set({stats:88888888,invulnerable:600,shield:999,crystals:modifier.gems_upon_spawning+(level-5)*100});
+      event.ship.set({stats:88888888,invulnerable:600,shield:999,crystals:modifier.gems_upon_spawning+((modifier.round_ship_tier-5)*100)});
       updatescoreboard(game);
     break;
     case "ui_component_clicked":
@@ -395,6 +420,12 @@ this.event = function(event, game){
         case "open": drawmenu(event.ship); break;
         case "heal": event.ship.set({healing:!event.ship.healing}); break;
         case "close": removemenu(event.ship); break;
+        case "Vanguard": event.ship.set({type:401,stats:88888888,shield:999}); removemenu(event.ship); break;
+        case "Mercury": event.ship.set({type:402,stats:88888888,shield:999}); removemenu(event.ship); break;
+        case "X-Warrior": event.ship.set({type:403,stats:88888888,shield:999}); removemenu(event.ship); break;
+        case "Side-Intercepter": event.ship.set({type:404,stats:88888888,shield:999}); removemenu(event.ship); break;
+        case "Pioneer": event.ship.set({type:405,stats:88888888,shield:999}); removemenu(event.ship); break;
+        case "Crusader": event.ship.set({type:406,stats:88888888,shield:999}); removemenu(event.ship); break;
         case "U-Sniper": event.ship.set({type:501,stats:88888888,shield:999}); removemenu(event.ship); break;
         case "Furystar": event.ship.set({type:502,stats:88888888,shield:999}); removemenu(event.ship); break;
         case "T-Warrior": event.ship.set({type:503,stats:88888888,shield:999}); removemenu(event.ship); break;
