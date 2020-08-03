@@ -1,18 +1,19 @@
 const divider = 4;
 const modifier = {
-  map_size: ~~(60/(Math.round(divider/2))),
+  map_size: ~~(80/(Math.round(divider/2))),
   crystal_value: 4,
   max_players: ~~(120/divider),
   kills_to_win: ~~(200/divider),
   yeet_gems: true,
   healer_button: true,
   round_timer: 15,
-  round_ship_tier: 6,//choose from 3,4,5,6,7, or "random"
+  round_ship_tier: "random",//choose from 3,4,5,6,7, or "random"
   gems_upon_spawning: 169
 };
 
 game.modding.commands.list = function(){
-  echo(`Red: ${teams.count[0]}, Blue: ${teams.count[1]}\n`);
+  for (let ship of game.ships) teams.count[ship.team]++;
+  echo(`${randcolors[randnum].team}: ${teams.count[0]}, ${randcolors[randnum].team2}: ${teams.count[1]}\n`);
   let count = 0;
   for (let ship of game.ships){
     let t = ship.team,u; ship.healing?u="(healer)":u="";
@@ -25,21 +26,23 @@ game.modding.commands.swap = function(req){
   let args=req.replace(/^\s+/,"").replace(/\s+/," ").split(" "),id=Number(args[1]||"NaN");
   let ship = game.ships[id];
   let opt = Math.abs(ship.team-1);
-  ship.set({team:opt,hue:teams.hues[opt]});
+  ship.set({team:opt,hue:colors[opt]});
+  updatescoreboard(game); 
 };
 
 game.modding.commands.split = function(){
-  let ts = [{hue:0,x:-215,y:0}, {hue:240,x:215,y:0}];
+  let ts = [{hue:randcolors[randnum].hue,x:-215,y:0}, {hue:randcolors[randnum].hue2,x:215,y:0}];
   for(let i=0; i<game.ships.length; i++){
     let ship = game.ships[i];
     let t = i%2;
     ship.set({hue:ts[t].hue,team:t,x:ts[t].x,y:ts[t].y,invulnerable:600});
   }
+  updatescoreboard(game); 
 };
 //Thanks to Destroy & Dimed for the idea
 var a = {};
 a.H_Mercury = '{"name":"H-Mercury","level":6,"model":9,"size":2,"specs":{"shield":{"capacity":[250,375],"reload":[6,9]},"generator":{"capacity":[100,150],"reload":[45,75]},"ship":{"mass":375,"speed":[75,95],"rotation":[50,65],"acceleration":[60,100]}},"bodies":{"main":{"section_segments":8,"offset":{"x":0,"y":0,"z":20},"position":{"x":[0,0,0,0,0,0,0,0,0],"y":[-65,-70,-60,-40,0,50,110,100],"z":[0,0,0,0,0,0,0,0]},"width":[1,5,10,20,30,25,10,0],"height":[1,5,10,15,25,20,10,0],"texture":[6,4,4,63,11,63,12],"propeller":true,"laser":{"damage":[7,12],"rate":8,"type":1,"speed":[100,190],"number":1,"error":0}},"cockpit":{"section_segments":8,"offset":{"x":0,"y":-20,"z":35},"position":{"x":[0,0,0,0,0,0,0],"y":[-20,-10,0,15,25],"z":[0,0,0,0,0]},"width":[0,10,12,10,5],"height":[0,10,13,12,5],"texture":[9,9,4,4],"propeller":false},"arms":{"section_segments":8,"offset":{"x":60,"y":0,"z":-10},"position":{"x":[0,0,0,5,10,0,0,-10],"y":[-85,-70,-80,-30,0,30,100,90],"z":[0,0,0,0,0,0,0,0]},"width":[1,5,6,15,15,15,10,0],"height":[1,5,6,20,30,25,10,0],"texture":[6,4,4,4,4,4,12],"angle":1,"propeller":true,"laser":{"damage":[2,4],"rate":4,"type":1,"speed":[150,200],"number":1,"error":0}},"canon":{"section_segments":12,"offset":{"x":100,"y":27,"z":5},"position":{"x":[0,0,0,0,0,0,0],"y":[-50,-45,-20,0,20,30,40],"z":[0,0,0,0,0,0,0]},"width":[0,5,7,7,3,5,0],"height":[0,5,15,15,3,5,0],"angle":3,"laser":{"damage":[4,9],"rate":1.5,"type":1,"speed":[150,220],"number":1,"error":0},"propeller":false,"texture":[6,4,10,4,4,4]}},"wings":{"main":{"offset":{"x":0,"y":-15,"z":20},"length":[60,40],"width":[60,30,20],"angle":[-20,10],"position":[30,50,30],"texture":[11,11],"bump":{"position":30,"size":10}},"font":{"length":[60],"width":[20,15],"angle":[-10,20],"position":[-20,-40],"texture":[63],"bump":{"position":30,"size":10},"offset":{"x":0,"y":0,"z":0}},"font2":{"offset":{"x":0,"y":40,"z":8},"length":[60],"width":[20,15],"angle":[-10,20],"position":[20,40],"texture":[63],"bump":{"position":30,"size":10}}},"typespec":{"name":"H-Mercury","level":6,"model":9,"code":609,"specs":{"shield":{"capacity":[250,375],"reload":[6,9]},"generator":{"capacity":[100,150],"reload":[45,75]},"ship":{"mass":375,"speed":[75,95],"rotation":[50,65],"acceleration":[60,100]}},"shape":[2.806,2.807,2.354,2.037,1.822,4.151,4.081,3.789,3.595,3.471,3.406,4.17,4.202,4.284,4.413,4.508,4.834,4.883,4.011,4.534,4.917,4.734,3.583,3.454,4.418,4.409,4.418,3.454,3.583,4.734,4.917,4.534,4.011,4.883,4.834,4.508,4.413,4.284,4.202,4.17,3.406,3.471,3.595,3.789,4.081,4.151,1.822,2.037,2.354,2.807],"lasers":[{"x":0,"y":-2.8,"z":0.8,"angle":0,"damage":[7,12],"rate":8,"type":1,"speed":[100,190],"number":1,"spread":0,"error":0,"recoil":0},{"x":2.341,"y":-3.399,"z":-0.4,"angle":1,"damage":[2,4],"rate":4,"type":1,"speed":[150,200],"number":1,"spread":0,"error":0,"recoil":0},{"x":-2.341,"y":-3.399,"z":-0.4,"angle":-1,"damage":[2,4],"rate":4,"type":1,"speed":[150,200],"number":1,"spread":0,"error":0,"recoil":0},{"x":3.895,"y":-0.917,"z":0.2,"angle":3,"damage":[4,9],"rate":1.5,"type":1,"speed":[150,220],"number":1,"spread":0,"error":0,"recoil":0},{"x":-3.895,"y":-0.917,"z":0.2,"angle":-3,"damage":[4,9],"rate":1.5,"type":1,"speed":[150,220],"number":1,"spread":0,"error":0,"recoil":0}],"radius":4.917}}';
-a.Toscain_508 = '{"name":"Toscain","level":5,"model":8,"size":1.7,"specs":{"shield":{"capacity":[275,350],"reload":[5,8]},"generator":{"capacity":[75,100],"reload":[35,50]},"ship":{"mass":300,"speed":[80,90],"rotation":[50,80],"acceleration":[80,110]}},"bodies":{"front":{"section_segments":8,"offset":{"x":0,"y":0,"z":0},"position":{"x":[0,0,0,0,0],"y":[-100,-95,-25,0,25],"z":[0,0,0,0,0]},"width":[0,20,40,40,20],"height":[0,10,35,20,5],"texture":[63,11,2,63],"laser":{"damage":[14,30],"rate":1,"type":2,"speed":[150,200],"number":1,"recoil":50,"error":0}},"cockpit":{"section_segments":8,"offset":{"x":0,"y":0,"z":10},"position":{"x":[0,0,0,0,0],"y":[-70,-70,-25,0,100],"z":[0,0,0,0,9]},"width":[0,10,15,15,10],"height":[0,15,35,20,0],"texture":[9,9,9,4]},"lasers":{"section_segments":8,"angle":15,"offset":{"x":1,"y":-5,"z":-3},"position":{"x":[0,0,0],"y":[-90,-70,-100],"z":[0,0,0]},"width":[5,5,0],"height":[5,5,0],"texture":[6],"laser":{"damage":[3.75,6],"rate":2,"type":1,"speed":[100,130],"number":2,"angle":45,"error":0}},"motor":{"section_segments":8,"offset":{"x":0,"y":0,"z":0},"position":{"x":[0,0,0,0,0],"y":[10,20,30,100,95],"z":[0,0,0,0,0]},"width":[0,40,50,50,0],"height":[0,10,15,20,0],"texture":[63,63,10,4]},"propulsors":{"section_segments":8,"offset":{"x":25,"y":0,"z":0},"position":{"x":[0,0,0],"y":[30,105,100],"z":[0,0,0]},"width":[15,15,0],"height":[10,10,0],"propeller":true,"texture":[12]}},"wings":{"main":{"doubleside":true,"offset":{"x":30,"y":80,"z":0},"length":[70,20],"width":[80,20],"angle":[0,0],"position":[-20,0],"texture":[11],"bump":{"position":20,"size":10}},"winglets":{"doubleside":true,"offset":{"x":98,"y":81,"z":-20},"length":[20,50,20],"width":[20,35,20],"angle":[90,90,90],"position":[0,0,0,0],"texture":[63],"bump":{"position":30,"size":50}}},"typespec":{"name":"Toscain","level":5,"model":8,"code":508,"specs":{"shield":{"capacity":[275,350],"reload":[5,8]},"generator":{"capacity":[75,100],"reload":[35,50]},"ship":{"mass":300,"speed":[80,90],"rotation":[50,80],"acceleration":[80,110]}},"shape":[3.4,3.354,3.556,2.748,2.336,2.055,1.858,1.732,1.634,1.548,1.462,1.404,1.371,1.36,1.241,1.161,1.723,4.485,5.01,4.795,4.111,3.842,3.82,3.753,3.634,3.407,3.634,3.753,3.82,3.842,4.111,4.795,5.01,4.485,1.723,1.161,1.241,1.353,1.371,1.404,1.462,1.548,1.634,1.732,1.858,2.055,2.336,2.748,3.556,3.354],"lasers":[{"x":0,"y":-3.4,"z":0,"angle":0,"damage":[14,30],"rate":1,"type":2,"speed":[150,200],"number":1,"spread":0,"error":0,"recoil":50},{"x":-0.846,"y":-3.454,"z":-0.102,"angle":15,"damage":[3.75,6],"rate":2,"type":1,"speed":[100,130],"number":2,"spread":45,"error":0,"recoil":0},{"x":0.846,"y":-3.454,"z":-0.102,"angle":-15,"damage":[3.75,6],"rate":2,"type":1,"speed":[100,130],"number":2,"spread":45,"error":0,"recoil":0}],"radius":5.01}}';
+a.Toscain = '{"name":"Toscain","level":5,"model":8,"size":1.7,"specs":{"shield":{"capacity":[275,350],"reload":[5,8]},"generator":{"capacity":[75,100],"reload":[35,50]},"ship":{"mass":300,"speed":[80,90],"rotation":[50,80],"acceleration":[80,110]}},"bodies":{"front":{"section_segments":8,"offset":{"x":0,"y":0,"z":0},"position":{"x":[0,0,0,0,0],"y":[-100,-95,-25,0,25],"z":[0,0,0,0,0]},"width":[0,20,40,40,20],"height":[0,10,35,20,5],"texture":[63,11,2,63],"laser":{"damage":[14,30],"rate":1,"type":2,"speed":[150,200],"number":1,"recoil":50,"error":0}},"cockpit":{"section_segments":8,"offset":{"x":0,"y":0,"z":10},"position":{"x":[0,0,0,0,0],"y":[-70,-70,-25,0,100],"z":[0,0,0,0,9]},"width":[0,10,15,15,10],"height":[0,15,35,20,0],"texture":[9,9,9,4]},"lasers":{"section_segments":8,"angle":15,"offset":{"x":1,"y":-5,"z":-3},"position":{"x":[0,0,0],"y":[-90,-70,-100],"z":[0,0,0]},"width":[5,5,0],"height":[5,5,0],"texture":[6],"laser":{"damage":[3.75,6],"rate":2,"type":1,"speed":[100,130],"number":2,"angle":45,"error":0}},"motor":{"section_segments":8,"offset":{"x":0,"y":0,"z":0},"position":{"x":[0,0,0,0,0],"y":[10,20,30,100,95],"z":[0,0,0,0,0]},"width":[0,40,50,50,0],"height":[0,10,15,20,0],"texture":[63,63,10,4]},"propulsors":{"section_segments":8,"offset":{"x":25,"y":0,"z":0},"position":{"x":[0,0,0],"y":[30,105,100],"z":[0,0,0]},"width":[15,15,0],"height":[10,10,0],"propeller":true,"texture":[12]}},"wings":{"main":{"doubleside":true,"offset":{"x":30,"y":80,"z":0},"length":[70,20],"width":[80,20],"angle":[0,0],"position":[-20,0],"texture":[11],"bump":{"position":20,"size":10}},"winglets":{"doubleside":true,"offset":{"x":98,"y":81,"z":-20},"length":[20,50,20],"width":[20,35,20],"angle":[90,90,90],"position":[0,0,0,0],"texture":[63],"bump":{"position":30,"size":50}}},"typespec":{"name":"Toscain","level":5,"model":8,"code":508,"specs":{"shield":{"capacity":[275,350],"reload":[5,8]},"generator":{"capacity":[75,100],"reload":[35,50]},"ship":{"mass":300,"speed":[80,90],"rotation":[50,80],"acceleration":[80,110]}},"shape":[3.4,3.354,3.556,2.748,2.336,2.055,1.858,1.732,1.634,1.548,1.462,1.404,1.371,1.36,1.241,1.161,1.723,4.485,5.01,4.795,4.111,3.842,3.82,3.753,3.634,3.407,3.634,3.753,3.82,3.842,4.111,4.795,5.01,4.485,1.723,1.161,1.241,1.353,1.371,1.404,1.462,1.548,1.634,1.732,1.858,2.055,2.336,2.748,3.556,3.354],"lasers":[{"x":0,"y":-3.4,"z":0,"angle":0,"damage":[14,30],"rate":1,"type":2,"speed":[150,200],"number":1,"spread":0,"error":0,"recoil":50},{"x":-0.846,"y":-3.454,"z":-0.102,"angle":15,"damage":[3.75,6],"rate":2,"type":1,"speed":[100,130],"number":2,"spread":45,"error":0,"recoil":0},{"x":0.846,"y":-3.454,"z":-0.102,"angle":-15,"damage":[3.75,6],"rate":2,"type":1,"speed":[100,130],"number":2,"spread":45,"error":0,"recoil":0}],"radius":5.01}}';
 var ships = [];
 for (let ship in a) ships.push(a[ship]);
 
@@ -70,21 +73,23 @@ var ships_list = [
   ["Odyssey","Shadow X-3","Bastion","Aries"]    //T7
 ];
 
-findShipCode = function(name){
+function findShipCode(name){
   for (let i=0;i<ships_list.length;i++)
     for (let j=0;j<ships_list[i].length;j++)
       if (ships_list[i][j] == name) return (i+3)*100+j+1;
 };
 
-var maps = [1761,1749,77,45,4360,3604,5575],rand_ships,ship_name,d=false;
-if (modifier.round_ship_tier === "random"&&!d){d = true;modifier.round_ship_tier = 3+~~(Math.random()*5);echo(modifier.round_ship_tier)}
+var maps = [1761,1749,77,45,4360,3604,5575],rand_ships,ship_name;
+if (modifier.round_ship_tier === "random" && !game.custom.init){
+  game.custom.init = true;
+  modifier.round_ship_tier = 3+~~(Math.random()*5);
+  echo(modifier.round_ship_tier);
+}
 let tier = modifier.round_ship_tier;
 let yeetus = 4; 
 switch (modifier.round_ship_tier){
-  case 3: yeetus = 3; break;
-  case 4: yeetus = 3; break; 
-  case 5: yeetus = 3; break;
-  case 7: yeetus = false; 
+  case 3: yeetus = 3; break; case 4: yeetus = 3; break; 
+  case 5: yeetus = 3; break; case 7: yeetus = false; 
 }
 ship_name = JSON.parse(JSON.stringify(ships_list[tier-3]));
 rand_ships = JSON.parse(JSON.stringify(ships_list[tier-3])).map((n,p) => tier*100+p+1);
@@ -102,7 +107,7 @@ function shuffle(array,yeetus){
 }
 
 this.options = {
-  map_id: maps[~~(Math.random()*maps.length)],
+  //map_id: maps[~~(Math.random()*maps.length)],
   vocabulary: vocabulary,
   soundtrack: "argon.mp3",
   weapons_store: false,
@@ -126,7 +131,6 @@ this.tick = function(game){
   if (game.step % 30 === 0){
     updatescoreboard(game); 
     for (let ship of game.ships){
-      let tm; 
       if (!ship.custom.lol){
         ship.custom.lol = true;
         setteam(ship);
@@ -135,15 +139,15 @@ this.tick = function(game){
         ship.deaths = 0;
         joinmessage(ship);
         setup(ship);
+        updatescoreboard(game); 
         echo(`${ship.name} spawned`);  
       } 
-      //teamcount[tm||ship.team]++;   
-      //teams.count[ship.custom.team]++;
-      //teams.ships[ship.custom.team].push(ship);
       ship.set({score:ship.frags});
     }
     for (let i=0; i<2; i++){
+      if (game.custom.won) break;
       if (teams.points[i] >= modifier.kills_to_win){
+        game.custom.won = true;
         game.setUIComponent({
           id: "end",
           position: [39,18,42,40],
@@ -195,25 +199,31 @@ this.tick = function(game){
       });    
       setTimeout(function(){
         for (let ship of game.ships){
+          if (game.custom.win) break;
           ship.gameover({text,"Frags:":ship.frags,"Deaths:":ship.deaths});
           echo(text);
         }
-      }, 5000);      
+      }, 5000);
+      game.custom.win = true;
     }       
   }
 };
 
+var randcolors = [
+  {team:"Red",hue:0,team2:"Blue",hue2:240},
+  {team:"Yellow",hue:60,team2:"Green",hue2:120},
+  {team:"Orange",hue:30,team2:"Purple",hue2:270}
+];
+
+if (!game.custom.init2){game.custom.init2 = true;
+for (let i=0; i<~~(Math.random()*3); i++) randcolors.shift();}
+
 var teams = {
-  names: ["Red","Blue"],
-  hues: [0,240],
+  names: [randcolors[0].team,randcolors[0].team2],
   points: [0,0],
   count: [0,0],
   ships: [[],[]]
-};
-
-let teamcount = [0,0], ts = [
-  {hue:0,x:-215,y:0}, {hue:240,x:215,y:0}
-], colors = [0,240];
+},colors = [randcolors[0].hue,randcolors[0].hue2];
 
 function getcolor(color){
   return `hsla(${color},100%,50%,1)`;
@@ -230,16 +240,7 @@ function setteam(ship){
   for (let ship of game.ships) count[ship.team]++;
   let t = count.indexOf(Math.min(...count));
   echo(count);
-  ship.set({hue:teams.hues[t],team:t,invulnerable:600,stats:88888888});
-}
-
-function checkButtons(ship){
-  if (!ship.custom.buttons){
-    ship.setUIComponent({id:"open",visible:false});   
-    ship.setUIComponent({id:"heal",visible:false});  
-    for (let i=0;i<3;i++){ ship.setUIComponent({id:ship.custom.rand[i],visible:false});}
-    ship.setUIComponent({id:"close",visible:false});
-  }
+  ship.set({hue:colors[t],team:t,invulnerable:600,stats:88888888});
 }
 
 function PlayerBox(posx,posy) {
@@ -254,7 +255,7 @@ function Tag(indtext,param,posx,posy,hex,al,size) {
       break;
     case "player":
       obj.id=param;
-      break;
+    break;
   }
   return obj;
 }
@@ -276,9 +277,9 @@ function updatescoreboard(game){
   for (let ship of game.ships) t[ship.team].push(ship);
   scoreboard.components = [
     { type:"box",position:[0,0,50,8],fill:getcolor(colors[0])},
-    { type: "text",position: [0,0,50,8],color: "#cde",value: "Red"},
+    { type: "text",position: [0,0,50,8],color:"#e5e5e5",value: teams.names[0]},
     { type:"box",position:[50,0,50,8],fill:getcolor(colors[1])},
-    { type: "text",position: [50,0,50,8],color: "#cde",value: "Blue"}
+    { type: "text",position: [50,0,50,8],color:"#e5e5e5",value: teams.names[1]}
   ];
   let sc=[sort(t[0]),sort(t[1])],line=1;
   sc[0].slice(10);sc[1].slice(10);
@@ -317,23 +318,15 @@ function outputscoreboard(game,tm){
   }
 }
 
-function configship(ship, team){ship.set({hue:teams.hues[team],team:team,invulnerable:600,stats:88888888});}
-function notsetteam(ship){
-  let t;
-  t = teams.count.indexOf(Math.min(...teams.count));
-  ship.custom.team = t;
-  configship(ship, t);
-}
-
 function checkscores(game){
   game.setUIComponent({
     id: "scores",
     position: [34,10,42,40],
     visible: true,
     components: [
-      {type: "text",position:[2,5,80/1.5,33/1.5],value:teams.points[0],color:"#ff0000"},
+      {type: "text",position:[2,5,80/1.5,33/1.5],value:teams.points[0],color:getcolor(colors[0])},
       {type: "text",position:[0,0,80,33],value:"-",color:"#CDE"},
-      {type: "text",position:[25,5,80/1.5,33/1.5],value:teams.points[1],color:"#0000ff"},
+      {type: "text",position:[25,5,80/1.5,33/1.5],value:teams.points[1],color:getcolor(colors[1])},
     ]
   });
 }
@@ -351,6 +344,15 @@ function joinmessage(ship){
   setTimeout(function(){  
     ship.setUIComponent({id:"yeet",visible:false});
   },8000);
+}
+
+function checkButtons(ship){
+  if (!ship.custom.buttons){
+    ship.setUIComponent({id:"open",visible:false});   
+    ship.setUIComponent({id:"heal",visible:false});  
+    for (let i=0;i<3;i++){ ship.setUIComponent({id:ship.custom.rand[i],visible:false});}
+    ship.setUIComponent({id:"close",visible:false});
+  }
 }
 
 function optionopenmenu(ship){
@@ -437,6 +439,14 @@ function setup(ship){
   ship.set({stats:88888888,invulnerable:600,shield:999,crystals:modifier.gems_upon_spawning+(level-3)*100});
 }
 
+lOlO0.prototype.shipDisconnected = function(t){
+  var e=this.modding.game.findShip(t.id);
+  if (e != null) {
+    this.context.event != null && this.context.event({name:"ship_disconnected",ship:e},this.modding.game);
+    return e.lI101 = !0
+  }
+}
+
 this.event = function(event, game){
   let ship = event.ship;
   switch (event.name){
@@ -448,23 +458,23 @@ this.event = function(event, game){
         echo(`${killer.name} killed ${ship.name}`);
       } else {
         echo(ship.name + " killed themselves");
-        teams.points[Math.abs(ship.team-1)]++
+        teams.points[Math.abs(ship.team-1)]++;
       }
       ship.deaths++;
       checkscores(game);
       ship.custom.hasbeenkilled = true;
-      echo(`Red:${teams.points[0]},Blue:${teams.points[1]}`);
+      echo(`${teams.names[0]}:${teams.points[0]},${teams.names[1]}:${teams.points[1]}`);
       updatescoreboard(game);
     break;
     case "ship_spawned":
-      if (ship.custom.hasbeenkilled === true) {
+      if (ship.custom.hasbeenkilled === true){
         ship.custom.buttons = true;
         optionopenmenu(ship);
         ship.custom.hasbeenkilled = false;
       }
       let gems;
       gems = modifier.gems_upon_spawning+(modifier.round_ship_tier-5)*100;
-      if (gems < 0){echo("Gem value is negative, lmao"); gems = 69}
+      if (gems < 0){echo("Gem value is negative, lmao"); gems = 69;}
       (ship != null) && ship.set({stats:88888888,invulnerable:600,shield:999,crystals:gems});
       updatescoreboard(game);
     break;
@@ -472,7 +482,8 @@ this.event = function(event, game){
       let component = event.id;
       switch (component){
         case "open": drawmenu(ship); break;
-        case "heal": confighealing(ship);ship.set({healing:!ship.healing}); break;
+        case "heal": confighealing(ship);ship.set({healing:!ship.healing}); 
+          ship.setUIComponent({id:"heal",visible:false}); break;
         case "close": removemenu(ship);addShipSelection(ship); break;
         default:
           ship.set({type:findShipCode(component),stats:88888888,shield:999});
@@ -481,5 +492,8 @@ this.event = function(event, game){
       }
       checkButtons(ship);
     break;  
+    case "ship_disconnected":
+      updatescoreboard(game); 
+    break;    
   }
 };
