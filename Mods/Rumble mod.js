@@ -36,8 +36,7 @@ game.modding.commands.split = function(){
     let ship = game.ships[i];
     let t = i%2;
     ship.set({hue:ts[t].hue,team:t,x:ts[t].x,y:ts[t].y,invulnerable:600});
-  }
-  updatescoreboard(game); 
+  } updatescoreboard(game); 
 };
 //Thanks to Destroy & Dimed for the idea
 var a = {};
@@ -216,7 +215,8 @@ var randcolors = [
 ];
 
 if (!game.custom.init2){game.custom.init2 = true;
-for (let i=0; i<~~(Math.random()*3); i++) randcolors.shift();}
+for (let i=0; i<~~(Math.random()*3); i++) randcolors.shift(); 
+echo('Rumble mod is Rumble mod, not TDM');}
 
 var teams = {
   names: [randcolors[0].team,randcolors[0].team2],
