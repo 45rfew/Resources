@@ -366,8 +366,8 @@ addRadarSpot(0,0,"box",6,6,0.6);
 var floor = {
   id: "floor",
   obj: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Circuit.obj",
-  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Ship%20lambert.png",
-  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Ship%20emissive%20(5).jpg",
+  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20Lambert%20Green.png",
+  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20emissive%20(5).jpg",
   emissiveColor: 0x00ff00,
   transparent: false,
 };
@@ -375,8 +375,8 @@ var floor = {
 var antenna = {
   id: "antenna",
   obj: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Antenna.obj",
-  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Ship%20Lambert%20Green.png",
-  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Ship%20emissive%20(5).jpg",
+  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20Lambert%20Green.png",
+  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20emissive%20(5).jpg",
   specularColor: 0x2f4f4f,
   emissiveColor: 0x00ff00,
   physics: {
@@ -404,8 +404,8 @@ game.setObject({
 var zeroboros = {
   id: "zeroboros",
   obj: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Zeroboros.obj",
-  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Ship%20lambert%20orange.png",
-  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Ship%20emissive%20(5).jpg",
+  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20lambert%20orange.png",
+  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20emissive%20(5).jpg",
   emissiveColor: 0xff8c00,
   transparent: false
 };
@@ -417,3 +417,4 @@ game.setObject({
   rotation: {x:0,y:0,z:1},
   scale: {x:10/1.5,y:10/1.5,z:10/1.5}
 }); 
+
