@@ -1,5 +1,5 @@
-const divider = 4;
-const modifier = {
+var divider = 4;
+var modifier = {
   map_size: ~~(80/(Math.round(divider/2))),
   crystal_value: 4,
   max_players: ~~(120/divider),
@@ -31,7 +31,7 @@ game.modding.commands.swap = function(req){
 };
 
 game.modding.commands.split = function(){
-  let ts = [{hue:randcolors[randnum].hue,x:-215,y:0}, {hue:randcolors[randnum].hue2,x:215,y:0}];
+  let ts = [{hue:randcolors[0].hue,x:50,y:0}, {hue:randcolors[0].hue2,x:-50,y:0}];
   for(let i=0; i<game.ships.length; i++){
     let ship = game.ships[i];
     let t = i%2;
@@ -76,9 +76,9 @@ function findShipCode(name){
   for (let i=0;i<ships_list.length;i++)
     for (let j=0;j<ships_list[i].length;j++)
       if (ships_list[i][j] == name) return (i+3)*100+j+1;
-};
+}
 
-var maps = [1761,1749,77,45,4360,3604,5575],rand_ships,ship_name;
+var maps = [1761,1749,77,45,4360,3604,5575,4990],rand_ships,ship_name;
 if (modifier.round_ship_tier === "random" && !game.custom.init){
   game.custom.init = true;
   modifier.round_ship_tier = 3+~~(Math.random()*5);
@@ -105,6 +105,24 @@ function shuffle(array,yeetus){
   return array;
 }
 
+var randcolors = [
+  {team:"Red",hue:0,team2:"Blue",hue2:240},
+  {team:"Yellow",hue:60,team2:"Green",hue2:120},
+  {team:"Orange",hue:30,team2:"Purple",hue2:270}
+];
+
+if (!game.custom.init2){game.custom.init2 = true;
+for (let i=0; i<~~(Math.random()*3); i++) randcolors.shift(); 
+echo('Rumble mod is Rumble mod, not TDM');
+}
+
+var teams = {
+  names: [randcolors[0].team,randcolors[0].team2],
+  points: [10,0],
+  count: [0,0],
+  ships: [[],[]]
+},colors = [randcolors[0].hue,randcolors[0].hue2];
+
 this.options = {
   //map_id: maps[~~(Math.random()*maps.length)],
   vocabulary: vocabulary,
@@ -123,7 +141,8 @@ this.options = {
   choose_ship: shuffle(rand_ships,yeetus),
   release_crystal: modifier.yeet_gems,
   healing_enabled: true,
-  healing_ratio: 0.35
+  healing_ratio: 0.5,
+  hues: [randcolors[0].hue,randcolors[0].hue2]
 };
 
 this.tick = function(game){
@@ -132,12 +151,12 @@ this.tick = function(game){
     for (let ship of game.ships){
       if (!ship.custom.lol){
         ship.custom.lol = true;
+        ship.frags = 0;
+        ship.deaths = 0; 
+        setup(ship);
         setteam(ship);
         checkscores(game);
-        ship.frags = 0;
-        ship.deaths = 0;
         joinmessage(ship);
-        setup(ship);
         updatescoreboard(game); 
         echo(`${ship.name} spawned`);  
       } 
@@ -198,32 +217,13 @@ this.tick = function(game){
       });    
       setTimeout(function(){
         for (let ship of game.ships){
-          if (game.custom.win) break;
           ship.gameover({text,"Frags:":ship.frags,"Deaths:":ship.deaths});
           echo(text);
         }
       }, 5000);
-      game.custom.win = true;
     }       
   }
 };
-
-var randcolors = [
-  {team:"Red",hue:0,team2:"Blue",hue2:240},
-  {team:"Yellow",hue:60,team2:"Green",hue2:120},
-  {team:"Orange",hue:30,team2:"Purple",hue2:270}
-];
-
-if (!game.custom.init2){game.custom.init2 = true;
-for (let i=0; i<~~(Math.random()*3); i++) randcolors.shift(); 
-echo('Rumble mod is Rumble mod, not TDM');}
-
-var teams = {
-  names: [randcolors[0].team,randcolors[0].team2],
-  points: [0,0],
-  count: [0,0],
-  ships: [[],[]]
-},colors = [randcolors[0].hue,randcolors[0].hue2];
 
 function getcolor(color){
   return `hsla(${color},100%,50%,1)`;
@@ -233,14 +233,14 @@ var scoreboard = {
   id:"scoreboard",
   visible: true,
   components: []
-};
+}; 
 
 function setteam(ship){
-  let count = [0,0]; 
+  let count = [0,0];  
   for (let ship of game.ships) count[ship.team]++;
   let t = count.indexOf(Math.min(...count));
-  echo(count);
   ship.set({hue:colors[t],team:t,invulnerable:600,stats:88888888});
+  echo(count);
 }
 
 function PlayerBox(posx,posy) {
@@ -436,7 +436,7 @@ function removemenu(ship){
 
 function setup(ship){
   let level = Math.trunc(ship.type/100);level = (level<3)?3:level;
-  ship.set({stats:88888888,invulnerable:600,shield:999,crystals:modifier.gems_upon_spawning+(level-3)*100});
+  ship.set({stats:88888888,invulnerable:600,shield:999/*,crystals:modifier.gems_upon_spawning+(level-3)*100*/});
 }
 
 lOlO0.prototype.shipDisconnected = function(t){
@@ -464,7 +464,6 @@ this.event = function(event, game){
       checkscores(game);
       ship.custom.hasbeenkilled = true;
       echo(`${teams.names[0]}:${teams.points[0]},${teams.names[1]}:${teams.points[1]}`);
-      updatescoreboard(game);
     break;
     case "ship_spawned":
       if (ship.custom.hasbeenkilled === true){
@@ -476,7 +475,6 @@ this.event = function(event, game){
       gems = modifier.gems_upon_spawning+(modifier.round_ship_tier-5)*100;
       if (gems < 0){echo("Gem value is negative, lmao"); gems = 69;}
       (ship != null) && ship.set({stats:88888888,invulnerable:600,shield:999,crystals:gems});
-      updatescoreboard(game);
     break;
     case "ui_component_clicked":
       let component = event.id;
@@ -492,8 +490,5 @@ this.event = function(event, game){
       }
       checkButtons(ship);
     break;  
-    case "ship_disconnected":
-      updatescoreboard(game); 
-    break;    
   }
 };
