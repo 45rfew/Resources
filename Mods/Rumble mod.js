@@ -112,13 +112,11 @@ var randcolors = [
 ];
 
 if (!game.custom.init2){game.custom.init2 = true;
-for (let i=0; i<~~(Math.random()*3); i++) randcolors.shift(); 
-echo('Rumble mod is Rumble mod, not TDM');
-}
+for (let i=0; i<~~(Math.random()*3); i++) randcolors.shift();}
 
 var teams = {
   names: [randcolors[0].team,randcolors[0].team2],
-  points: [10,0],
+  points: [0,0],
   count: [0,0],
   ships: [[],[]]
 },colors = [randcolors[0].hue,randcolors[0].hue2];
