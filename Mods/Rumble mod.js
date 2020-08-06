@@ -38,6 +38,33 @@ game.modding.commands.split = function(){
     ship.set({hue:ts[t].hue,team:t,x:ts[t].x,y:ts[t].y,invulnerable:600});
   } updatescoreboard(game); 
 };
+
+game.modding.commands.end = function(){
+  game.custom.ended = true;
+  game.setUIComponent({
+    id: "timer",
+    position: [2.5,28,15,10],
+    visible: true,
+    components: [{type: "text",position:[0,0,100,50],value:`Time's up!`,color:"#cde"}]
+  }); let win,text;
+  if (teams.points[0] != teams.points[1]){
+    win = teams.points.indexOf(Math.max(...teams.points));
+    text = `${teams.names[win]} team wins!`;
+  } else text = "It's a draw!"; 
+  game.setUIComponent({
+    id: "end",
+    position: [39,18,42,40],
+    visible: true,
+    components: [{type:"text",position:[2,5,80/1.5,33/1.5],value:text,color:"#cde"}]
+  });    
+  setTimeout(function(){
+    for (let ship of game.ships){
+      ship.gameover({text,"Frags:":ship.frags,"Deaths:":ship.deaths});
+      echo(text);
+    }
+  }, 5000);
+  echo(text);
+};
 //Thanks to Destroy & Dimed for the idea
 var a = {};
 a.H_Mercury = '{"name":"H-Mercury","level":6,"model":9,"size":2,"specs":{"shield":{"capacity":[250,375],"reload":[6,9]},"generator":{"capacity":[100,150],"reload":[45,75]},"ship":{"mass":375,"speed":[75,95],"rotation":[50,65],"acceleration":[60,100]}},"bodies":{"main":{"section_segments":8,"offset":{"x":0,"y":0,"z":20},"position":{"x":[0,0,0,0,0,0,0,0,0],"y":[-65,-70,-60,-40,0,50,110,100],"z":[0,0,0,0,0,0,0,0]},"width":[1,5,10,20,30,25,10,0],"height":[1,5,10,15,25,20,10,0],"texture":[6,4,4,63,11,63,12],"propeller":true,"laser":{"damage":[7,12],"rate":8,"type":1,"speed":[100,190],"number":1,"error":0}},"cockpit":{"section_segments":8,"offset":{"x":0,"y":-20,"z":35},"position":{"x":[0,0,0,0,0,0,0],"y":[-20,-10,0,15,25],"z":[0,0,0,0,0]},"width":[0,10,12,10,5],"height":[0,10,13,12,5],"texture":[9,9,4,4],"propeller":false},"arms":{"section_segments":8,"offset":{"x":60,"y":0,"z":-10},"position":{"x":[0,0,0,5,10,0,0,-10],"y":[-85,-70,-80,-30,0,30,100,90],"z":[0,0,0,0,0,0,0,0]},"width":[1,5,6,15,15,15,10,0],"height":[1,5,6,20,30,25,10,0],"texture":[6,4,4,4,4,4,12],"angle":1,"propeller":true,"laser":{"damage":[2,4],"rate":4,"type":1,"speed":[150,200],"number":1,"error":0}},"canon":{"section_segments":12,"offset":{"x":100,"y":27,"z":5},"position":{"x":[0,0,0,0,0,0,0],"y":[-50,-45,-20,0,20,30,40],"z":[0,0,0,0,0,0,0]},"width":[0,5,7,7,3,5,0],"height":[0,5,15,15,3,5,0],"angle":3,"laser":{"damage":[4,9],"rate":1.5,"type":1,"speed":[150,220],"number":1,"error":0},"propeller":false,"texture":[6,4,10,4,4,4]}},"wings":{"main":{"offset":{"x":0,"y":-15,"z":20},"length":[60,40],"width":[60,30,20],"angle":[-20,10],"position":[30,50,30],"texture":[11,11],"bump":{"position":30,"size":10}},"font":{"length":[60],"width":[20,15],"angle":[-10,20],"position":[-20,-40],"texture":[63],"bump":{"position":30,"size":10},"offset":{"x":0,"y":0,"z":0}},"font2":{"offset":{"x":0,"y":40,"z":8},"length":[60],"width":[20,15],"angle":[-10,20],"position":[20,40],"texture":[63],"bump":{"position":30,"size":10}}},"typespec":{"name":"H-Mercury","level":6,"model":9,"code":609,"specs":{"shield":{"capacity":[250,375],"reload":[6,9]},"generator":{"capacity":[100,150],"reload":[45,75]},"ship":{"mass":375,"speed":[75,95],"rotation":[50,65],"acceleration":[60,100]}},"shape":[2.806,2.807,2.354,2.037,1.822,4.151,4.081,3.789,3.595,3.471,3.406,4.17,4.202,4.284,4.413,4.508,4.834,4.883,4.011,4.534,4.917,4.734,3.583,3.454,4.418,4.409,4.418,3.454,3.583,4.734,4.917,4.534,4.011,4.883,4.834,4.508,4.413,4.284,4.202,4.17,3.406,3.471,3.595,3.789,4.081,4.151,1.822,2.037,2.354,2.807],"lasers":[{"x":0,"y":-2.8,"z":0.8,"angle":0,"damage":[7,12],"rate":8,"type":1,"speed":[100,190],"number":1,"spread":0,"error":0,"recoil":0},{"x":2.341,"y":-3.399,"z":-0.4,"angle":1,"damage":[2,4],"rate":4,"type":1,"speed":[150,200],"number":1,"spread":0,"error":0,"recoil":0},{"x":-2.341,"y":-3.399,"z":-0.4,"angle":-1,"damage":[2,4],"rate":4,"type":1,"speed":[150,200],"number":1,"spread":0,"error":0,"recoil":0},{"x":3.895,"y":-0.917,"z":0.2,"angle":3,"damage":[4,9],"rate":1.5,"type":1,"speed":[150,220],"number":1,"spread":0,"error":0,"recoil":0},{"x":-3.895,"y":-0.917,"z":0.2,"angle":-3,"damage":[4,9],"rate":1.5,"type":1,"speed":[150,220],"number":1,"spread":0,"error":0,"recoil":0}],"radius":4.917}}';
@@ -161,9 +188,9 @@ this.tick = function(game){
       ship.set({score:ship.frags});
     }
     for (let i=0; i<2; i++){
-      if (game.custom.won) break;
+      if (game.custom.end) break;   
+      game.custom.end = true;
       if (teams.points[i] >= modifier.kills_to_win){
-        game.custom.won = true;
         game.setUIComponent({
           id: "end",
           position: [39,18,42,40],
@@ -176,6 +203,7 @@ this.tick = function(game){
             echo(`${teams.names[i]} team wins!`);
           }
         }, 5000);
+        echo(`${teams.names[i]} team wins!`);
       }
     }
     let time = modifier.round_timer*3600;
@@ -202,7 +230,7 @@ this.tick = function(game){
           {type: "text",position:[0,0,100,50],value:`Time's up!`,color:"#cde"},
         ]
       });
-      var win,text;
+      let win,text;
       if (teams.points[0] != teams.points[1]){
         win = teams.points.indexOf(Math.max(...teams.points));
         text = `${teams.names[win]} team wins!`;
@@ -367,13 +395,13 @@ function optionopenmenu(ship){
 function confighealing(ship) {
   ship.setUIComponent({
     id: "heal",
-    position: [3,42,16,20],
+    position: [3,42,16,20/2],
     visible: true,
     clickable: true,
     shortcut: "W",
     components: [
-      {type: "box",position:[0,0,88,40],stroke:"#191919",fill:"#333333",width:5},
-      {type: "text",position:[6,4,88/1.2,40/1.2],value:`${(ship.healing)?"Attacker":"Healer"} [W]`,color:"#cde"},
+      {type: "box",position:[0,0,88,40*2],stroke:"#191919",fill:"#333333",width:5},
+      {type: "text",position:[6,4,88/1.2,40/1.2*2],value:`${(ship.healing)?"Attacker":"Healer"} [W]`,color:"#cde"},
     ]
   });
 }
@@ -384,13 +412,13 @@ function addMenu(ship){
     ship.setUIComponent({id:"open",visible:false});   
     ship.setUIComponent({
       id: ship.custom.rand[i],
-      position: [36,26+i*7,34,18],
+      position: [36,26+i*7,34,18/2],
       visible: true,
       clickable: true,
       shortcut: shortcut[i],
       components: [
-        {type: "box",position:[0,0,88,40],stroke:"#191919",fill:"#333333",width:5},
-        {type: "text",position:[0,4,88/1.2,40/1.2],value:`${ship.custom.rand[i]} [${shortcut[i]}]`,color:"#cde"},
+        {type: "box",position:[0,0,88,40*2],stroke:"#191919",fill:"#333333",width:5},
+        {type: "text",position:[0,4,88/1.2,40/1.2*2],value:`${ship.custom.rand[i]} [${shortcut[i]}]`,color:"#cde"},
       ]
     });
   }
@@ -400,13 +428,13 @@ function drawmenu(ship){
   addMenu(ship);
   ship.setUIComponent({
     id: "close",
-    position: [43,26+4*7,34/2,18],
+    position: [43,26+4*7,34/2,18/2],
     visible: true,
     clickable: true,
     shortcut: "L",
     components: [
-      {type: "box",position:[0,0,88,40],stroke:"#191919",fill:"#333333",width:5},
-      {type: "text",position:[0,4,88/1.2,40/1.2],value:"Close [L]",color:"#cde"},
+      {type: "box",position:[0,0,88,40*2],stroke:"#191919",fill:"#333333",width:5},
+      {type: "text",position:[0,4,88/1.2,40/1.2*2],value:"Close [L]",color:"#cde"},
     ]
   });   
 }
@@ -414,13 +442,13 @@ function drawmenu(ship){
 function addShipSelection(ship){
   ship.setUIComponent({
     id: "open",
-    position: [3,33,16,20],
+    position: [3,33,16,20/2],
     visible: true,
     clickable: true,
     shortcut: "J",
     components: [
-      {type: "box",position:[0,0,88,40],stroke:"#191919",fill:"#333333",width:5},
-      {type: "text",position:[6,4,88/1.2,40/1.2],value:"Select ship [J]",color:"#cde"},
+      {type: "box",position:[0,0,88,40*2],stroke:"#191919",fill:"#333333",width:5},
+      {type: "text",position:[6,4,88/1.2,40/1.2*2],value:"Select ship [J]",color:"#cde"},
     ]
   });   
 }
