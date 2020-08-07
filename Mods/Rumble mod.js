@@ -13,7 +13,7 @@ var modifier = {
 
 game.modding.commands.list = function(){
   for (let ship of game.ships) teams.count[ship.team]++;
-  echo(`${randcolors[randnum].team}: ${teams.count[0]}, ${randcolors[randnum].team2}: ${teams.count[1]}\n`);
+  echo(`${randcolors[0].team}: ${teams.count[0]}, ${randcolors[0].team2}: ${teams.count[1]}\n`);
   let count = 0;
   for (let ship of game.ships){
     let t = ship.team,u; ship.healing?u="(healer)":u="";
@@ -21,6 +21,12 @@ game.modding.commands.list = function(){
     count++;
   }
 }; 
+
+game.modding.commands.yeet = function(req){
+  let args=req.replace(/^\s+/,"").replace(/\s+/," ").split(" "),id=Number(args[1]||"NaN");
+  let ship = game.ships[id];
+  ship.set({kill:true});
+};
 
 game.modding.commands.swap = function(req){
   let args=req.replace(/^\s+/,"").replace(/\s+/," ").split(" "),id=Number(args[1]||"NaN");
@@ -87,8 +93,8 @@ var vocabulary = [
   {text: "Hmmm?", icon:"\u004b", key:"Q"},
   {text: "GoodGame", icon:"\u00a3", key:"G"},
   {text: "Wait", icon:"\u0048", key:"T"},
-  {text: "Leader", icon:"\u002e", key:"L"},
-  {text: "Follow", icon:"\u0050", key:"F"},
+  {text: "Heal", icon:"\u0037", key:"L"},
+  {text: "Follow", icon:"\u0050", key:"F"}
 ];
 
 var ships_list = [
@@ -109,7 +115,6 @@ var maps = [1761,1749,77,45,4360,3604,5575,4990],rand_ships,ship_name;
 if (modifier.round_ship_tier === "random" && !game.custom.init){
   game.custom.init = true;
   modifier.round_ship_tier = 3+~~(Math.random()*5);
-  echo(modifier.round_ship_tier);
 }
 let tier = modifier.round_ship_tier;
 let yeetus = 4; 
@@ -143,7 +148,7 @@ for (let i=0; i<~~(Math.random()*3); i++) randcolors.shift();}
 
 var teams = {
   names: [randcolors[0].team,randcolors[0].team2],
-  points: [0,0],
+  points: [10,0],
   count: [0,0],
   ships: [[],[]]
 },colors = [randcolors[0].hue,randcolors[0].hue2];
@@ -249,6 +254,7 @@ this.tick = function(game){
       }, 5000);
     }       
   }
+  if (game.step === 0) echo(modifier.round_ship_tier);
 };
 
 function getcolor(color){
@@ -261,11 +267,17 @@ var scoreboard = {
   components: []
 }; 
 
-function setteam(ship){
-  let count = [0,0];  
-  for (let ship of game.ships) count[ship.team]++;
-  let t = count.indexOf(Math.min(...count));
+function configship(ship,t){
   ship.set({hue:colors[t],team:t,invulnerable:600,stats:88888888});
+}
+
+function setteam(ship){
+  let count = [0,0], t;  
+  for (let ship of game.ships) count[ship.team]++;
+  if (count[0] === count[1]) t = teams.points.indexOf(Math.min(...teams.points));
+  else t = count.indexOf(Math.min(...count));
+  ship.custom.team = t;
+  configship(ship,t);
   echo(count);
 }
 
@@ -398,10 +410,10 @@ function confighealing(ship) {
     position: [3,42,16,20/2],
     visible: true,
     clickable: true,
-    shortcut: "W",
+    shortcut: "J",
     components: [
       {type: "box",position:[0,0,88,40*2],stroke:"#191919",fill:"#333333",width:5},
-      {type: "text",position:[6,4,88/1.2,40/1.2*2],value:`${(ship.healing)?"Attacker":"Healer"} [W]`,color:"#cde"},
+      {type: "text",position:[6,4,88/1.2,40/1.2*2],value:`${(ship.healing)?"Attacker":"Healer"} [J]`,color:"#cde"},
     ]
   });
 }
@@ -445,10 +457,10 @@ function addShipSelection(ship){
     position: [3,33,16,20/2],
     visible: true,
     clickable: true,
-    shortcut: "J",
+    shortcut: "W",
     components: [
       {type: "box",position:[0,0,88,40*2],stroke:"#191919",fill:"#333333",width:5},
-      {type: "text",position:[6,4,88/1.2,40/1.2*2],value:"Select ship [J]",color:"#cde"},
+      {type: "text",position:[6,4,88/1.2,40/1.2*2],value:"Select ship [W]",color:"#cde"},
     ]
   });   
 }
