@@ -1,6 +1,6 @@
 var divider = 4;
 var modifier = {
-  map_size: ~~(80/(Math.round(divider/2))),
+  map_size: ~~(60/(Math.round(divider/2))),
   crystal_value: 4,
   max_players: ~~(120/divider),
   kills_to_win: ~~(200/divider),
@@ -148,7 +148,7 @@ for (let i=0; i<~~(Math.random()*3); i++) randcolors.shift();}
 
 var teams = {
   names: [randcolors[0].team,randcolors[0].team2],
-  points: [10,0],
+  points: [0,0],
   count: [0,0],
   ships: [[],[]]
 },colors = [randcolors[0].hue,randcolors[0].hue2];
@@ -274,8 +274,8 @@ function configship(ship,t){
 function setteam(ship){
   let count = [0,0], t;  
   for (let ship of game.ships) count[ship.team]++;
-  if (count[0] === count[1]) t = teams.points.indexOf(Math.min(...teams.points));
-  else t = count.indexOf(Math.min(...count));
+  //if (count[0] === count[1]) t = teams.points.indexOf(Math.min(...teams.points));
+  t = count.indexOf(Math.min(...count));
   ship.custom.team = t;
   configship(ship,t);
   echo(count);
