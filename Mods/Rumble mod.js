@@ -46,17 +46,12 @@ game.modding.commands.split = function(){
 };
 
 game.modding.commands.end = function(){
-  game.custom.ended = true;
-  game.setUIComponent({
-    id: "timer",
-    position: [2.5,28,15,10],
-    visible: true,
-    components: [{type: "text",position:[0,0,100,50],value:`Time's up!`,color:"#cde"}]
-  }); let win,text;
+  let win,text;
   if (teams.points[0] != teams.points[1]){
     win = teams.points.indexOf(Math.max(...teams.points));
     text = `${teams.names[win]} team wins!`;
   } else text = "It's a draw!"; 
+  modifier.round_timer = 0.001;
   game.setUIComponent({
     id: "end",
     position: [39,18,42,40],
