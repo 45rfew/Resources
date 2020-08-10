@@ -201,7 +201,7 @@ function tick(game){
       var seconds = Math.floor((steps % 3600) / 60);
       if (seconds < 10) seconds = "0" + seconds;
       if (minutes < 10) minutes = "0" + minutes;
-      button(2.2,31,20,20,"timer",false,true,"Time till survival: "+minutes+":"+seconds);
+      button(2.2,32,20,20,"timer",false,true,`Time till survival: ${minutes}:${seconds}`);
     } else { 
       if (!game.custom.a){
         game.custom.a = true;
@@ -210,17 +210,17 @@ function tick(game){
       }
     }
     for (let ship of game.ships){
-      if (!ship.custom.yeet){
+      if (ship.custom.yeet){
         ship.custom.yeet = true;
         ship.setUIComponent(radar_background);
         ship.setUIComponent({
           id: "reset",
-          position: [4,26,10,7],
+          position: [5,28,16/1.2,20/2/1.2],
+          visible: true,
           clickable: true,
           shortcut: "J",
-          visible: true,
-          components: [{type: "text",position:[10,35,100,50],value:"Reset [J]",color:"#CDE"}]
-        });
+          components: [{type:"text",position:[6,4,88/1.2/1.2,40/1.2*2/1.2],value:"Reset [J]",color:"#cde"},]
+        });           
       }
     } 
     if (game.step % 3600/1.5 === 0) game.addCollectible({code:10,x:Math.cos(Math.random()*Math.PI*2)*50,y:Math.sin(Math.random()*Math.PI*2)*50});
@@ -252,9 +252,7 @@ this.event = function(event, game){
     case "ui_component_clicked":
       const ship = event.ship;    
       const component = event.id;
-      if (component == "reset"){
-        resetShip(ship);
-      }
+      if (component == "reset") resetShip(ship);
     break;    
     case "alien_destroyed":
       const alien = event.alien;
@@ -325,9 +323,7 @@ function resetShip(ship){
 }
 
 function button(x, y, width, height, id, clickable, visible, text){
-  components = [
-    {type:"text",position:[0,0,78,20],value:text,color:"#cde"},
-  ];
+  components = [{type:"text",position:[0,0,78,20],value:text,color:"#cde"},];
   game.setUIComponent({
     id: id,
     position: [x,y,width,height],
@@ -417,4 +413,3 @@ game.setObject({
   rotation: {x:0,y:0,z:1},
   scale: {x:10/1.5,y:10/1.5,z:10/1.5}
 }); 
-
