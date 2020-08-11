@@ -1,5 +1,5 @@
 //Thanks to Destroy & Dimed for the idea
-//Based on the Team Rumble from Fortnite
+//Based on Team Rumble from Fortnite
 var divider = 4;
 var modifier = {
   map_size: ~~(60/(Math.round(divider/2))),
@@ -67,6 +67,15 @@ game.modding.commands.end = function(){
     }
   }, 5000);
   echo(text);
+};
+
+game.modding.commands.announce = function(req){
+  let text = req.replace('announce ','');
+  game.setUIComponent({
+    id:"id",position:[25,75,50,25],visible:true,
+    components: [{type:"text",position:[0,0,100,20],value:text,color:"#ffbbbb"}]
+  });   
+  setTimeout(function(){game.setUIComponent({id:"id",visible:false});},10000);
 };
 
 var a = {};
