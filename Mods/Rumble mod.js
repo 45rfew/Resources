@@ -15,7 +15,7 @@ var modifier = {
 
 game.modding.commands.list = function(){
   for (let ship of game.ships) teams.count[ship.team]++;
-  echo(`${randcolors[0].team}: ${teams.count[0]}, ${randcolors[0].team2}: ${teams.count[1]}\n`);
+  echo(`${teams.names[0]}: ${teams.count[0]}, ${teams,names[1]}: ${teams.count[1]}\n`);
   let count = 0;
   for (let ship of game.ships){
     let t = ship.team,u; ship.healing?u="(healer)":u="";
@@ -34,16 +34,14 @@ game.modding.commands.swap = function(req){
   let args=req.replace(/^\s+/,"").replace(/\s+/," ").split(" "),id=Number(args[1]||"NaN");
   let ship = game.ships[id];
   let opt = Math.abs(ship.team-1);
-  ship.set({team:opt,hue:colors[opt]});
+  ship.set({team:opt,hue:teams.hues[opt]});
   updatescoreboard(game); 
 };
 
 game.modding.commands.split = function(){
-  let ts = [{hue:randcolors[0].hue,x:50,y:0}, {hue:randcolors[0].hue2,x:-50,y:0}];
-  for(let i=0; i<game.ships.length; i++){
-    let ship = game.ships[i];
-    let t = i%2;
-    ship.set({hue:ts[t].hue,team:t,x:ts[t].x,y:ts[t].y,invulnerable:600});
+  for (let i=0; i<game.ships.length; i++){
+    let ship = game.ships[i]; let t = i%2;
+    ship.set({hue:teams.hue[t],team:t,x:t=0?50:-50,y:0,invulnerable:600});
   } updatescoreboard(game); 
 };
 
@@ -75,7 +73,7 @@ game.modding.commands.announce = function(req){
     id:"id",position:[25,75,50,25],visible:true,
     components: [{type:"text",position:[0,0,100,20],value:text,color:"#ffbbbb"}]
   });   
-  setTimeout(function(){game.setUIComponent({id:"id",visible:false});},10000);
+  setTimeout(function(){game.setUIComponent({id:"id",visible:false});},15000);
 };
 
 var a = {};
@@ -119,17 +117,16 @@ function findShipCode(name){
 
 var maps = [1761,1749,77,45,4360,3604,5575,4990],rand_ships,ship_name;
 if (modifier.round_ship_tier === "random" && !game.custom.init){
-  game.custom.init = true;
-  modifier.round_ship_tier = 3+~~(Math.random()*5);
-}
-let tier = modifier.round_ship_tier;
-let yeetus = 4; 
+  game.custom.init = true; let tiersratio = [3,3,4,4,4,5,5,5,5,6,6,6,6,6,7,7,7]; 
+  modifier.round_ship_tier = tiersratio[~~(Math.random()*tiersratio.length)];
+} let tier = modifier.round_ship_tier, yeetus = 4; 
+
 switch (modifier.round_ship_tier){
   case 3: yeetus = 3; break; case 4: yeetus = 3; break; 
   case 5: yeetus = 3; break; case 7: yeetus = false; 
-}
+} if (!game.custom.json){ game.custom.json = true;
 ship_name = JSON.parse(JSON.stringify(ships_list[tier-3]));
-rand_ships = JSON.parse(JSON.stringify(ships_list[tier-3])).map((n,p) => tier*100+p+1);
+rand_ships = JSON.parse(JSON.stringify(ships_list[tier-3])).map((n,p) => tier*100+p+1);}
 
 function shuffle(array,yeetus){
   var tmp, current, top = array.length;
@@ -143,7 +140,7 @@ function shuffle(array,yeetus){
   return array;
 }
 
-var randcolors = [
+var colors = [
   {team:"Red",hue:0,team2:"Blue",hue2:240},
   {team:"Yellow",hue:60,team2:"Green",hue2:120},
   {team:"Orange",hue:30,team2:"Purple",hue2:270},
@@ -151,14 +148,15 @@ var randcolors = [
 ];
 
 if (!game.custom.init2){game.custom.init2 = true;
-for (let i=0; i<~~(Math.random()*4); i++) randcolors.shift();}
+for (let i=0; i<~~(Math.random()*4); i++) colors.shift();}
 
 var teams = {
-  names: [randcolors[0].team,randcolors[0].team2],
+  names: [colors[0].team,colors[0].team2],
   points: [0,0],
   count: [0,0],
-  ships: [[],[]]
-},colors = [randcolors[0].hue,randcolors[0].hue2];
+  ships: [[],[]],
+  hues: [colors[0].hue,colors[0].hue2]
+}//,colors = [randcolors[0].hue,randcolors[0].hue2];
 
 this.options = {
   //map_id: maps[~~(Math.random()*maps.length)],
@@ -179,7 +177,7 @@ this.options = {
   release_crystal: modifier.yeet_gems,
   healing_enabled: true,
   healing_ratio: 0.5,
-  hues: [randcolors[0].hue,randcolors[0].hue2]
+  hues: [colors[0].hue,colors[0].hue2]
 };
 
 this.tick = function(game){
@@ -286,7 +284,7 @@ function setteam(ship){
 }
 
 function configship(ship,t){
-  ship.set({hue:colors[t],team:t,invulnerable:600,stats:88888888});
+  ship.set({hue:teams.hues[t],team:t,invulnerable:600,stats:88888888});
 }
 
 var scoreboard = {
@@ -332,9 +330,9 @@ function updatescoreboard(game){
   let t=[[],[]];
   for (let ship of game.ships) t[ship.team].push(ship);
   scoreboard.components = [
-    { type:"box",position:[0,0,50,8],fill:getcolor(colors[0])},
+    { type:"box",position:[0,0,50,8],fill:getcolor(teams.hues[0])},
     { type: "text",position: [0,0,50,8],color:"#e5e5e5",value: teams.names[0]},
-    { type:"box",position:[50,0,50,8],fill:getcolor(colors[1])},
+    { type:"box",position:[50,0,50,8],fill:getcolor(teams.hues[1])},
     { type: "text",position: [50,0,50,8],color:"#e5e5e5",value: teams.names[1]}
   ];
   let sc=[sort(t[0]),sort(t[1])],line=1;
@@ -380,9 +378,9 @@ function checkscores(game){
     position: [34,10,42,40],
     visible: true,
     components: [
-      {type: "text",position:[2,5,80/1.5,33/1.5],value:teams.points[0],color:getcolor(colors[0])},
+      {type: "text",position:[2,5,80/1.5,33/1.5],value:teams.points[0],color:getcolor(teams.hues[0])},
       {type: "text",position:[0,0,80,33],value:"-",color:"#CDE"},
-      {type: "text",position:[25,5,80/1.5,33/1.5],value:teams.points[1],color:getcolor(colors[1])},
+      {type: "text",position:[25,5,80/1.5,33/1.5],value:teams.points[1],color:getcolor(teams.hues[1])},
     ]
   });
 }
@@ -494,9 +492,9 @@ lOlO0.prototype.shipDisconnected = function(t){
   var e=this.modding.game.findShip(t.id);
   if (e != null) {
     this.context.event != null && this.context.event({name:"ship_disconnected",ship:e},this.modding.game);
-    return e.lI101 = !0
+    return e.lI101 = !0;
   }
-}
+};
 
 this.event = function(event, game){
   let ship = event.ship;
