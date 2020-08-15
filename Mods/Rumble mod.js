@@ -115,19 +115,6 @@ function findShipCode(name){
       if (ships_list[i][j] == name) return (i+3)*100+j+1;
 }
 
-var maps = [1761,1749,77,45,4360,3604,5575,4990],rand_ships,ship_name;
-if (modifier.round_ship_tier === "random" && !game.custom.init){
-  game.custom.init = true; let tiersratio = [3,3,4,4,4,5,5,5,5,6,6,6,6,6,7,7,7]; 
-  modifier.round_ship_tier = tiersratio[~~(Math.random()*tiersratio.length)];
-} let tier = modifier.round_ship_tier, yeetus = 4; 
-
-switch (modifier.round_ship_tier){
-  case 3: yeetus = 3; break; case 4: yeetus = 3; break; 
-  case 5: yeetus = 3; break; case 7: yeetus = false; 
-} if (!game.custom.json){ game.custom.json = true;
-ship_name = JSON.parse(JSON.stringify(ships_list[tier-3]));
-rand_ships = JSON.parse(JSON.stringify(ships_list[tier-3])).map((n,p) => tier*100+p+1);}
-
 function shuffle(array,yeetus){
   var tmp, current, top = array.length;
   if (top) while(--top){
@@ -140,6 +127,7 @@ function shuffle(array,yeetus){
   return array;
 }
 
+var chooseships,maps = [1761,1749,77,45,4360,3604,5575,4990],music=["warp_drive.mp3","red_mist.mp3","civilisation.mp3","argon.mp3"];
 var colors = [
   {team:"Red",hue:0,team2:"Blue",hue2:240},
   {team:"Yellow",hue:60,team2:"Green",hue2:120},
@@ -147,8 +135,22 @@ var colors = [
   {team:"Aqua",hue:150,team2:"Pink",hue2:300}
 ];
 
-if (!game.custom.init2){game.custom.init2 = true;
-for (let i=0; i<~~(Math.random()*4); i++) colors.shift();}
+if (!game.custom.init){
+  game.custom.init = true;
+  if (modifier.round_ship_tier === "random"){
+    let tiersratio = [3,3,4,4,4,5,5,5,5,6,6,6,6,6,7,7,7]; 
+    modifier.round_ship_tier = tiersratio[~~(Math.random()*tiersratio.length)];
+  } 
+  var tier = modifier.round_ship_tier,rand_ships,ship_name,yeetus = 4;
+  switch (modifier.round_ship_tier){
+    case 3: yeetus = 3; break; case 4: yeetus = 3; break; 
+    case 5: yeetus = 3; break; case 7: yeetus = false; 
+  }
+  ship_name = JSON.parse(JSON.stringify(ships_list[tier-3]));
+  rand_ships = JSON.parse(JSON.stringify(ships_list[tier-3])).map((n,p) => tier*100+p+1);
+  chooseships = shuffle(rand_ships,yeetus);
+  for (let i=0; i<~~(Math.random()*4); i++) colors.shift();
+}
 
 var teams = {
   names: [colors[0].team,colors[0].team2],
@@ -156,14 +158,13 @@ var teams = {
   count: [0,0],
   ships: [[],[]],
   hues: [colors[0].hue,colors[0].hue2]
-}//,colors = [randcolors[0].hue,randcolors[0].hue2];
+};
 
 this.options = {
-  //map_id: maps[~~(Math.random()*maps.length)],
+  map_id: ~~(Math.random()*9999)+1,
   vocabulary: vocabulary,
-  soundtrack: "argon.mp3",
+  soundtrack: music[~~(Math.random()*music.length)],
   weapons_store: false,
-  reset_tree: false,
   friendly_colors: 2,
   radar_zoom: 1,
   map_size: modifier.map_size,
@@ -173,9 +174,8 @@ this.options = {
   max_players: modifier.max_players,
   max_level: modifier.round_ship_tier,
   ships: ships,
-  choose_ship: shuffle(rand_ships,yeetus),
+  choose_ship: chooseships,
   release_crystal: modifier.yeet_gems,
-  healing_enabled: true,
   healing_ratio: 0.5,
   hues: [colors[0].hue,colors[0].hue2]
 };
@@ -214,6 +214,7 @@ this.tick = function(game){
             ship.gameover({"Winner":`${teams.names[i]} team`,"Frags":ship.frags,"Deaths":ship.deaths});
             echo(`${teams.names[i]} team wins!`);
           }
+          game.modding.I1I0I.send({name:"stop"})
         }, 5000);
         echo(`${teams.names[i]} team wins!`);
       }
@@ -257,11 +258,16 @@ this.tick = function(game){
         for (let ship of game.ships){
           ship.gameover({text,"Frags:":ship.frags,"Deaths:":ship.deaths});
           echo(text);
+          game.modding.I1I0I.send({name:"stop"})
         }
       }, 5000);
     }       
   }
-  if (game.step === 0) echo(modifier.round_ship_tier);
+  if (game.step === 0){ 
+    echo(modifier.round_ship_tier);
+    if (isNaN(modifier.round_ship_tier)===true)
+    game.modding.I1I0I.send({name:"stop"});
+  }
 };
 
 game.modding.tick = function(t){
