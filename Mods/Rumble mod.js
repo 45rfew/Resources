@@ -9,7 +9,7 @@ var modifier = {
   yeet_gems: true,
   healer_button: true,
   round_timer: 15,
-  round_ship_tier: "random",//choose from 1-7 or "random"
+  round_ship_tier: "random",//choose from 3-7 or "random"
   gems_upon_spawning: 169
 };
 
