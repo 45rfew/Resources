@@ -44,10 +44,7 @@ st.Cairngorgon = '{"name":"Cairngorgon","level":7,"model":8,"size":2,"specs":{"s
 var ships = [];
 for (let ship in st) ships.push(st[ship]);
 
-var music = ["red_mist.mp3","civilisation.mp3","procedurality.mp3","argon.mp3","crystals.mp3"];
- 
-var map_names = ["Switzerland","Canada","Japan","Germany","UnitedKingdom","Sweden","Australia","UnitedStates","Norway","France","Netherlands","NewZealand","Denmark","Finland","Singapore","China","Belgium","Italy","Luxembourg","Spain","Ireland","SouthKorea","UnitedArabEmirates","Russia","Portugal","Thailand","India","Brazil","Israel","Greece","Qatar","SaudiArabia","Poland","Turkey","Mexico","Croatia","SouthAfrica","Malaysia","Vietnam","Egypt","CzechRepublic","Morocco","Indonesia","CostaRica","SriLanka","Peru","Hungary","Argentina","DominicanRepublic","Philippines","Estonia","Panama","Chile","Tanzania","Latvia","Slovenia","Lithuania","Ecuador","Slovakia","Uruguay","Myanmar","Romania","Oman","Guatemala","Ukraine","Colombia","Bulgaria","Kazakhstan","Ghana","Azerbaijan","Jordan","Tunisia","Belarus","Nigeria","Pakistan"];
-
+var music = ["warp_drive.mp3","red_mist.mp3","civilisation.mp3","argon.mp3"];
 var map_made_by_Carme = `\ 
 ---9-777777777-98-------44--------44--4567---6-4-66-4-6---7654--44--------44-------89-----------9---
 ----88-666-8888--------6896---54-67564-44---757757757757---44-46576-45---6986--------8888-----88----
@@ -162,7 +159,6 @@ this.options = {
   survival_level: 8,
   starting_ship_maxed: true,
   map_size: 100,
-  map_name: map_names[~~(Math.random()*map_names.length)],  
   asteroids_strength: 1,
   lives: 5,
   crystal_value: 3.5,
@@ -188,21 +184,22 @@ function tick(game){
   if (game.step % 30 === 0){
     for (let alien of game.aliens){
       if (Math.abs(alien.x) > alien_radius || Math.abs(alien.y) > alien_radius){
-        if (alien.code != 16){
-          alien.set({x:Math.cos(Math.random()*Math.PI*2)*5,y:Math.sin(Math.random()*Math.PI*2)*5});
-        }
+        if (alien.code != 16) alien.set({x:Math.cos(Math.random()*Math.PI*2)*5,y:Math.sin(Math.random()*Math.PI*2)*5});
       }
     }
   }
   if (game.step % 60 === 0){
     if (game.step < survival_step){
       var steps = survival_step - game.step;
-      var minutes = Math.floor(steps / 3600);
-      var seconds = Math.floor((steps % 3600) / 60);
+      var minutes = ~~(steps / 3600);
+      var seconds = ~~((steps % 3600) / 60);
       if (seconds < 10) seconds = "0" + seconds;
       if (minutes < 10) minutes = "0" + minutes;
-      button(2.2,32,20,20,"timer",false,true,`Time till survival: ${minutes}:${seconds}`);
-    } else { 
+      game.setUIComponent({
+        id:"timer",position:[0,33,25,15],visible:true,
+        components: [{type:"text",position:[0,0,85,20],value:`Time till survival: ${minutes}:${seconds}`,color:"#cde"}]
+      }); 
+      } else { 
       if (!game.custom.a){
         game.custom.a = true;
         button(0,0,0,0,"timer",false,false);
@@ -210,16 +207,12 @@ function tick(game){
       }
     }
     for (let ship of game.ships){
-      if (ship.custom.yeet){
+      if (!ship.custom.yeet){
         ship.custom.yeet = true;
         ship.setUIComponent(radar_background);
         ship.setUIComponent({
-          id: "reset",
-          position: [5,28,16/1.2,20/2/1.2],
-          visible: true,
-          clickable: true,
-          shortcut: "J",
-          components: [{type:"text",position:[6,4,88/1.2/1.2,40/1.2*2/1.2],value:"Reset [J]",color:"#cde"},]
+          id:"reset",position:[5,28,16/1.2,10/1.2],visible:true,clickable:true,shortcut:"J",
+          components: [{type:"text",position:[6,4,88/1.2/1.2,40/1.2*2/1.2],value:"Reset [J]",color:"#cde"}]
         });           
       }
     } 
@@ -227,7 +220,6 @@ function tick(game){
     if (game.step % 3600*2.2 === 0) game.addCollectible({code:11,x:Math.cos(Math.random()*Math.PI*2)*50,y:Math.sin(Math.random()*Math.PI*2)*50});
     if (game.step % 3600*1.5 === 0) game.addCollectible({code:21,x:Math.cos(Math.random()*Math.PI*2)*50,y:Math.sin(Math.random()*Math.PI*2)*50});
   }    
-  if (game.step % 600 === 0 && game.step < survival_step) button(26.5,10,60,25,"quote",false,true,quotes[~~(quotes.length*Math.random())]); else button(0,0,0,0,"quote",false,false,0);
 }
 
 var alien_radius = 0.25;  
@@ -241,9 +233,7 @@ function game_start(game){
 this.tick = game_start;
 
 game.modding.commands.a = function(){
-  for (let alien of game.aliens){
-    alien.set({kill:true});
-  }
+  for (let alien of game.aliens) alien.set({kill:true});
   echo("Aliens cleared");
 };
 
@@ -287,26 +277,6 @@ var alien_types = [
   {code:10,level:3,points:300,crystal_drop:250},
 ];
 
-var quotes = [
-  "A bargain is something you don’t need at a price you can’t resist.",
-  "Some people are like clouds. When they go away, it's a brighter day.",
-  "Camping: When you spend a small fortune to live like somebody poor.",
-  "If at first you don’t succeed . . . so much for skydiving.",
-  "Wouldn’t exercise be more fun if calories screamed while you burned them?",
-  "Always borrow money from a pessimist. He won’t expect it back.",
-  "Pleasing everyone, that's impossible. Making everyone angry, piece of cake!",  
-  "Fart when someone hugs you, it makes them feel strong.",
-  "If you can't find your better half, try finding your better two quarters.",
-  "The difference between stupidity and genius is that genius has its limits.",
-  "Doing nothing is hard, you never know when you're done.",
-  "If you think nothing is impossible, try slamming a revolving door.",
-  "Some people aren't just missing a screw, the whole toolbox is gone.",
-  "An apple a day keeps anyone away, if you throw it hard enough.",
-  "Everybody wants to go to heaven; but nobody wants to die.",
-  "Never go to a doctor whose office plants have died.",
-  "If your life has no problems, then you're not really living it."
-];
-
 e = function(i,type){
   let gems = 0;
   const level = Math.trunc(type / 100);  
@@ -321,17 +291,6 @@ function resetShip(ship){
     ship.set({type:101,shield:999,invulnerable:360,crystals:gems});
   }  
 }
-
-function button(x, y, width, height, id, clickable, visible, text){
-  components = [{type:"text",position:[0,0,78,20],value:text,color:"#cde"},];
-  game.setUIComponent({
-    id: id,
-    position: [x,y,width,height],
-    clickable: clickable,
-    visible: visible,
-    components: components
-  });
-} 
 
 var radar_background = {
   id: "radar_background",
@@ -396,20 +355,3 @@ game.setObject({
   rotation: {x:0,y:0,z:0},
   scale: {x:2,y:2,z:1.5}
 });  
-
-var zeroboros = {
-  id: "zeroboros",
-  obj: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Zeroboros.obj",
-  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20lambert%20orange.png",
-  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20emissive%20(5).jpg",
-  emissiveColor: 0xff8c00,
-  transparent: false
-};
-
-game.setObject({
-  id: "zeroboros",
-  type: zeroboros,
-  position: {x:30-210,y:120,z:-10},
-  rotation: {x:0,y:0,z:1},
-  scale: {x:10/1.5,y:10/1.5,z:10/1.5}
-}); 
