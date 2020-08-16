@@ -1,4 +1,4 @@
-//Thanks to Destroy & Dimed for the idea
+//Thanks to Destroy & Dimed for the idea & Bhpsngum for code help
 //Based on Team Rumble from Fortnite
 var divider = 4;
 var modifier = {
@@ -9,13 +9,13 @@ var modifier = {
   yeet_gems: true,
   healer_button: true,
   round_timer: 15,
-  round_ship_tier: "random",//choose from 3,4,5,6,7, or "random"
+  round_ship_tier: "random",//choose from 1-7 or "random"
   gems_upon_spawning: 169
 };
 
 game.modding.commands.list = function(){
   for (let ship of game.ships) teams.count[ship.team]++;
-  echo(`${teams.names[0]}: ${teams.count[0]}, ${teams,names[1]}: ${teams.count[1]}\n`);
+  echo(`${teams.names[0]}: ${teams.count[0]}, ${teams.names[1]}: ${teams.count[1]}\n`);
   let count = 0;
   for (let ship of game.ships){
     let t = ship.team,u; ship.healing?u="(healer)":u="";
@@ -111,8 +111,8 @@ var ships_list = [
 
 function findShipCode(name){
   for (let i=0;i<ships_list.length;i++)
-    for (let j=0;j<ships_list[i].length;j++)
-      if (ships_list[i][j] == name) return (i+3)*100+j+1;
+  for (let j=0;j<ships_list[i].length;j++)
+  if (ships_list[i][j] == name) return (i+3)*100+j+1;
 }
 
 function shuffle(array,yeetus){
@@ -127,7 +127,16 @@ function shuffle(array,yeetus){
   return array;
 }
 
-var chooseships,maps = [1761,1749,77,45,4360,3604,5575,4990],music=["warp_drive.mp3","red_mist.mp3","civilisation.mp3","argon.mp3"];
+function getRandByRatio(tierratio){
+  let idx = Math.floor(Math.random()*101);
+  for (let item of tierratio){
+    if (idx >= item.r[0] && idx <= item.r[1]) return item.t;
+  }
+}
+
+var chooseships,maps = [1761,1749,77,45,4360,3604,5575,4990],music = ["warp_drive.mp3","red_mist.mp3","civilisation.mp3","argon.mp3"],
+tierratio = [{t:3,r:[0,6]},{t:4,r:[9,13]},{t:5,r:[14,35]},{t:6,r:[46,75]},{t:7,r:[76,100]}/*6,16,26,32,18*/];
+
 var colors = [
   {team:"Red",hue:0,team2:"Blue",hue2:240},
   {team:"Yellow",hue:60,team2:"Green",hue2:120},
@@ -137,19 +146,17 @@ var colors = [
 
 if (!game.custom.init){
   game.custom.init = true;
-  if (modifier.round_ship_tier === "random"){
-    let tiersratio = [3,3,4,4,4,5,5,5,5,6,6,6,6,6,7,7,7]; 
-    modifier.round_ship_tier = tiersratio[~~(Math.random()*tiersratio.length)];
-  } 
+  if (modifier.round_ship_tier === "random")
+  modifier.round_ship_tier = getRandByRatio(tierratio);
   var tier = modifier.round_ship_tier,rand_ships,ship_name,yeetus = 4;
   switch (modifier.round_ship_tier){
-    case 3: yeetus = 3; break; case 4: yeetus = 3; break; 
+    case 3: yeetus = 3; break; case 4: yeetus = 3; break;
     case 5: yeetus = 3; break; case 7: yeetus = false; 
   }
   ship_name = JSON.parse(JSON.stringify(ships_list[tier-3]));
   rand_ships = JSON.parse(JSON.stringify(ships_list[tier-3])).map((n,p) => tier*100+p+1);
   chooseships = shuffle(rand_ships,yeetus);
-  for (let i=0; i<~~(Math.random()*4); i++) colors.shift();
+  shuffle(colors,false);
 }
 
 var teams = {
@@ -161,7 +168,7 @@ var teams = {
 };
 
 this.options = {
-  map_id: ~~(Math.random()*9999)+1,
+  map_id: ~~(Math.random()*10000)+1,
   vocabulary: vocabulary,
   soundtrack: music[~~(Math.random()*music.length)],
   weapons_store: false,
