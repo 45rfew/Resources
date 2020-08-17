@@ -1,3 +1,4 @@
+  
 //Thanks to Destroy & Dimed for the idea & Bhpsngum for code help
 //Based on Team Rumble from Fortnite
 var divider = 4;
@@ -41,7 +42,7 @@ game.modding.commands.swap = function(req){
 game.modding.commands.split = function(){
   for (let i=0; i<game.ships.length; i++){
     let ship = game.ships[i]; let t = i%2;
-    ship.set({hue:teams.hue[t],team:t,x:t=0?50:-50,y:0,invulnerable:600});
+    ship.set({hue:teams.hues[t],team:t,x:t=0?100:-100,y:0,invulnerable:600});
   } updatescoreboard(game); 
 };
 
