@@ -1,4 +1,3 @@
-  
 //Thanks to Destroy & Dimed for the idea & Bhpsngum for code help
 //Based on Team Rumble from Fortnite
 var divider = 4;
@@ -263,11 +262,10 @@ this.tick = function(game){
         components: [{type:"text",position:[2,5,80/1.5,33/1.5],value:text,color:"#cde"}]
       });    
       setTimeout(function(){
-        for (let ship of game.ships){
-          ship.gameover({text,"Frags:":ship.frags,"Deaths:":ship.deaths});
-          echo(text);
-          game.modding.I1I0I.send({name:"stop"})
-        }
+        for (let ship of game.ships)
+          ship.gameover({"":text,"Frags:":ship.frags,"Deaths:":ship.deaths});
+        echo(text);
+        game.modding.I1I0I.send({name:"stop"})
       }, 5000);
     }       
   }
