@@ -1,16 +1,16 @@
 //Thanks to Destroy & Dimed for the idea & Bhpsngum for code help
 //Based on Team Rumble from Fortnite
-var divider = 4;
 var modifier = {
   map_size: 60,
   crystal_value: 0,
   max_players: 20,
-  kills_to_win: ~~(200/divider),
+  kills_to_win: 50,
   yeet_gems: true,
   healer_button: true,
   round_timer: 15,
   round_ship_tier: "random",//choose from 3-7 or "random"
-  gems_upon_spawning: 169//removed 
+  gems_upon_spawning: 169,//removed
+  laggy_objs: false
 };
 
 game.modding.commands.list = function(){
@@ -136,8 +136,7 @@ function getRandByRatio(tierratio){
 }
 
 var chooseships,maps = [1761,1749,77,45,4360,3604,5575,4990],music = ["warp_drive.mp3","red_mist.mp3","civilisation.mp3","argon.mp3"],
-tierratio = [{t:3,r:[0,6]},{t:4,r:[9,13]},{t:5,r:[14,35]},{t:6,r:[46,75]},{t:7,r:[76,100]}/*6,16,26,32,18*/];
-
+tierratio = [{t:3,r:[0,6]},{t:4,r:[7,16]},{t:5,r:[17,41]},{t:6,r:[42,74]},{t:7,r:[75,100]}/*6,17,25,33,17*/];
 var colors = [
   {team:"Red",hue:0,team2:"Blue",hue2:240},
   {team:"Yellow",hue:60,team2:"Green",hue2:120},
@@ -337,13 +336,10 @@ this.tick = function(game){
         ship.setUIComponent(radar_background);
         updatescoreboard(game); 
         echo(`${ship.name} spawned`);  
-      } 
-      teams.count[ship.custom.team]++;
+      } teams.count[ship.custom.team]++;
       ship.set({score:ship.frags});
     }
     for (let i=0; i<2; i++){
-      if (game.custom.end) break;   
-      game.custom.end = true;
       if (teams.points[i] >= modifier.kills_to_win){
         game.setUIComponent({
           id: "end",
@@ -356,7 +352,10 @@ this.tick = function(game){
             ship.gameover({"Winner":`${teams.names[i]} team`,"Frags":ship.frags,"Deaths":ship.deaths});
           }
         }, 5000);
-        echo(`${teams.names[i]} team wins!`);
+        if (!game.custom.echo){
+          game.custom.echo = true;
+          echo(`${teams.names[i]} team wins!`);
+        }
       }
     }
     let time = modifier.round_timer*3600;
@@ -397,8 +396,11 @@ this.tick = function(game){
       setTimeout(function(){
         for (let ship of game.ships)
           ship.gameover({"":text,"Frags:":ship.frags,"Deaths:":ship.deaths});
-          echo(text);
       }, 5000);
+      if (!game.custom.echo){
+        game.custom.echo = true;
+        echo(text);
+      }
     }       
   }
   if (game.step === 0){ 
@@ -415,19 +417,6 @@ this.tick = function(game){
 game.modding.tick = function(t){
   this.game.tick(t); if (this.context.tick != null) this.context.tick(this.game);
 };
-
-function status_button(ship, width, visible){
-  components = [
-    {type:"text",position:[0,0,78,20],value:ship.custom.status_text,color:ship.custom.status_hue},
-  ];
-  ship.setUIComponent({
-    id: ship.id,
-    position: [2.5,29,width,15],
-    clickable: false,
-    visible: visible,
-    components: components
-  });
-} 
  
 var radar_background = {
   id: "radar_background",
@@ -735,6 +724,20 @@ this.event = function(event, game){
   }
 };
 
+var tree = {
+  id: "tree",
+  obj: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Tree.obj",
+  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/green.png",
+};
+
+var present = {
+  id: "present",
+  obj: "https://starblast.data.neuronality.com/models/xmas/gift/model.obj",
+  diffuse: "https://starblast.data.neuronality.com/models/xmas/gift/lambert.jpg",
+  emissive: "https://starblast.data.neuronality.com/models/xmas/gift/emissive.jpg",
+  specular: "https://starblast.data.neuronality.com/models/xmas/gift/specular.jpg"
+};
+
 var pumpkin = {
   id: "pumpkin",
   obj: "https://starblast.data.neuronality.com/models/halloween/pumpkin/model.obj",
@@ -751,7 +754,26 @@ var alien = {
   transparent: false,
 };
 
-if (map_id === 1){
+if (map_id === 0 && modifier.laggy_objs){
+  game.setObject({
+    id: "tree",
+    type: tree,
+    position: {x:0,y:0,z:-13},
+    rotation: {x:Math.PI/2,y:0,z:0},
+    scale: {x:5,y:5,z:5}
+  }); 
+  for (let i=0; i<6; i++){
+    let th = (i/6)*Math.PI*2;
+    let rd = 13
+    game.setObject({
+      id: "present"+i,
+      type: present,
+      position: {x:Math.cos(th)*rd,y:Math.sin(th)*rd,z:-10},
+      rotation: {x:0,y:0,z:Math.random()*Math.PI/2},
+      scale: {x:2,y:2,z:2}
+    }); 
+  }
+} else if (map_id === 1 && modifier.laggy_objs){
   let objx = [0,20,-16,-2,13,3,-11], objy = [0,5,-6,-22,-14,15,11], scale = [0,1.5,1.5,1.6,1.8,2,2];
   for (let i=0; i<7; i++){
     game.setObject({
@@ -780,3 +802,6 @@ if (map_id === 1){
     });
   }
 }
+
+
+
