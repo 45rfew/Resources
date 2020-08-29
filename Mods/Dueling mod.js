@@ -1,7 +1,5 @@
-const This_mod = "Money's dueling mod";
- 
-let strafe = false;
-//Set strafe to true if you want strafe and false if not
+let strafe = 0;
+//Set strafe to 1 if you want strafe and 0 if not
 const alien_array = [
   {code:19,level:0}
 ];
@@ -23,38 +21,43 @@ killAliens = () => {
 //Function to kill all aliens
 //To use, just type into the console: killAliens()
 authorize = id => {
-  game.ships[id].custom.admin_ship = true;
+  game.ships[id].setUIComponent({ 
+    id: "Admin ship",
+    position: [27,0,10,4],
+    clickable: true,
+    visible: true,
+    shortcut: "M",
+    components: [
+      { type:"box",position:[0,0,200,100],fill:"rgba(68, 85, 102, 0)",stroke:"#cde",width:5},
+      { type: "text",position:[0,30,100,60],value:"Admin ship [M]",color:"#cde"},
+    ]
+  });     
   return game.ships[id].name + " was granted admin ship\n";
 };
 //Function allowing to enable admin ship, for yourself or other players
 //To use execute authorize(id) where id is the id of the ship wanted to 
 //authorize, via console
 unauthorize = id => {
-  game.ships[id].custom.admin_ship = false;
+  game.ships[id].setUIComponent({id:"Admin ship",visible:false});  
+  game.ships[id].set({type:101});
   return "Admin ship was disabled for " + game.ships[id].name + "\n";  
 };
 //Same as the authorize function, just disables admin ship for a certain player
-kick = id => {
+game.modding.commands.kick = function(req){
+  let args=req.replace(/^\s+/,"").replace(/\s+/," ").split(" "),id=Number(args[1]||"NaN");
   game.ships[id].gameover({"":""});
-  return game.ships[id].name + " was kicked\n";
+  echo(game.ships[id].name+" Was kicked");
 };
-//eg: kick(1) into the console
-//Kicks the player an id of 1 - the second player joined
-say = (saysWhat,instructor = "Zoltar") => {
-  for (let ship of game.ships){
-    ship.instructorSays(saysWhat, instructor);
-  }
-};
-//eg: say('Yo wazup') into the console
-//Zoltar will pop up and say Yo wazup for all players
-hide = () => {
-  for (let ship of game.ships){
-    ship.hideInstructor();
-  }
-};
-//eg: hide() into the console  
-//Hides the instructor for all players
- 
+
+game.modding.commands.announce = function(req){
+  let text = req.replace('announce ','');
+  game.setUIComponent({
+    id:"id",position:[25,75,50,25],visible:true,
+    components: [{type:"text",position:[0,0,100,20],value:text,color:"#ffbbbb"}]
+  });   
+  setTimeout(function(){game.setUIComponent({id:"id",visible:false});},10000);
+}; 
+
 //Don't change anything below this line unless you know what you're doing kay
 
 playerList = function(){
@@ -75,25 +78,6 @@ findPlayerByName = function(name){
 };
 
 //findPlayerByName(name).gameover({"":""});
-
-const hues = [0xff0000,0xff00ff,0x0000ff,0x00ff00,0xffff00,0xff8000,0x00ffff];
-
-const cow = {
-  id: "cow",
-  obj: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Cow.obj",
-  emissiveColor: hues[Math.floor(Math.random()*hues.length)]
-}; 
- 
-for (let i=0; i<1; i++){
-  let rand = Math.random()*2;
-  game.setObject({
-    id: "cow"+i,
-    type: cow,
-    position: {x:Math.cos(Math.random()*Math.PI*2)*360,y:Math.sin(Math.random()*Math.PI*2)*360,z:Math.floor(Math.random()*3)},
-    rotation: {x:Math.floor(Math.random()*3),y:Math.floor(Math.random()*3),z:Math.floor(Math.random()*3)},
-    scale: {x:rand,y:rand,z:rand}
-  });  
-}
 
 var Face_102 = '{"name":"Face","level":1,"model":2,"size":1,"zoom":0.2,"specs":{"shield":{"capacity":[690,690],"reload":[1000,1000]},"generator":{"capacity":[1,1],"reload":[1,1]},"ship":{"mass":1,"speed":[100,100],"rotation":[100,100],"acceleration":[100,100]}},"bodies":{"face":{"section_segments":100,"angle":0,"offset":{"x":0,"y":0,"z":0},"position":{"x":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"y":[-2,-2,2,2],"z":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"width":[0,1,1,0],"height":[0,1,1,0],"vertical":true,"texture":[6]}},"typespec":{"name":"Face","level":1,"model":2,"code":102,"specs":{"shield":{"capacity":[690,690],"reload":[1000,1000]},"generator":{"capacity":[1,1],"reload":[1,1]},"ship":{"mass":1,"speed":[100,100],"rotation":[100,100],"acceleration":[100,100]}},"shape":[0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02],"lasers":[],"radius":0.02}}';
 var Trisbaena_191 = '{"name":"Trisbaena","level":1,"model":91,"size":0.5,"specs":{"shield":{"capacity":[500,500],"reload":[500,500]},"generator":{"capacity":[2000,2000],"reload":[500,500]},"ship":{"mass":1000,"speed":[300,300],"rotation":[100,100],"acceleration":[100,100]}},"bodies":{"main":{"section_segments":[22.5,67.5,112.5,157.5,202.5,247.5,292.5,337.5,382.5],"offset":{"x":0,"y":0,"z":0},"position":{"x":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"y":[-330,-330,-350,-350,-310,-310,-300,-300,-270,-266,-230,-230,-200,-200,-180,-180,-150,-150,-130,-130,-100,-100,-80,-80,-50,-50,-30,-30,0,0,40,44,230,230,270,270,370,370,350,350],"z":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"width":[0,50,50,60,60,58,58,61,61,65,65,55,55,65,65,55,55,65,65,55,55,65,65,55,55,65,65,55,55,65,65,80,80,70,70,50,50,45,45,0],"height":[0,50,50,60,60,58,58,61,61,65,65,55,55,65,65,55,55,65,65,55,55,65,65,55,55,65,65,55,55,65,65,80,80,70,70,50,50,45,45,0],"texture":[4,11,18.1,18.1,4,17,4,18.1,4,4,4,18,17,17,17,18,17,17,17,18,17,17,17,18,17,17,17,18,4,18.1,18.1,4,18.1,18.1,4,18.1,17,18,13],"propeller":true},"front_spike":{"section_segments":[35,55,125,145,215,235,305,325],"offset":{"x":0,"y":0,"z":0},"position":{"x":[0,0,0,0,0,0,0,0,0],"y":[-340,-340,-335,-330,-330,-340,-340,-345,-330],"z":[0,0,0,0,0,0,0,0,0]},"width":[20,40,45,45,20,20,0,0,10],"height":[20,40,45,45,20,20,0,0,10],"laser":{"damage":[320,320],"rate":10,"type":1,"speed":[300,300],"number":1,"angle":0,"error":0,"recoil":20},"texture":[17,3,1,2,4,81]},"cockpit":{"section_segments":[40,45,50,130,135,140,220,225,230,310,315,320],"offset":{"x":0,"y":0,"z":50},"position":{"x":[0,0,0,0,0],"y":[60,65,100,140,165],"z":[0,0,0,0,20]},"width":[0,35,35,35,0],"height":[0,30,60,64,0],"texture":[7,7,7,4]},"cockpit_detail1":{"section_segments":[45,135,225,315],"offset":{"x":0,"y":90,"z":98},"position":{"x":[0,0,0,0],"y":[-40,10,50,50],"z":[-35,-3,0,0]},"width":[3,3,3,0],"height":[3,3,3,0],"texture":[4]},"cockpit_detail2":{"section_segments":[90,180,270,360],"offset":{"x":23,"y":90,"z":97},"position":{"x":[0,0,0,0],"y":[-40,10,50,50],"z":[-35,-3,0,0]},"width":[3,3,3,0],"height":[3,3,3,0],"texture":[4]},"cockpit_detail3":{"section_segments":[45,135,225,315],"offset":{"x":0,"y":140,"z":98},"position":{"x":[0,0,0,0,0,0,0,0],"y":[-27,-27,-23,-23,23,23,27,27],"z":[-11,-11,0,0,0,0,-11,-11]},"width":[0,3,3,3,3,3,3,0],"height":[0,13,3,3,3,3,13,0],"texture":[4],"angle":90},"cockpit_detail4":{"section_segments":[45,135,225,315],"offset":{"x":0,"y":100,"z":95},"position":{"x":[0,0,0,0,0,0,0,0],"y":[-27,-27,-23,-23,23,23,27,27],"z":[-12,-12,0,0,0,0,-12,-12]},"width":[0,3,3,3,3,3,3,0],"height":[0,15,3,3,3,3,15,0],"texture":[4],"angle":90},"cockpit_back1":{"section_segments":[45,135,225,315],"offset":{"x":0,"y":-10,"z":60},"position":{"x":[0,0,0,0,0],"y":[120,120,180,190,190],"z":[0,0,0,0,0,0,0]},"width":[0,60,60,60,0],"height":[0,40,40,30,0],"texture":[3,4,5]},"cockpit_back2":{"section_segments":[45,135,225,315],"offset":{"x":0,"y":-10,"z":40},"position":{"x":[0,0,0,0],"y":[130,130,195,195],"z":[0,0,0,0,0,0,0,0,0]},"width":[0,70,70,0],"height":[0,60,60,0],"texture":[3,17]},"cockpit_back3":{"section_segments":[45,135,225,315],"offset":{"x":0,"y":-10,"z":35},"position":{"x":[0,0,0,0],"y":[140,140,205,205],"z":[0,0,0,0,0,0,0,0,0]},"width":[0,80,80,0],"height":[0,60,60,0],"texture":[3,18]},"back_joint1":{"section_segments":[40,45,50,130,135,140,220,225,230,310,315,320],"offset":{"x":15,"y":195,"z":69},"position":{"x":[0,0,0,0,0],"y":[0,0,30,60,60],"z":[0,0,0,-10,-10]},"width":[0,10,10,10,0],"height":[0,10,10,10,0],"texture":[17,17.95,17,4]},"back_joint2":{"section_segments":[90,180,270,360],"offset":{"x":37,"y":195,"z":60},"position":{"x":[0,0,0,-5,-5],"y":[0,0,30,60,60],"z":[0,0,0,-5,-5]},"width":[0,10,10,10,0],"height":[0,10,10,10,0],"texture":[17,17.95,17,4]},"back_joint3":{"section_segments":[90,180,270,360],"offset":{"x":57,"y":195,"z":40},"position":{"x":[0,0,0,-5,-5],"y":[0,0,30,60,60],"z":[0,0,0,-5,-5]},"width":[0,10,10,10,0],"height":[0,10,10,10,0],"texture":[17,17.95,17,4]},"wing_shields1":{"section_segments":[35,45,55,125,135,145,215,225,235,305,315,325],"offset":{"x":0,"y":95,"z":0},"position":{"x":[0,0,0,0,0,0,0,0,0,0,0,0],"y":[0,0,30,50,50,60,60,90,105,125,125],"z":[0,0,0,0,0,0,0,0,0,0,0,0]},"width":[0,100,130,130,120,123,140,140,120,115,0],"height":[0,30,30,30,25,25,25,25,25,25,0],"texture":[18,3,4,4,4,4,18.1,4,3]},"wing_shields2":{"section_segments":[35,45,55,125,135,145,215,225,235,305,315,325],"offset":{"x":0.01,"y":95,"z":7},"position":{"x":[0,0,0,0,0,0,0,0,0,0,0,0],"y":[1,0,30,50,50,59,59,90,105,125,126],"z":[0,0,0,0,0,0,0,0,0,0,0,0]},"width":[0,100,130,130,120,123,140,140,120,115,0],"height":[0,6,6,6,5,5,5,5,5,5,0],"texture":[63]},"wing_shields3":{"section_segments":[35,45,55,125,135,145,215,225,235,305,315,325],"offset":{"x":0.01,"y":95,"z":-7},"position":{"x":[0,0,0,0,0,0,0,0,0,0,0,0],"y":[1,0,30,50,50,59,59,90,105,125,126],"z":[0,0,0,0,0,0,0,0,0,0,0,0]},"width":[0,100,130,130,120,123,140,140,120,115,0],"height":[0,6,6,6,5,5,5,5,5,5,0],"texture":[63]},"joint1":{"section_segments":[45,135,225,315],"offset":{"x":0,"y":150,"z":0},"position":{"x":[0,0,0,0],"y":[-5,10,30,50],"z":[0,0,0,0]},"width":[0,210,210,0],"height":[0,15,15,0],"texture":[3]},"joint2":{"section_segments":[45,135,225,315],"offset":{"x":0,"y":150,"z":5},"position":{"x":[0,0,0,0],"y":[-5,10,30,50],"z":[0,0,0,0]},"width":[0,211,211,0],"height":[0,3,3,0],"texture":[63]},"joint3":{"section_segments":[45,135,225,315],"offset":{"x":0,"y":150,"z":-5},"position":{"x":[0,0,0,0],"y":[-5,10,30,50],"z":[0,0,0,0]},"width":[0,211,211,0],"height":[0,3,3,0],"texture":[63]},"disc1":{"section_segments":12,"offset":{"x":80,"y":170,"z":0},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[6.4,6.4,0,0,0,0,0,6.4,6.4,6.4],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[24,24,24,28.8,28.8,28.8,28.8,28.8,24,24],"height":[24,24,24,28.8,28.8,28.8,28.8,28.8,24,24],"texture":[4,4,4,4,4,4,17,4],"angle":-90},"disc2":{"section_segments":12,"offset":{"x":90,"y":170,"z":0},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[6.4,6.4,0,0,0,0,0,6.4,6.4,6.4],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[24,24,24,28.8,28.8,28.8,28.8,28.8,24,24],"height":[24,24,24,28.8,28.8,28.8,28.8,28.8,24,24],"texture":[4,4,4,4,4,4,17,4],"angle":-90},"disc3":{"section_segments":12,"offset":{"x":100,"y":170,"z":0},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[6.4,6.4,0,0,0,0,0,6.4,6.4,6.4],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[24,24,24,28.8,28.8,28.8,28.8,28.8,24,24],"height":[24,24,24,28.8,28.8,28.8,28.8,28.8,24,24],"texture":[4,4,4,4,4,4,17,4],"angle":-90},"disc4":{"section_segments":12,"offset":{"x":115,"y":170,"z":0},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[6.4,6.4,0,0,0,0,0,6.4,6.4,6.4],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[15,15,15,18,18,18,18,18,15,15],"height":[15,15,15,18,18,18,18,18,15,15],"texture":[16],"angle":90},"disc5":{"section_segments":12,"offset":{"x":125,"y":170,"z":0},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[6.4,6.4,0,0,0,0,0,6.4,6.4,6.4],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[15,15,15,18,18,18,18,18,15,15],"height":[15,15,15,18,18,18,18,18,15,15],"texture":[16],"angle":90},"disc6":{"section_segments":16,"offset":{"x":0,"y":200,"z":75},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[7,7,0,0,0,2,5,7,7,7],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[15,15,15,18,18,18,18,18,15,15],"height":[6,6,6,7.199999999999999,7.199999999999999,7.199999999999999,7.199999999999999,7.199999999999999,6,6],"texture":[4,4,4,4,4,17,4]},"disc7":{"section_segments":16,"offset":{"x":0,"y":210,"z":75},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[7,7,0,0,0,2,5,7,7,7],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[15,15,15,18,18,18,18,18,15,15],"height":[6,6,6,7.199999999999999,7.199999999999999,7.199999999999999,7.199999999999999,7.199999999999999,6,6],"texture":[4,4,4,4,4,17,4]},"disc8":{"section_segments":16,"offset":{"x":45,"y":200,"z":47},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[7,7,0,0,0,2,5,7,7,7],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[15,15,15,18,18,18,18,18,15,15],"height":[17,17,17,20.4,20.4,20.4,20.4,20.4,17,17],"texture":[4,4,4,4,4,17,4]},"disc9":{"section_segments":16,"offset":{"x":45,"y":210,"z":47},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[7,7,0,0,0,2,5,7,7,7],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[15,15,15,18,18,18,18,18,15,15],"height":[17,17,17,20.4,20.4,20.4,20.4,20.4,17,17],"texture":[4,4,4,4,4,17,4]},"disc10":{"section_segments":16,"offset":{"x":45,"y":90,"z":47},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[10.5,10.5,0,0,0,3,7.5,10.5,10.5,10.5],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[20,20,20,24,24,24,24,24,20,20],"height":[20,20,20,24,24,24,24,24,20,20],"texture":[4,4,4,4,17,4,17,4]},"disc11":{"section_segments":16,"offset":{"x":45,"y":70,"z":47},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[10.5,10.5,0,0,0,3,7.5,10.5,10.5,10.5],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[20,20,20,24,24,24,24,24,20,20],"height":[20,20,20,24,24,24,24,24,20,20],"texture":[4,4,4,4,17,4,17,4]},"disc12":{"section_segments":16,"offset":{"x":50,"y":50,"z":-160},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[10.5,10.5,0,0,0,3,7.5,10.5,10.5,10.5],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[16,16,16,19.200000000000003,19.200000000000003,19.200000000000003,19.200000000000003,19.200000000000003,16,16],"height":[20,20,20,24,24,24,24,24,20,20],"texture":[4,4,4,4,17,4,17,18],"angle":45,"vertical":true},"disc13":{"section_segments":24,"offset":{"x":0,"y":160,"z":80},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[10.5,10.5,0,0,0,3,7.5,10.5,10.5,10.5],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[40,40,40,48,48,48,48,48,40,40],"height":[15,15,15,18,18,18,18,18,15,15],"texture":[4,4,4,4,4,17,4,4],"angle":180},"disc14":{"section_segments":24,"offset":{"x":0,"y":160,"z":80},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[10.5,10.5,0,0,0,3,7.5,10.5,10.5,10.5],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[40,40,40,48,48,48,48,48,40,40],"height":[15,15,15,18,18,18,18,18,15,15],"texture":[4,4,4,4,4,17,4,4]},"disc15":{"section_segments":6,"offset":{"x":0,"y":-17.5,"z":57},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[10.5,10.5,1.5,1.5,1.5,3,7.5,10.5,10.5,10.5],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[18,18,18,21.6,21.6,21.6,21.6,21.6,18,18],"height":[5,5,5,6,6,6,6,6,5,5],"texture":[3,3,3,3,3,17,4,4]},"disc16":{"section_segments":6,"offset":{"x":0,"y":-12.5,"z":57},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[10.5,10.5,1.5,1.5,1.5,3,7.5,10.5,10.5,10.5],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[18,18,18,21.6,21.6,21.6,21.6,21.6,18,18],"height":[5,5,5,6,6,6,6,6,5,5],"texture":[3,3,3,3,3,17,4,4],"angle":180},"disc17":{"section_segments":6,"offset":{"x":0,"y":-67.5,"z":57},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[10.5,10.5,1.5,1.5,1.5,3,7.5,10.5,10.5,10.5],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[18,18,18,21.6,21.6,21.6,21.6,21.6,18,18],"height":[5,5,5,6,6,6,6,6,5,5],"texture":[3,3,3,3,3,17,4,4]},"disc18":{"section_segments":6,"offset":{"x":0,"y":-62.5,"z":57},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[10.5,10.5,1.5,1.5,1.5,3,7.5,10.5,10.5,10.5],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[18,18,18,21.6,21.6,21.6,21.6,21.6,18,18],"height":[5,5,5,6,6,6,6,6,5,5],"texture":[3,3,3,3,3,17,4,4],"angle":180},"disc19":{"section_segments":6,"offset":{"x":0,"y":-117.5,"z":57},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[10.5,10.5,1.5,1.5,1.5,3,7.5,10.5,10.5,10.5],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[18,18,18,21.6,21.6,21.6,21.6,21.6,18,18],"height":[5,5,5,6,6,6,6,6,5,5],"texture":[3,3,3,3,3,17,4,4]},"disc20":{"section_segments":6,"offset":{"x":0,"y":-112.5,"z":57},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[10.5,10.5,1.5,1.5,1.5,3,7.5,10.5,10.5,10.5],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[18,18,18,21.6,21.6,21.6,21.6,21.6,18,18],"height":[5,5,5,6,6,6,6,6,5,5],"texture":[3,3,3,3,3,17,4,4],"angle":180},"disc21":{"section_segments":6,"offset":{"x":0,"y":-167.5,"z":57},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[10.5,10.5,1.5,1.5,1.5,3,7.5,10.5,10.5,10.5],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[18,18,18,21.6,21.6,21.6,21.6,21.6,18,18],"height":[5,5,5,6,6,6,6,6,5,5],"texture":[3,3,3,3,3,17,4,4]},"disc22":{"section_segments":6,"offset":{"x":0,"y":-162.5,"z":57},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[10.5,10.5,1.5,1.5,1.5,3,7.5,10.5,10.5,10.5],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[18,18,18,21.6,21.6,21.6,21.6,21.6,18,18],"height":[5,5,5,6,6,6,6,6,5,5],"texture":[3,3,3,3,3,17,4,4],"angle":180},"disc23":{"section_segments":6,"offset":{"x":0,"y":-217.5,"z":57},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[10.5,10.5,1.5,1.5,1.5,3,7.5,10.5,10.5,10.5],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[18,18,18,21.6,21.6,21.6,21.6,21.6,18,18],"height":[5,5,5,6,6,6,6,6,5,5],"texture":[3,3,3,3,3,17,4,4]},"disc24":{"section_segments":6,"offset":{"x":0,"y":-212.5,"z":57},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[10.5,10.5,1.5,1.5,1.5,3,7.5,10.5,10.5,10.5],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[18,18,18,21.6,21.6,21.6,21.6,21.6,18,18],"height":[5,5,5,6,6,6,6,6,5,5],"texture":[3,3,3,3,3,17,4,4],"angle":180},"box":{"section_segments":[45,135,225,315],"offset":{"x":50,"y":35,"z":-85},"position":{"x":[0,0,0,0,0],"y":[-10,15,15,19,19],"z":[0,0,0,0,0]},"width":[10,10,20,20,20],"height":[30,30,50,35,0],"texture":[4,4,18,17],"vertical":true,"angle":50},"hubs1":{"section_segments":20,"offset":{"x":80,"y":20,"z":-128},"position":{"x":[0,0,0,0,0,0,0],"y":[0,10,5,5,10,6],"z":[0,0,0,0,0,0,0]},"width":[18,15,13,12,10,0],"height":[18,15,13,12,10,0],"texture":[18,17,17,18,18],"vertical":true},"hubs2":{"section_segments":20,"offset":{"x":80,"y":15,"z":-204},"position":{"x":[0,0,0,0,0,0,0],"y":[0,10,5,5,10,6],"z":[0,0,0,0,0,0,0]},"width":[12.6,10.5,9.1,8.399999999999999,7,0],"height":[12.6,10.5,9.1,8.399999999999999,7,0],"texture":[18,17,17,18,18],"vertical":true},"hubs3":{"section_segments":20,"offset":{"x":0,"y":45,"z":-310},"position":{"x":[0,0,0,0,0,0,0],"y":[0,10,5,5,10,6],"z":[0,0,0,0,0,0,0]},"width":[32.4,27,23.400000000000002,21.6,18,0],"height":[32.4,27,23.400000000000002,21.6,18,0],"texture":[18,17,17,18,18],"vertical":true},"hubs4":{"section_segments":20,"offset":{"x":50,"y":55,"z":-160},"position":{"x":[0,0,0,0,0,0,0],"y":[0,10,5,5,10,6],"z":[0,0,0,0,0,0,0]},"width":[18,15,13,12,10,0],"height":[18,15,13,12,10,0],"texture":[18,17,17,18,18],"vertical":true,"angle":70},"hubs5":{"section_segments":20,"offset":{"x":35,"y":-15,"z":0},"position":{"x":[0,0,0,0,0,0,0],"y":[23,29,28,28,29,28],"z":[0,0,0,0,0,0,0]},"width":[15.600000000000001,13,10.4,9.1,6.5,0],"height":[15.600000000000001,13,10.4,9.1,6.5,0],"texture":[18,18,17,17,18],"angle":90},"hubs6":{"section_segments":20,"offset":{"x":35,"y":-65,"z":0},"position":{"x":[0,0,0,0,0,0,0],"y":[23,29,28,28,29,28],"z":[0,0,0,0,0,0,0]},"width":[15.600000000000001,13,10.4,9.1,6.5,0],"height":[15.600000000000001,13,10.4,9.1,6.5,0],"texture":[18,18,17,17,18],"angle":90},"hubs7":{"section_segments":20,"offset":{"x":35,"y":-115,"z":0},"position":{"x":[0,0,0,0,0,0,0],"y":[23,29,28,28,29,28],"z":[0,0,0,0,0,0,0]},"width":[15.600000000000001,13,10.4,9.1,6.5,0],"height":[15.600000000000001,13,10.4,9.1,6.5,0],"texture":[18,18,17,17,18],"angle":90},"hubs8":{"section_segments":20,"offset":{"x":35,"y":-165,"z":0},"position":{"x":[0,0,0,0,0,0,0],"y":[23,29,28,28,29,28],"z":[0,0,0,0,0,0,0]},"width":[15.600000000000001,13,10.4,9.1,6.5,0],"height":[15.600000000000001,13,10.4,9.1,6.5,0],"texture":[18,18,17,17,18],"angle":90},"hubs9":{"section_segments":20,"offset":{"x":35,"y":-215,"z":0},"position":{"x":[0,0,0,0,0,0,0],"y":[23,29,28,28,29,28],"z":[0,0,0,0,0,0,0]},"width":[15.600000000000001,13,10.4,9.1,6.5,0],"height":[15.600000000000001,13,10.4,9.1,6.5,0],"texture":[18,18,17,17,18],"angle":90},"propeller1":{"section_segments":10,"offset":{"x":20,"y":350,"z":15},"position":{"x":[0,0,0,0,0,0],"y":[-10,-10,30,30,30,20],"z":[0,0,0,0,0,0]},"width":[0,15,15,14,14,0],"height":[0,15,15,14,14,0],"propeller":true,"texture":[3,3,17,13]},"propeller2":{"section_segments":10,"offset":{"x":20,"y":350,"z":-15},"position":{"x":[0,0,0,0,0,0],"y":[-10,-10,30,30,30,20],"z":[0,0,0,0,0,0]},"width":[0,15,15,14,14,0],"height":[0,10,15,14,14,0],"propeller":true,"texture":[3,3,17,13]},"propeller_joint1":{"section_segments":4,"offset":{"x":10,"y":261,"z":-5},"position":{"x":[0,0,-30,-50,-50],"y":[0,0,60,70,70],"z":[0,0,0,-20,-20]},"width":[0,10,10,13,0],"height":[0,10,10,10,0],"angle":90,"texture":[17,18,17,17]},"propeller_joint2":{"section_segments":4,"offset":{"x":30,"y":305,"z":-5},"position":{"x":[0,0,-15,-30,-30],"y":[0,0,30,40,40],"z":[0,0,0,-20,-20]},"width":[0,10,10,13,0],"height":[0,10,10,10,0],"angle":90,"texture":[17,18,17,17]},"propeller_joint3":{"section_segments":4,"offset":{"x":10,"y":280,"z":-56},"position":{"x":[0,0,0,-30,-50,-50],"y":[0,0,20,60,70,70],"z":[15,15,0,0,20,20]},"width":[0,10,10,10,13,0],"height":[0,10,10,10,10,0],"angle":90,"texture":[4,4,18]},"propeller_joint4":{"section_segments":4,"offset":{"x":10,"y":310,"z":-56},"position":{"x":[0,0,0,-20,-40,-40],"y":[0,0,20,50,50,50],"z":[15,15,0,0,20,20]},"width":[0,10,10,10,13,0],"height":[0,10,10,10,10,0],"angle":90,"texture":[4,4,18]},"propeller_side":{"section_segments":16,"offset":{"x":80,"y":290,"z":-40},"position":{"x":[0,0,0,0,0,0,0,0,0,0,0,0],"y":[0,14,4,0,-6,0,60,66,48,48,78,72],"z":[0,0,0,0,0,0,0,0,0,0,0,0]},"width":[0,5,20,20,22.5,25,25,20,20,14,10,0],"height":[0,5,20,20,22.5,25,25,20,20,14,10,0],"propeller":true,"texture":[3,12,4,3,4,18,4,18,13,3,13]},"propeller_side2":{"section_segments":16,"offset":{"x":80,"y":380,"z":-40},"position":{"x":[0],"y":[0],"z":[0]},"width":[25],"height":[25],"propeller":true},"top":{"section_segments":[45,135,225,315],"offset":{"x":0,"y":-220,"z":52.9},"position":{"x":[0,0,0,0],"y":[-20,-20,240,180],"z":[0,0,0,0]},"width":[0,35,35,0],"height":[0,10,10,0],"texture":[4]},"bottom":{"section_segments":[45,135,225,315],"offset":{"x":0,"y":-235,"z":-52.9},"position":{"x":[0,0,0,0],"y":[0,0,240,180],"z":[0,0,0,0]},"width":[0,35,35,0],"height":[0,10,10,0],"texture":[4]},"side":{"section_segments":[45,135,225,315],"offset":{"x":52.9,"y":-235,"z":0},"position":{"x":[0,0,0,0],"y":[0,0,240,180],"z":[0,0,0,0]},"width":[0,10,10,0],"height":[0,35,35,0],"texture":[4]},"propeller_support1":{"section_segments":[45,135,225,315],"offset":{"x":15,"y":10,"z":-300},"position":{"x":[0,0,0,0],"y":[0,0,40,40],"z":[0,0,0,0]},"width":[0,25,10,0],"height":[0,100,80,0],"angle":45,"vertical":true,"texture":[17,4,17]},"propeller_support2":{"section_segments":[45,135,225,315],"offset":{"x":15,"y":-10,"z":-300},"position":{"x":[0,0,0,0],"y":[0,0,40,40],"z":[0,0,0,0]},"width":[0,25,10,0],"height":[0,100,80,0],"angle":135,"vertical":true,"texture":[17,4,17]},"gun_holder1":{"section_segments":[45,135,225,315],"offset":{"x":0,"y":40,"z":10},"position":{"x":[0,0,0,0],"y":[-10,-10,10,10],"z":[0,0,0,0]},"width":[0,20,20,0],"height":[0,80,90,0],"texture":[1]},"gun_holder2":{"section_segments":[45,135,225,315],"offset":{"x":0,"y":40,"z":0},"position":{"x":[0,0,0,0],"y":[-10,-10,10,10],"z":[0,0,0,0]},"width":[0,100,90,0],"height":[0,20,20,0],"angle":180,"texture":[1]},"gun_holder3":{"section_segments":[45,135,225,315],"offset":{"x":0,"y":40,"z":-10},"position":{"x":[0,0,0,0],"y":[-10,-10,10,10],"z":[0,0,0,0]},"width":[0,20,20,0],"height":[0,80,90,0],"texture":[1]},"bars_top1":{"section_segments":6,"offset":{"x":31,"y":-110,"z":41},"position":{"x":[0,0,0,0],"y":[-120,-120,120,120],"z":[0,0,0,0]},"width":[0,3,3,0],"height":[0,3,3,0],"texture":[13]},"bars_top2":{"section_segments":6,"offset":{"x":40,"y":-110,"z":32},"position":{"x":[0,0,0,0],"y":[-120,-120,120,120],"z":[0,0,0,0]},"width":[0,3,3,0],"height":[0,3,3,0],"texture":[13]},"bars_bottom1":{"section_segments":6,"offset":{"x":31,"y":-110,"z":-41},"position":{"x":[0,0,0,0],"y":[-120,-120,120,120],"z":[0,0,0,0]},"width":[0,3,3,0],"height":[0,3,3,0],"texture":[13]},"bars_bottom2":{"section_segments":6,"offset":{"x":40,"y":-110,"z":-32},"position":{"x":[0,0,0,0],"y":[-120,-120,120,120],"z":[0,0,0,0]},"width":[0,3,3,0],"height":[0,3,3,0],"texture":[13]}},"wings":{"main":{"length":[40,70,40],"width":[40,90,90,40],"angle":[50,90,130],"position":[0,0,0,0],"doubleside":true,"offset":{"x":120,"y":170,"z":-65},"bump":{"position":0,"size":15},"texture":[4,18,4]}},"typespec":{"name":"Trisbaena","level":1,"model":91,"code":191,"specs":{"shield":{"capacity":[500,500],"reload":[500,500]},"generator":{"capacity":[2000,2000],"reload":[500,500]},"ship":{"mass":1000,"speed":[300,300],"rotation":[100,100],"acceleration":[100,100]}},"shape":[3.507,3.544,3.005,1.943,1.431,1.121,1.004,0.878,0.742,0.699,0.688,0.661,0.645,0.605,0.619,0.645,0.75,0.911,2.064,2.419,2.597,2.279,3.396,3.788,3.815,3.807,3.815,3.788,3.396,2.279,2.597,2.419,2.064,0.911,0.75,0.645,0.619,0.605,0.645,0.661,0.688,0.699,0.742,0.878,1.004,1.121,1.431,1.943,3.005,3.544],"lasers":[{"x":0,"y":-3.45,"z":0,"angle":0,"damage":[320,320],"rate":10,"type":1,"speed":[300,300],"number":1,"spread":0,"error":0,"recoil":20}],"radius":3.815}}';
@@ -119,37 +103,37 @@ ships.push(Toscain_509);
 ships.push(Howler_506);
 ships.push(Bat_Defender_507);
 ships.push(H_Mercury_609);
- 
-var vocabulary = [
-  { text: "You", icon:"\u004e", key:"O" },
-  { text: "Me", icon:"\u004f", key:"E" },
-  { text: "Yes", icon:"\u004c", key:"Y" },
-  { text: "No", icon:"\u004d", key:"N" },  
-  { text: "Hmm?", icon:"\u004b", key:"Q" },
-  { text: "Sorry", icon:"\u00a1", key:"S" },
-  { text: "Thanks", icon:"\u0041", key:"X" },  
-  { text: "No Prob", icon:"\u0047", key:"P" },
-  { text: "Wait", icon:"\u0048", key:"T" },
-  { text: "Follow", icon:"\u0050", key:"F" },
-  { text: "Attack", icon:"\u00b4", key:"A" },
-  { text: "Heal", icon:"\u0037", key:"H" },  
-  { text: "GG", icon:"\u00a3", key:"G" },
-  { text: "Upgrade", icon:"\u0078", key:"L" },  
-  { text: "Lag", icon:"\u00be", key:"V"}
+
+var ship_list = [
+  [101,201,202,301,302,303,304,401,402,403,404,405,406,501,502,503,504,505,506,509,507,601,602,603,609,604,605,606,607,608,701,702,703,704]
 ];
  
-var map = "";
- 
-if (strafe === true) strafe = 1; else strafe = 0;
- 
+var vocabulary = [
+  {text: "You", icon:"\u004e", key:"O" },
+  {text: "Me", icon:"\u004f", key:"E" },
+  {text: "Yes", icon:"\u004c", key:"Y" },
+  {text: "No", icon:"\u004d", key:"N" },  
+  {text: "Hmm?", icon:"\u004b", key:"Q" },
+  {text: "Sorry", icon:"\u00a1", key:"S" },
+  {text: "Thanks", icon:"\u0041", key:"X" },  
+  {text: "No Prob", icon:"\u0047", key:"P" },
+  {text: "Wait", icon:"\u0048", key:"T" },
+  {text: "Follow", icon:"\u0050", key:"F" },
+  {text: "Attack", icon:"\u00b4", key:"A" },
+  {text: "Heal", icon:"\u0037", key:"H" },  
+  {text: "GG", icon:"\u00a3", key:"G" },
+  {text: "Upgrade", icon:"\u0078", key:"L" },  
+  {text: "Lag", icon:"\u00be", key:"V"}
+];
+
 this.options = {
   ships: ships,
-  custom_map: map,
+  custom_map: [],
   vocabulary: vocabulary,
   strafe: strafe,
   lives: 0,
   starting_ship: 801,
-  map_size: 80,
+  map_size: 70,
   survival_level: 8,
   speed_mod: 1.2,
   starting_ship_maxed: true,
@@ -157,19 +141,18 @@ this.options = {
   friendly_colors: 0,
   weapons_store: false,
   max_level: 8,
-  soundtrack: "civilisation.mp3",
+  soundtrack: "civilisation.mp3"
 };
  
-var ship_list = [
-  [101,201,202,301,302,303,304,401,402,403,404,405,406,501,502,503,504,505,506,509,507,601,602,603,609,604,605,606,607,608,701,702,703,704]
-];
- 
-function tick(game){
+this.tick = function(game){
   if (game.step % 60 === 0){
     for (let i=0; i<game.ships.length; i++){  
       var ship = game.ships[i];
-      if (!ship.custom.options_button){ 
-        ship.custom.options_button = true;
+      var ship_level = Math.trunc(ship.type / 100);
+      var stats = 11111111 * ship_level;
+      if (ship.stats < stats) ship.set({stats:stats});
+      if (!ship.custom.init){ 
+        ship.custom.init = true;
         game.ships[i].setUIComponent({ 
           id: "Options",
           position: [71.5,0,6.6,4],
@@ -177,8 +160,8 @@ function tick(game){
           visible: true,
           shortcut: "W",
           components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#FFFFFF",width:5},
-            { type: "text",position:[0,30,100,60],value:"Options [W]",color:"#FFFFFF"},
+            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#cde",width:5},
+            { type: "text",position:[0,30,100,60],value:"Options [W]",color:"#cde"},
           ]
         });   
         ship.custom.option_screen = true;    
@@ -189,8 +172,8 @@ function tick(game){
           visible: true,
           shortcut: "J",
           components: [
-            { type:"box",position:[0,0,190,100],fill:"rgba(68, 85, 102, 0)",stroke:"#FFFFFF",width:5},
-            { type: "text",position:[0,30,100,60],value:"Restore [J]",color:"#FFFFFF"},
+            { type:"box",position:[0,0,190,100],fill:"rgba(68, 85, 102, 0)",stroke:"#cde",width:5},
+            { type: "text",position:[0,30,100,60],value:"Restore [J]",color:"#cde"},
           ]
         });       
         ship.custom.tree = 0;
@@ -201,34 +184,6 @@ function tick(game){
           }
         }        
       }
-      if (game.ships[i].custom.admin_ship === true){
-        if (!ship.custom.authorized){ 
-          ship.custom.authorized = true;   
-          ship.custom.unauthorized = false; 
-          game.ships[i].setUIComponent({ 
-            id: "Admin ship",
-            position: [27,0,8,4],
-            clickable: true,
-            visible: true,
-            shortcut: "M",
-            components: [
-              { type:"box",position:[0,0,200,100],fill:"rgba(68, 85, 102, 0)",stroke:"#FFFFFF",width:5},
-              { type: "text",position:[0,30,100,60],value:"Admin ship [M]",color:"#FFFFFF"},
-            ]
-          });     
-        }    
-      } else if (game.ships[i].custom.admin_ship === false){
-        if (!ship.custom.unauthorized){ 
-          ship.custom.unauthorized = true; 
-          ship.custom.authorized = false;  
-          game.ships[i].setUIComponent({ 
-            id: "Admin ship",
-            clickable: false,
-            visible: false,
-          });        
-          if (game.ships[i].type === 101) game.ships[i].set({type:101,stats:11111111});
-        }
-      }
     }
     if (game.aliens.length < max_aliens && alien_portal === true){
       game.addAlien(alien_array[Math.floor(Math.random()*alien_array.length)]);
@@ -238,13 +193,7 @@ function tick(game){
     }
   }
   if (game.step % 1800 === 0) playerList();
-}
-
-function game_start(game){
-  echo("\nPlease read the comments\n");  
-  this.tick = tick;
-}
-this.tick = game_start;
+};
  
 game.modding.tick = function(t){
   this.game.tick(t);
@@ -254,142 +203,35 @@ game.modding.tick = function(t){
 };  
  
 this.event = function(event, game){
-  var ship = event.ship;  
-  var ship_level = Math.trunc(ship.type / 100);
-  var max_crystals = 980;    
-  var new_type;  
-  var tree = ship.custom.tree;
-  var index = -1;
+  var ship = event.ship, ship_level = Math.trunc(ship.type/100), max_crystals = 980,  
+  new_type, tree = ship.custom.tree, index = -1;
+  var ids = ["Next ship","Previous ship","Reset","Spectate","A-Speedster"];
+  var shc = ["1","2","3","4","5"];
   switch (event.name){
     case "ui_component_clicked":
       var component = event.id;
       if (component == "Options"){
         if (ship.custom.option_screen === true){
-          ship.setUIComponent({
-            id: "Next ship",
-            position: [28,35,12,10],
-            clickable: true,
-            visible: true,
-            components: [
-              { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-              { type: "text",position:[5,35,90,40],value:"Next ship",color:"#CDE"},
-            ]
-          });
-          ship.setUIComponent({
-            id: "Previous ship",
-            position: [60,35,12,10],
-            clickable: true,
-            visible: true,
-            components: [
-              { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-              { type: "text",position:[5,35,90,40],value:"Previous ship",color:"#CDE"},
-            ]
-          });    
-          ship.setUIComponent({
-            id: "Reset",
-            position: [28,45,12,10],
-            clickable: true,
-            visible: true,
-            components: [
-              { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-              { type: "text",position:[5,35,90,40],value:"Reset",color:"#CDE"},
-            ]
-          });  
-          ship.setUIComponent({      
-            id: "Stats",
-            position: [28,55,12,10],
-            clickable: true,
-            visible: true,
-            components: [
-              { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-              { type: "text",position:[5,35,90,40],value:"Stats",color:"#CDE"},
-            ]
-          });  
-          ship.setUIComponent({
-            id: "Spectate",
-            position: [60,45,12,10],
-            clickable: true,
-            visible: true,
-            components: [
-              { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-              { type: "text",position:[5,35,90,40],value:"Spectate",color:"#CDE"},
-            ]
-          });  
-          ship.setUIComponent({      
-            id: "Gems",
-            position: [60,55,12,10],
-            clickable: true,
-            visible: true,
-            components: [
-              { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-              { type: "text",position:[5,35,90,40],value:"Gems",color:"#CDE"},
-            ]
-          });          
-          ship.setUIComponent({
-            id: "Options screen circle",
-            position: [42,36.5,80*1.35,100*1.35],
-            clickable: false,
-            visible: true,
-            components: [
-              {type:"round",position:[0,0,15,20],fill:"rgba(68, 85, 102, 0)",stroke:"#43454a",width:5},
-            ]
-          });    
-          ship.setUIComponent({
-            id: "Options screen next page",
-            position: [25,65,12,10],
-            clickable: true,
-            visible: true,
-            components: [
-              { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-              { type: "text",position:[5,35,90,40],value:"Next page",color:"#CDE"},
-            ]
-          });        
-          ship.setUIComponent({
-            id: "Options screen exit",
-            position: [63,65,12,10],
-            clickable: true,
-            visible: true,
-            components: [
-              { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-              { type: "text",position:[5,35,90,40],value:"Close",color:"#CDE"},
-            ]
-          });        
-          ship.setUIComponent({
-            id: "Options screen",
-            position: [0,25,100,200],
-            clickable: false,
-            visible: true,
-            components: [
-              {type:"box",position:[25,0,50,25],fill:"rgba(68, 85, 102, 0)",stroke:"#ffffff",width:3},
-              {type: "text",position: [45,0,10,5],color: "#ffffff",value: "Options"},
-            ]
-          });
+          for (let i=0; i<5; i++){
+            ship.setUIComponent({
+              id: ids[i],
+              position: [19+i*12,21,12,10],
+              clickable: true,
+              visible: true,
+              shortcut: shc[i],
+              components: [
+                { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
+                { type: "text",position:[5,35,90,40],value:`${ids[i]} [${i+1}]`,color:"#CDE"},
+              ]
+            });
+          }  
           ship.custom.option_screen = false;
         } else if (ship.custom.option_screen === false){
           ship.setUIComponent({id: "Next ship",visible: false});
           ship.setUIComponent({id: "Previous ship",visible: false});        
           ship.setUIComponent({id: "Reset",visible: false});  
-          ship.setUIComponent({id: "Stats",visible: false});              
           ship.setUIComponent({id: "Spectate",visible: false});  
-          ship.setUIComponent({id: "Gems",visible: false});  
-          ship.setUIComponent({id: "Options screen",visible: false});  
-          ship.setUIComponent({id: "Options screen circle",visible: false});    
-          ship.setUIComponent({id: "Options screen next page",visible: false});        
-          ship.setUIComponent({id: "Options screen go back",visible: false,});
-          ship.setUIComponent({id: "Options screen exit",visible: false});
-          ship.setUIComponent({id: "Advanced-Fighter",visible: false});    
-          ship.setUIComponent({id: "Marauder",visible: false});  
-          ship.setUIComponent({id: "H-Mercury",visible: false});          
           ship.setUIComponent({id: "A-Speedster",visible: false});  
-          ship.setUIComponent({id: "Barracuda",visible: false});    
-          ship.setUIComponent({id: "Odyssey",visible: false});  
-          ship.setUIComponent({id: "Bastion",visible: false});          
-          ship.setUIComponent({id: "Scorpion",visible: false});    
-          ship.setUIComponent({id: "Condor",visible: false});  
-          ship.setUIComponent({id: "Rock-Tower",visible: false});
-          ship.setUIComponent({id: "O-Defender",visible: false});    
-          ship.setUIComponent({id: "Shadow X-3",visible: false});  
-          ship.setUIComponent({id: "Aries",visible: false});            
           ship.custom.option_screen = true;
         }
       }  
@@ -415,312 +257,25 @@ this.event = function(event, game){
           ship.set({crystals:((ship_level||0)**2)*20});            
           if (ship_level < 7) ship.set({shield:999, stats:88888888});      
           ship.set({type:new_type, shield:999});
-        }
+        } if (ship.type == 101) ship.set({type:704});
       }
       else if (component == "Spectate"){
-        ship.set({type:102, crystals:20, stats:11111111});
-      }
-      else if (component == "Gems"){
-        ship.set({ crystals:((ship_level||0)**2)*20});
+        if (ship.type != 102)
+          ship.set({type:102, crystals:20});
+        else ship.set({type:101});
       }
       else if (component == "Reset"){
-        ship.set({type:101, crystals:20, shield:100, stats:11111111});
+        if (ship.type != 101)
+        ship.set({type:101, crystals:20, shield:100});
       }
-      else if (component == "Stats"){
-        var stats = ship.stats;
-        var max = 11111111 * ship_level;
-        if (ship_level < 7){
-          if (stats == max){
-            ship.custom.keep_maxed = false;
-            ship.set({stats:0});
-          } else {
-            ship.custom.keep_maxed = true;
-            ship.set({stats:max, shield:999});
-          }
-        }
-      }
-      else if (component == "Advanced-Fighter") ship.set({type:601, stats:88888888, shield:999, crystals: 720});
-      else if (component == "Scorpion") ship.set({type:602, stats:88888888, shield:999, crystals: 720});
-      else if (component == "Marauder") ship.set({type:603, stats:88888888, shield:999, crystals: 720});
-      else if (component == "H-Mercury") ship.set({type:609, stats:88888888, shield:999, crystals: 720});
-      else if (component == "Condor") ship.set({type:604, stats:88888888, shield:999, crystals: 720});
-      else if (component == "A-Speedster") ship.set({type:605, stats:88888888, shield:999, crystals: 720});
-      else if (component == "Rock-Tower") ship.set({type:606, stats:88888888, shield:999, crystals: 720});
-      else if (component == "Barracuda") ship.set({type:607, stats:88888888, shield:999, crystals: 720});
-      else if (component == "O-Defender") ship.set({type:608, stats:88888888, shield:999, crystals: 720});
-      else if (component == "Odyssey") ship.set({type:701, shield:999, crystals: 980});
-      else if (component == "Shadow X-3") ship.set({type:702, shield:999, crystals: 980});        
-      else if (component == "Bastion") ship.set({type:703, shield:999, crystals: 980});        
-      else if (component == "Aries") ship.set({type:704, shield:999, crystals: 980});        
-      else if (component == "Options screen next page"){
-        ship.setUIComponent({id: "Next ship",visible: false});
-        ship.setUIComponent({id: "Previous ship",visible: false});          
-        ship.setUIComponent({id: "Reset",visible: false});  
-        ship.setUIComponent({id: "Stats",visible: false});              
-        ship.setUIComponent({id: "Spectate",visible: false});  
-        ship.setUIComponent({id: "Gems",visible: false});  
-        ship.setUIComponent({id: "Options screen next page",visible: false});    
-        ship.setUIComponent({
-          id: "Options screen go back",
-          position: [25,65,12,10],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Previous page",color:"#CDE"},
-          ]
-        });
-        ship.setUIComponent({
-          id: "Advanced-Fighter",
-          position: [28,35,12,5],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Advanced-Fighter",color:"#CDE"},
-          ]
-        });    
-        ship.setUIComponent({
-          id: "Marauder",
-          position: [28,40,6,5],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Marauder",color:"#CDE"},
-          ]
-        });  
-        ship.setUIComponent({
-          id: "H-Mercury",
-          position: [34,40,6,5],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"H-Mercury",color:"#CDE"},
-          ]
-        });        
-        ship.setUIComponent({      
-          id: "A-Speedster",
-          position: [28,45,12,5],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"A-Speedster",color:"#CDE"},
-          ]
-        });  
-        ship.setUIComponent({
-          id: "Barracuda",
-          position: [28,50,12,5],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Barracuda",color:"#CDE"},
-          ]
-        });    
-        ship.setUIComponent({
-          id: "Odyssey",
-          position: [28,55,12,5],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Odyssey",color:"#CDE"},
-          ]
-        });  
-        ship.setUIComponent({      
-          id: "Bastion",
-          position: [28,60,12,5],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Bastion",color:"#CDE"},
-          ]
-        });          
-        ship.setUIComponent({
-          id: "Scorpion",
-          position: [60,35,12,5],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Scorpion",color:"#CDE"},
-          ]
-        });    
-        ship.setUIComponent({
-          id: "Condor",
-          position: [60,40,12,5],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Condor",color:"#CDE"},
-          ]
-        });  
-        ship.setUIComponent({      
-          id: "Rock-Tower",
-          position: [60,45,12,5],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Rock-Tower",color:"#CDE"},
-          ]
-        });
-        ship.setUIComponent({
-          id: "O-Defender",
-          position: [60,50,12,5],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"O-Defender",color:"#CDE"},
-          ]
-        });    
-        ship.setUIComponent({
-          id: "Shadow X-3",
-          position: [60,55,12,5],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Shadow X-3",color:"#CDE"},
-          ]
-        });  
-        ship.setUIComponent({      
-          id: "Aries",
-          position: [60,60,12,5],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Aries",color:"#CDE"},
-          ]
-        });
-        ship.custom.option_screen = false;    
-      }
-      else if (component == "Options screen go back"){
-        ship.setUIComponent({id: "Advanced-Fighter",visible: false});    
-        ship.setUIComponent({id: "Marauder",visible: false});  
-        ship.setUIComponent({id: "H-Mercury",visible: false});              
-        ship.setUIComponent({id: "A-Speedster",visible: false});  
-        ship.setUIComponent({id: "Barracuda",visible: false});    
-        ship.setUIComponent({id: "Odyssey",visible: false});  
-        ship.setUIComponent({id: "Bastion",visible: false});          
-        ship.setUIComponent({id: "Scorpion",visible: false});    
-        ship.setUIComponent({id: "Condor",visible: false});  
-        ship.setUIComponent({id: "Rock-Tower",visible: false});
-        ship.setUIComponent({id: "O-Defender",visible: false});    
-        ship.setUIComponent({id: "Shadow X-3",visible: false});  
-        ship.setUIComponent({id: "Aries",visible: false});          
-        ship.setUIComponent({
-          id: "Next ship",
-          position: [28,35,12,10],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Next ship",color:"#CDE"},
-          ]
-        });
-        ship.setUIComponent({
-          id: "Previous ship",
-          position: [60,35,12,10],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Previous ship",color:"#CDE"},
-          ]
-        });          
-        ship.setUIComponent({
-          id: "Reset",
-          position: [28,45,12,10],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Reset",color:"#CDE"},
-          ]
-        });  
-        ship.setUIComponent({      
-          id: "Stats",
-          position: [28,55,12,10],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Stats",color:"#CDE"},
-          ]
-        });      
-        ship.setUIComponent({
-          id: "Spectate",
-          position: [60,45,12,10],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Spectate",color:"#CDE"},
-          ]
-        });  
-        ship.setUIComponent({      
-          id: "Gems",
-          position: [60,55,12,10],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Gems",color:"#CDE"},
-          ]
-        });          
-        ship.setUIComponent({
-          id: "Options screen next page",
-          position: [25,65,12,10],
-          clickable: true,
-          visible: true,
-          components: [
-            { type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
-            { type: "text",position:[5,35,90,40],value:"Next page",color:"#CDE"},
-          ]
-        });    
-        ship.setUIComponent({id: "Options screen go back",visible: false});      
-        ship.custom.option_screen = true;    
+      else if (component == "A-Speedster"){
+        if (ship.type != 605)
+        ship.set({type:605, crystals:720, shield:990});
       }
       else if (component == "Restore"){
-        ship.set({shield:999, crystals:((ship_level||0)**2)*20,generator:999,stats:ship.stats});
-      }        
-      else if (component == "Options screen exit"){
-        ship.setUIComponent({id: "Next ship",visible: false});
-        ship.setUIComponent({id: "Previous ship",visible: false});        
-        ship.setUIComponent({id: "Reset",visible: false});  
-        ship.setUIComponent({id: "Stats",visible: false});              
-        ship.setUIComponent({id: "Spectate",visible: false});  
-        ship.setUIComponent({id: "Gems",visible: false});  
-        ship.setUIComponent({id: "Options screen",visible: false});  
-        ship.setUIComponent({id: "Options screen circle",visible: false});    
-        ship.setUIComponent({id: "Options screen next page",visible: false});        
-        ship.setUIComponent({id: "Options screen go back",visible: false,});
-        ship.setUIComponent({id: "Options screen exit",visible: false});
-        ship.setUIComponent({id: "Advanced-Fighter",visible: false});    
-        ship.setUIComponent({id: "Marauder",visible: false});  
-        ship.setUIComponent({id: "H-Mercury",visible: false});          
-        ship.setUIComponent({id: "A-Speedster",visible: false});  
-        ship.setUIComponent({id: "Barracuda",visible: false});    
-        ship.setUIComponent({id: "Odyssey",visible: false});  
-        ship.setUIComponent({id: "Bastion",visible: false});          
-        ship.setUIComponent({id: "Scorpion",visible: false});    
-        ship.setUIComponent({id: "Condor",visible: false});  
-        ship.setUIComponent({id: "Rock-Tower",visible: false});
-        ship.setUIComponent({id: "O-Defender",visible: false});    
-        ship.setUIComponent({id: "Shadow X-3",visible: false});  
-        ship.setUIComponent({id: "Aries",visible: false});        
-      }
+        ship.set({shield:999, crystals:((ship_level||0)**2)*20,generator:999,stats:ship.stats});}
       else if (component == "Admin ship"){
-        ship.set({type:191,stats:11111111,crystals:20,generator:10000});
-      }
+       ship.set({type:191,crystals:20,generator:10000});}
       break;
     case "ship_spawned": 
       ship.set({x:0,y:250,invulnerable:300,crystals:((ship_level||0)**2)*20});
