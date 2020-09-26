@@ -324,7 +324,7 @@ this.options = {
   soundtrack: music[~~(Math.random()*music.length)],
   weapons_store: false,
   friendly_colors: 2,
-  radar_zoom: 1,
+  radar_zoom: 2,
   map_size: modifier.map_size,
   starting_ship: 801,
   crystal_value: modifier.crystal_value,
@@ -340,7 +340,7 @@ this.options = {
 };
  
 var update = 1;
-var delay = 2*3600;
+var delay = .2*3600;
 this.tick = function(game){
   if (game.step === delay){
     checkscores(game);
@@ -705,7 +705,7 @@ function checkButtons(ship){
   if (!ship.custom.buttons){
     ship.setUIComponent({id:"open",visible:false});   
     ship.setUIComponent({id:"heal",visible:false});  
-    for (let i=0;i<3;i++){ ship.setUIComponent({id:ship_name[i],visible:false});}
+    for (let i=0;i<9;i++){ ship.setUIComponent({id:ship_name[i],visible:false});}
     ship.setUIComponent({id:"close",visible:false});
   }
 }
@@ -783,7 +783,7 @@ function addShipSelection(ship){
 }
  
 function removemenu(ship){
-  for (let i=0; i<3; i++){
+  for (let i=0; i<9; i++){
     ship.setUIComponent({id:ship_name[i],visible:false});    
   }
   ship.setUIComponent({id:"close",visible:false});
@@ -824,8 +824,11 @@ this.event = function(event, game){
           ship.setUIComponent({id:"heal",visible:false}); break;
         case "close": removemenu(ship);addShipSelection(ship); break;
         default:
-          ship.set({type:findShipCode(component),stats:88888888,shield:999});
+          ship.set({type:findShipCode(component),stats:88888888,shield:1,generator:0,idle:true,vx:0,vy:0});
           removemenu(ship);
+          setTimeout(function(){  
+            ship.set({idle:false,shield:999});
+          },2000);             
         break;
       }
       checkButtons(ship);
