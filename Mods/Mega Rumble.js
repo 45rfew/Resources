@@ -102,7 +102,7 @@ if (!game.custom.init){
  
 var teams = {
   names: ["Red","Blue"],
-  points: [5000,5000],
+  points: [0,0],
   count: [0,0],
   ships: [[],[]],
   hues: [0,240]
