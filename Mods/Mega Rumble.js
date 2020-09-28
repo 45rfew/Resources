@@ -340,7 +340,7 @@ this.options = {
 };
  
 var update = 1;
-var delay = .2*3600;
+var delay = 2*3600;
 this.tick = function(game){
   if (game.step === delay){
     checkscores(game);
