@@ -1,18 +1,22 @@
+//TODO: make the mod playable
+
 this.options = {
   root_mode: "survival",
   asteroids_strength: 0.1,
   radar_zoom: 1,
-  survival_time: 69,
-  starting_ship: 704,
+  survival_time: 30,
+  starting_ship: 801,
+  choose_ship: [701,702,703,704],
   map_size: 30,
   survival_level: 8,
   crystal_value: 10,
   mines_self_destroy: false,
-  weapons_store: true,
+  weapons_store: false,
   max_level: 8,
+  crystal_drop: 0
 };
 
-function tick(game){
+this.tick = function(game){
   if (game.step % 15 === 0){ 
     if (game.aliens.length < 295){
       game.addAlien({level:0,code:16,x:Math.cos(Math.random() * Math.PI * 2) * 360,y:Math.sin(Math.random() * Math.PI * 2) * 360,crystal_drop:50});
@@ -20,57 +24,37 @@ function tick(game){
       game.addAlien({level:2,code:16,x:Math.cos(Math.random() * Math.PI * 2) * 360,y:Math.sin(Math.random() * Math.PI * 2) * 360,crystal_drop:300});
     }
     if (game.collectibles.length < 45){
-      game.addCollectible({code:12,x:Math.cos(Math.random() * Math.PI * 2) * 360,y:Math.sin(Math.random() * Math.PI * 2) * 360});
+      for (let ship of game.ships)
+      game.addCollectible({code:11+~~(Math.random()*2),x:ship.x,y:ship.y});
     }   
   }
-  for (let i=0; i<game.aliens.length; i++){
-    //game.aliens[i].set({kill:true});
-  }
-  const fatboi = [{code:16,level:3}];
-  let fatboilive = false;
-  if (game.step % 30 === 0){
-    for (let alien of game.aliens){
-      for (let i = 0; i<fatboi.length; i++){
-        if (alien.code == fatboi[i].code && alien.level == fatboi[i].level){
-          fatboilive = true;
-        }
-      }
-    }
-    if (fatboilive){
-    } else {
-      game.addAlien({level:3,code:16,x:Math.cos(Math.random() * Math.PI * 2) * 360,y:Math.sin(Math.random() * Math.PI * 2) * 360,crystal_drop:1700});
-    }
-  }
-}
+  if (game.step % 1200 === 0) game.addAlien({level:3,code:16,x:Math.cos(Math.random() * Math.PI * 2) * 360,y:Math.sin(Math.random() * Math.PI * 2) * 360,crystal_drop:1700});
+};
 
-function game_start(game){
-  if (!game.custom.init){
-    game.custom.init = true;
-    echo("No u");
-  }
-  this.tick = tick;
-}
-this.tick = game_start;
- 
 this.event = function(event, game){
+  let ship = event.ship;
   switch (event.name){
+    case "ship_spawned":
+      ship.set({crystals:980});
+      break;
     case "alien_destroyed":
       let killer = event.killer;
-      if (killer.custom_kills === undefined){
-        killer.custom_kills = 0;
-      }
-      else{ 
-        killer.custom_kills++;
+      if (killer.custom_kills === undefined)
+        killer.custom.kills = 0;
+      else { 
+        killer.custom.kills++;
         killer.setUIComponent({
-          id:"whatnou",
-          position:[25,10,50,25],
+          id: "count",
+          position: [25,10,50,25],
           clickable: false,
           visible: true,
-          components: [
-            { type: "text",position: [0,0,100,20],color: "#FFFFFF",value: "Aliens killed:" + killer.custom_kills}
-          ]
+          components: [{type:"text",position:[0,0,100,20],color:"#cde",value:"Aliens killed: "+killer.custom.kills}]
         });
       }
-    break;
+      break;
+    case "collectible_picked":
+      ship.emptyWeapons();
+      setTimeout(function(){ship.emptyWeapons();},100);
+    break;    
   }
 };
