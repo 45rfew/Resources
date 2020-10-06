@@ -1,7 +1,254 @@
 //TODO: make the mod playable
+//freekeys: c,h,i,j,l,m,b
+
+var exp = {
+  tick: function(ship){
+    if (!ship.custom.init){
+      ship.custom.init = true;
+      ship.custom.exp = 0;
+      ship.custom.alienkills = 0;
+      ship.custom.deaths = 0;
+      ship.custom.kills = 0;
+      ship.custom.e = 0;
+      ship.custom.secondary = 10;
+      ship.custom.a = [];
+      ship.custom.mexp = 1;
+      ship.setUIComponent({
+        id:"shop",clickable:true,visible:true,shortcut:"J",position:[5,30,10,8],
+        components: [
+          {type:"box",position:[0,0,100,100],fill:"#191919",stroke:"#cde",width:5},
+        	{type: "text",position:[9,0,60*1.4,40*1.4],value:"Shop",color:"#cde"},
+          {type: "text",position:[20,43.5,60,40],value:"[J]",color:"#cde"},
+        ]
+      });
+      ship.custom.c1 = {
+        fill: ["#2db749","#999999","#999999"],
+        icon: "\u{1F9C0}",
+        cost: ["OWNED","50000EXP","100000EXP"],
+        clickable: [false,true,false]
+      };
+      ship.custom.c2 = {
+        fill: ["#2db749","#999999","#999999"],
+        icon: ["\u{1F56F}","\u{1F386}","\u{1F4A3}"],
+        cost: ["OWNED - Equipped","50000EXP","100000EXP"],
+        clickable: [true,true,false]
+      };       
+      ship.custom.c3 = {
+        fill: ["#999999","#999999","#999999"],
+        icon: ["\u{21f6}\u{21f6}","\u{21f6}\u{1F680}","\u{1F4A5}"],
+        cost: ["20000EXP","50000EXP","100000EXP"],
+        clickable: [true,false,false]
+      };   
+      ship.custom.c4 = {
+        fill: ["#999999","#999999","#999999"],
+        icon: ["\u{1F4B2}","\u{1F4B2}","\u{1F4B2}"],
+        cost: ["20000EXP","50000EXP","100000EXP"],
+        clickable: [true,false,false]
+      };           
+    }   
+    ship.setUIComponent({
+      id:"exp",position:[25,11,50,25],visible:true,
+      components: [{type:"text",position:[0,0,100,20],color:"#cde",value:"EXP: "+ship.custom.exp}]
+    });      
+    ship.setUIComponent({
+      id:"count",position:[25,5,50,25],visible:true,
+      components: [{type:"text",position:[0,0,100,20],color:"#cde",value:"Aliens killed: "+ship.custom.alienkills}]
+    });
+    if (game.collectibles.length < 50-game.ships.length){
+      if (ship.alive) 
+      game.addCollectible({code:ship.custom.secondary,x:ship.x,y:ship.y});    
+    }
+  },   
+  drawshipbutton: function(ship,x,y,w,h,u,u2,id,fill,visible,shortcut,text,ch,cl,clickable){
+    var components = [];
+    var tcol = "#CDE";
+    if (visible)
+    components = [
+      {type:"box",position:[0,0,100,100],fill:"#00000000",stroke:fill,width:10},
+    	{type:"box",position:[10,10-u2,80,80-u],fill:"#000000",stroke:"#000000",width:2},
+    	{type:"text",position:[10,10,80,80],value:ch,color:fill},
+    	{type:"box",position:[10,10-u2,80,80-u],fill:"#222222AA",stroke:"#00000000",width:2},
+    	{type:"text",position:[11,20,78,30],value:text,color:tcol},
+    	{type:"text",position:[20,42,60,40],value:`[${shortcut}]`,color:tcol},
+    	{type:"text",position:[-7,11,78*1.5,10*1.5],value:cl,color:tcol}
+    ];
+    ship.setUIComponent({
+      id: id,
+      position: [x,y,12+w,12+h],
+      clickable: clickable,
+      shortcut: shortcut,
+      visible: visible,
+      components: components
+    });
+  },
+  createshop: function(ship,open){
+    let cat = ["Ship Upgrades","Weapons","Abilities","EXP Boost"];
+    let catfill = ["#325499","#a375a3","#51e051","#d1b547"];
+    let caticons = ["\u{1F53A}","\u{1F52B}","\u{1F300}","\u{1F4B1}"];
+    for (let i=0; i<cat.length; i++)
+    this.drawshipbutton(ship,26.5+i*12,20,-1,-5,20,-10,"cat"+i,catfill[i],open,i+1+"",cat[i],caticons[i],"",true);
+  },
+  category1: function(ship,open){
+    let name = ["Ship I","Ship II","Ship III"];
+    for (let i=0; i<3; i++)
+    this.drawshipbutton(ship,31+i*13,30,0,0,0,0,"upgrade"+i,ship.custom.c1.fill[i],true,i+1+"",name[i],ship.custom.c1.icon,ship.custom.c1.cost[i],ship.custom.c1.clickable[i]);
+  },
+  category2: function(ship,open){
+    let name = ["Rockets","Missiles","Torpedos"];
+    let cost = ["","50000 EXP","100000 EXP"];
+    for (let i=0; i<name.length; i++)
+    this.drawshipbutton(ship,31+i*13,30,0,0,0,0,"weapon"+i,ship.custom.c2.fill[i],true,i+1+"",name[i],ship.custom.c2.icon[i],ship.custom.c2.cost[i],ship.custom.c2.clickable[i]);
+  },
+  category3: function(ship,open){
+    let name = ["Hyperspeed","Absolute Control","POW"];
+    let cost = ["20000 EXP","50000 EXP","100000 EXP"];
+    for (let i=0; i<name.length; i++)
+    this.drawshipbutton(ship,31+i*13,30,0,0,0,0,"ability"+i,ship.custom.c3.fill[i],true,i+1+"",name[i],ship.custom.c3.icon[i],ship.custom.c3.cost[i],ship.custom.c3.clickable[i]);
+  },  
+  category4: function(ship,open){
+    let name = ["EXP Multiplier - 1.2x","EXP Multiplier - 1.5x","EXP Multiplier - 2x"];
+    let cost = ["20000 EXP","50000 EXP","100000 EXP"];
+    for (let i=0; i<name.length; i++)
+    this.drawshipbutton(ship,31+i*13,30,0,0,0,0,"EXP"+i,ship.custom.c4.fill[i],true,i+1+"",name[i],ship.custom.c4.icon[i],ship.custom.c4.cost[i],ship.custom.c4.clickable[i]);
+  },
+  opencategory: function(ship,page){
+    switch (page){
+      case "0": this.category1(ship,true); break;
+      case "1": this.category2(ship,true); break;
+      case "2": this.category3(ship,true); break;
+      case "3": this.category4(ship,true); break;
+    }
+  },
+  closeshop: function(ship,shop){
+    let names = ["upgrade0","upgrade1","upgrade2","weapon0","weapon1","weapon2","ability0","ability1","ability2","EXP0","EXP1","EXP2"];
+    if (shop) names.push("cat0","cat1","cat2","cat3","cat4");
+    for (let i=0; i<names.length; i++)
+    ship.setUIComponent({id:names[i],visible:false});            
+  }  
+};    
+
+this.tick = function(game){
+  if (game.step % 30 === 0)
+    for (let ship of game.ships)
+    exp.tick(ship);
+  if (game.step % 1600 === 0) 
+    game.addAlien({level:3,code:16,x:(Math.random()-0.5)*game.options.map_size*10,y:(Math.random()-0.5)*game.options.map_size*10,crystal_drop:1700});
+  if (game.step % 30 === 0)    
+  for (let i=0; i<10-game.aliens.length; i++){ 
+    let rand = ~~(Math.random()*3);
+    game.addAlien({level:0+rand,code:16,x:(Math.random()-0.5)*game.options.map_size*10,y:(Math.random()-0.5)*game.options.map_size*10,crystal_drop:25+rand*50});
+  }
+};
+
+this.event = function(event, game){
+  let ship = event.ship;
+  let killer = event.killer;  
+  switch (event.name){
+    case "ui_component_clicked":
+      var component = event.id;
+      if (component.includes("cat")&&ship.alive){
+        exp.closeshop(ship,false);
+        let a = component.replace('cat','');
+        exp.opencategory(ship,a);
+      } else
+      if (component.includes("upgrade")&&ship.alive){
+        let b = component.replace('upgrade','');
+        let i = parseInt(b); 
+        ship.custom.c1.clickable[i] = false;
+        if (i == 1) ship.custom.c1.clickable[2] = true;
+        ship.custom.c1.fill[i] = "#2db749";
+        ship.custom.c1.cost[i] = "OWNED";
+        exp.category1(ship,true);
+      } else 
+      if (component.includes("weapon")&&ship.alive){
+        let b = component.replace('weapon','');
+        let i = parseInt(b); 
+        let c = [10,11,12];
+        if (i == 1) ship.custom.c2.clickable[2] = true;
+        ship.custom.c2.fill[i] = "#2db749";
+        ship.custom.c2.cost[i] = "OWNED - Equipped";
+        if (ship.custom.e != i) ship.custom.c2.cost[ship.custom.e] = "OWNED";
+        ship.custom.secondary = c[i]; 
+        ship.custom.e = parseInt(b)
+        exp.category2(ship,true);
+      } else 
+      if (component.includes("ability")&&ship.alive){
+        let b = component.replace('ability','');
+        let i = parseInt(b); 
+        ship.custom.a.push(i);
+        ship.custom.c3.clickable[i] = false;
+        if (i == 0) ship.custom.c3.clickable[1] = true;
+        if (i == 1) ship.custom.c3.clickable[2] = true;
+        ship.custom.c3.fill[i] = "#2db749";
+        ship.custom.c3.cost[i] = "OWNED";
+        exp.category3(ship,true);
+      }           
+      if (component.includes("EXP")&&ship.alive){
+        let b = component.replace('EXP','');
+        let i = parseInt(b); 
+        let m = [1.2,1.5,2];
+        ship.custom.c4.clickable[i] = false;
+        if (i == 0) ship.custom.c4.clickable[1] = true;
+        if (i == 1) ship.custom.c4.clickable[2] = true;
+        ship.custom.c4.fill[i] = "#2db749";
+        ship.custom.c4.cost[i] = "OWNED";
+        ship.custom.mexp = m[i]; 
+        exp.category4(ship,true);
+      }       
+      switch (component){
+        case "shop":
+          exp.createshop(ship,true);
+          ship.setUIComponent({id:"shop",visible:false});            
+          ship.setUIComponent({
+            id:"close",clickable:true,visible:true,shortcut:"J",position:[5,30,10,8],
+            components: [
+              {type:"box",position:[0,0,100,100],fill:"#191919",stroke:"#cde",width:5},
+            	{type: "text",position:[9,0,60*1.4,40*1.4],value:"Close Shop",color:"#cde"},
+              {type: "text",position:[20,43.5,60,40],value:"[J]",color:"#cde"},
+            ]
+          });        
+          break;
+        case "close":
+          exp.closeshop(ship,true);   
+          ship.setUIComponent({id:"close",visible:false}); 
+          ship.setUIComponent({
+            id:"shop",clickable:true,visible:true,shortcut:"J",position:[5,30,10,8],
+            components: [
+              {type:"box",position:[0,0,100,100],fill:"#191919",stroke:"#cde",width:5},
+            	{type: "text",position:[9,0,60*1.4,40*1.4],value:"Shop",color:"#cde"},
+              {type: "text",position:[20,43.5,60,40],value:"[J]",color:"#cde"},
+            ]
+          });      
+          break;  
+      }  
+      break;    
+    case "ship_spawned":
+      ship.set({crystals:980});
+      break;
+    case "ship_destroyed":
+      ship.set({score:Math.round(ship.score/2)});
+      killer.set({score:killer.score+Math.round(ship.score/2)});
+      killer.custom.exp += Math.round(ship.score/2)*killer.custom.mexp;
+      break;
+    case "alien_destroyed":
+      let alien = event.alien;
+      killer.custom.alienkills++;
+      switch (alien.level){
+        case 0: killer.custom.exp += 40*killer.custom.mexp; break;
+        case 1: killer.custom.exp += 60*killer.custom.mexp; break;
+        case 2: killer.custom.exp += 120*killer.custom.mexp; break;
+        case 3: killer.custom.exp += 1750*killer.custom.mexp; break;
+      }
+      break;
+    case "collectible_picked":
+      ship.emptyWeapons();
+      setTimeout(function(){ship.emptyWeapons();},100);
+    break;    
+  }
+};
+
 var ships = [];
 var Odyssey = '{"name":"Odyssey","level":7,"model":1,"size":4,"specs":{"shield":{"capacity":[750,750],"reload":[15,15]},"generator":{"capacity":[330,330],"reload":[150,150]},"ship":{"mass":700,"speed":[45,45],"rotation":[20,20],"acceleration":[150,150]}},"tori":{"circle":{"segments":20,"radius":95,"section_segments":12,"offset":{"x":0,"y":0,"z":0},"position":{"x":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"y":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"z":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"width":[20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20],"height":[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8],"texture":[63,63,4,10,4,4,10,4,63,63,63,63,3,10,3,3,10,3,63]}},"bodies":{"main":{"section_segments":20,"offset":{"x":0,"y":-10,"z":0},"position":{"x":[0,0,0,0,0,0,0,0,0,0,0,0],"y":[-130,-130,-85,-70,-60,-20,-25,40,40,100,90],"z":[0,0,0,0,0,0,0,0,0,0,0]},"width":[0,20,40,45,10,12,30,30,40,30,0],"height":[0,20,25,25,10,12,25,25,20,10,0],"texture":[4,15,63,4,4,4,11,10,4,12]},"laser1":{"section_segments":12,"offset":{"x":110,"y":0,"z":0},"position":{"x":[0,0,0,0,0,0,0],"y":[-25,-30,-20,0,20,30,20],"z":[0,0,0,0,0,0,0]},"width":[0,3,5,5,5,3,0],"height":[0,3,5,5,5,3,0],"texture":[12,6,63,63,6,12],"laser":{"damage":[20,20],"rate":3,"type":1,"speed":[200,200],"number":1,"error":0}},"laser2":{"section_segments":12,"offset":{"x":110,"y":0,"z":0},"position":{"x":[0,0,0,0,0,0,0],"y":[-25,-30,-20,0,20,30,20],"z":[0,0,0,0,0,0,0]},"width":[0,3,5,5,5,3,0],"height":[0,3,5,5,5,3,0],"texture":[12,6,63,63,6,12],"angle":180,"laser":{"damage":[20,20],"rate":3,"type":1,"speed":[200,200],"number":1,"error":0}},"cannon":{"section_segments":6,"offset":{"x":0,"y":-115,"z":0},"position":{"x":[0,0,0,0],"y":[-25,-30,-20,0],"z":[0,0,0,0]},"width":[0,15,9,7],"height":[0,10,9,7],"texture":[6,6,6,10],"laser":{"damage":[250,250],"rate":1,"type":1,"speed":[100,100],"number":1,"error":0,"recoil":300}},"cockpit":{"section_segments":10,"offset":{"x":0,"y":0,"z":15},"position":{"x":[0,0,0,0,0,0,0],"y":[-30,-10,0,10,30],"z":[0,0,0,0,0]},"width":[0,12,15,10,0],"height":[0,20,22,18,0],"texture":[9]},"bumpers":{"section_segments":8,"offset":{"x":85,"y":20,"z":0},"position":{"x":[-5,0,5,10,5,0,-5],"y":[-85,-80,-40,0,20,50,55],"z":[0,0,0,0,0,0,0]},"width":[0,10,15,15,15,5,0],"height":[0,20,35,35,25,15,0],"texture":[11,2,63,4,3],"angle":0},"toppropulsors":{"section_segments":10,"offset":{"x":17,"y":50,"z":15},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[-20,-15,0,10,20,25,30,40,50,40],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[0,10,15,15,15,10,10,15,10,0],"height":[0,10,15,15,15,10,10,15,10,0],"texture":[3,4,10,3,3,63,4],"propeller":true},"bottompropulsors":{"section_segments":10,"offset":{"x":17,"y":50,"z":-15},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[-20,-15,0,10,20,25,30,40,50,40],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[0,10,15,15,15,10,10,15,10,0],"height":[0,10,15,15,15,10,10,15,10,0],"texture":[3,4,10,3,3,63,4],"propeller":true}},"wings":{"topjoin":{"offset":{"x":0,"y":-3,"z":0},"doubleside":true,"length":[100],"width":[20,20],"angle":[25],"position":[0,0,0,50],"texture":[1],"bump":{"position":10,"size":30}},"bottomjoin":{"offset":{"x":0,"y":-3,"z":0},"doubleside":true,"length":[100],"width":[20,20],"angle":[-25],"position":[0,0,0,50],"texture":[1],"bump":{"position":-10,"size":30}}},"typespec":{"name":"Odyssey","level":7,"model":1,"code":701,"specs":{"shield":{"capacity":[750,750],"reload":[15,15]},"generator":{"capacity":[330,330],"reload":[150,150]},"ship":{"mass":700,"speed":[45,45],"rotation":[20,20],"acceleration":[150,150]}},"shape":[11.623,11.646,10.525,8.979,7.873,3.633,3.688,8.551,8.989,8.821,9.353,9.348,9.272,9.272,9.348,9.353,8.977,9.064,9.121,4.686,5.299,6.216,7.781,8.276,8.144,7.775,8.144,8.276,7.781,6.216,5.299,4.686,9.121,9.064,8.977,9.353,9.348,9.272,9.272,9.348,9.353,8.821,8.989,8.551,3.688,3.633,7.873,8.979,10.525,11.646],"lasers":[{"x":8.8,"y":-2.4,"z":0,"angle":0,"damage":[20,20],"rate":3,"type":1,"speed":[200,200],"number":1,"spread":0,"error":0,"recoil":0},{"x":-8.8,"y":-2.4,"z":0,"angle":0,"damage":[20,20],"rate":3,"type":1,"speed":[200,200],"number":1,"spread":0,"error":0,"recoil":0},{"x":8.8,"y":2.4,"z":0,"angle":180,"damage":[20,20],"rate":3,"type":1,"speed":[200,200],"number":1,"spread":0,"error":0,"recoil":0},{"x":-8.8,"y":2.4,"z":0,"angle":-180,"damage":[20,20],"rate":3,"type":1,"speed":[200,200],"number":1,"spread":0,"error":0,"recoil":0},{"x":0,"y":-11.6,"z":0,"angle":0,"damage":[250,250],"rate":1,"type":1,"speed":[100,100],"number":1,"spread":0,"error":0,"recoil":300}],"radius":11.646}}';
-
 var Odyssey2 = "";
 Odyssey2 = JSON.parse(Odyssey);
 Odyssey2.model = 2;
@@ -201,13 +448,13 @@ ships.push(Aries,Aries2,Aries3);
 
 var vocabulary = [
   {icon: "I", text: "Attack",key:"A"},
-  {icon: "4", text: "Base",key:"B"},
+  //{icon: "4", text: "Base",key:"B"},
   {icon: "%", text: "Defend",key:"D"},
   {icon: "O", text: "Me",key:"E"},
   {icon: "P", text: "Follow",key:"F"},
   {icon: "GG", text: "Good Game",key:"G"},
   {icon: "[", text: "Kill",key:"K"},
-  {icon: "D", text: "Mine",key:"M"},
+  //{icon: "D", text: "Mine",key:"M"},
   {icon: "M", text: "No",key:"N"},
   {icon: "N", text: "You",key:"O"},
   {icon: "G", text: "No Prob",key:"P"},
@@ -216,9 +463,8 @@ var vocabulary = [
   {icon: "H", text: "Wait",key:"T"},
   {icon: "A", text: "Thanks",key:"X"},
   {icon: "L", text: "Yes",key:"Y"},
-  {icon: "0", text: "Piranha",key:"H"},
-  {icon: "KK", text: "Why?", key:"I"}, 
-  {icon: "$", text: "Love", key:"L"},
+  //{icon: "0", text: "Piranha",key:"H"},
+  //{icon: "$", text: "Love", key:"L"},
   {icon:"˙ ͜ʟ˙",text: "Bruh",  key:"M"},
   {icon:"ಠ_ಠ", text: "WTF", key:"W"} 
 ];
@@ -231,7 +477,7 @@ this.options = {
   asteroids_strength: 0.1,
   radar_zoom: 1,
   starting_ship: 801,
-  choose_ship: [703,706,709,712],
+  choose_ship: [701,704,707,710],
   map_size: 30,
   survival_level: 8,
   crystal_value: 10,
@@ -239,48 +485,4 @@ this.options = {
   weapons_store: false,
   max_level: 8,
   crystal_drop: 0
-};
-
-this.tick = function(game){
-  if (game.step % 15 === 0){ 
-    if (game.collectibles.length < 50-game.ships.length){
-      for (let ship of game.ships)
-      if (ship.alive) 
-      game.addCollectible({code:11,x:ship.x,y:ship.y});
-    }   
-  }
-  if (game.step % 2000 === 0) game.addAlien({level:3,code:16,x:(Math.random()-0.5)*game.options.map_size*10,y:(Math.random()-0.5)*game.options.map_size*10,crystal_drop:1700});
-  if (game.step % 300 === 0)    
-  for (let i=0; i<300-game.aliens.length; i++){ 
-    let rand = ~~(Math.random()*3);
-    game.addAlien({level:0+rand,code:16,x:(Math.random()-0.5)*game.options.map_size*10,y:(Math.random()-0.5)*game.options.map_size*10,crystal_drop:50+rand*50});
-  }
-};
-
-this.event = function(event, game){
-  let ship = event.ship;
-  switch (event.name){
-    case "ship_spawned":
-      ship.set({crystals:980});
-      break;
-    case "alien_destroyed":
-      let killer = event.killer;
-      if (killer.custom.kills === undefined){
-        killer.custom.kills = 0;
-      } else { 
-        killer.custom.kills++;
-        killer.setUIComponent({
-          id: "count",
-          position: [25,10,50,25],
-          clickable: false,
-          visible: true,
-          components: [{type:"text",position:[0,0,100,20],color:"#cde",value:"Aliens killed: "+killer.custom.kills}]
-        });
-      }
-      break;
-    case "collectible_picked":
-      ship.emptyWeapons();
-      setTimeout(function(){ship.emptyWeapons();},100);
-    break;    
-  }
 };
