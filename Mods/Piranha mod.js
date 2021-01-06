@@ -1,5 +1,11 @@
 //TODO: make the mod playable
 //freekeys: c,h,i,j,l,m,b
+var modifier = {
+  gems: 98000/5,
+  aliens: 16, //+~~(Math.random()*10)
+  limit: 100,
+  rainbow: false
+};
 
 var exp = {
   tick: function(ship){
@@ -128,15 +134,19 @@ var exp = {
 };    
 
 this.tick = function(game){
-  if (game.step % 30 === 0)
+  if (game.step % 15 === 0)
     for (let ship of game.ships)
     exp.tick(ship);
   if (game.step % 1600 === 0) 
     game.addAlien({level:3,code:16,x:(Math.random()-0.5)*game.options.map_size*10,y:(Math.random()-0.5)*game.options.map_size*10,crystal_drop:1700});
-  if (game.step % 30 === 0)    
-  for (let i=0; i<10-game.aliens.length; i++){ 
-    let rand = ~~(Math.random()*3);
-    game.addAlien({level:0+rand,code:16,x:(Math.random()-0.5)*game.options.map_size*10,y:(Math.random()-0.5)*game.options.map_size*10,crystal_drop:25+rand*50});
+  if (game.step % 60 === 0){    
+    for (let i=0; i<modifier.limit-game.aliens.length; i++){ 
+      let rand = ~~(Math.random()*3);
+      game.addAlien({level:0+rand,code:modifier.aliens,x:(Math.random()-0.5)*game.options.map_size*10,y:(Math.random()-0.5)*game.options.map_size*10,crystal_drop:25+rand*50});
+    }
+    for (let ship of game.ships){
+      if (modifier.rainbow) ship.set({hue:~~(Math.random()*360)});
+    }
   }
 };
 
@@ -223,7 +233,7 @@ this.event = function(event, game){
       }  
       break;    
     case "ship_spawned":
-      ship.set({crystals:980});
+      ship.set({crystals:modifier.gems});
       break;
     case "ship_destroyed":
       ship.set({score:Math.round(ship.score/2)});
