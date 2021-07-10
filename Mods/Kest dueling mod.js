@@ -69,13 +69,13 @@ playerList = function(){
 };
 
 findPlayerByName = function(name){
-	for (let i=0; i<game.ships.length; i++){
-		if (game.ships[i].name == name){
-		  return game.ships[i];
-		}
-	}
-	return null;
-};
+  for (let i=0; i<game.ships.length; i++){
+    if (game.ships[i].name == name){
+      return game.ships[i];
+    }
+  }
+  return null;
+}
 
 //findPlayerByName(name).gameover({"":""});
 var a = {};
@@ -140,7 +140,7 @@ a.Aries_707 = '{"name":"Aries","level":7,"model":7,"size":4.5,"specs":{"shield":
 
 var ships = [];
 for (let ship in a) ships.push(a[ship]);
-var ship_list = Array(ships.length).fill(0).map((r, i) => JSON.parse(ships[i]).typespec.code).filter(item => ![102,191].includes(item))
+var ship_list = Array(ships.length).fill(0).map((r, i) => JSON.parse(ships[i]).typespec.code).filter(item => ![102,191].includes(item));
 
 var vocabulary = [
   {text: "You", icon:"\u004e", key:"O" },
@@ -271,7 +271,7 @@ var UIevents = {
     if (ship.type != 101) ship.set({type:101,crystals:20,shield:100,collider:true});    
   },
   speedster: function(ship){
-    if (ship.type != 605) ship.set({type:605,crystals:720,shield:990,collider:true});    
+    if (ship.type != 607) ship.set({type:607,crystals:720,shield:990,collider:true});    
   },
   restore: function(ship){
     ship.set({shield:999,crystals:((Math.trunc(ship.type/100)||0)**2)*20,generator:999,stats:ship.stats,collider:true});
