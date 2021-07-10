@@ -126,7 +126,7 @@ a.Chronos_R35_705 = '{"name":"Chronos-R35","level":7,"model":5,"size":4.5,"zoom"
  
 var ships = [];
 for (let ship in a) ships.push(a[ship]);
-var ship_list = Array(ships.length).fill(0).map((r, i) => JSON.parse(ships[i]).typespec.code).filter(item => ![102,191].includes(item));
+var ship_list = Array(Array(ships.length).fill(0).map((r, i) => JSON.parse(ships[i]).typespec.code).filter(item => ![102,191].includes(item)));
 
 var vocabulary = [
   {text: "You", icon:"\u004e", key:"O" },
@@ -284,7 +284,7 @@ var UIevents = {
       }  
       ship.custom.option_screen = false;
     } else if (ship.custom.option_screen === false){
-      for (let i=0; i<5; i++) sendUI(ship, {id:ids[i],visible:false});
+      for (let i=0; i<ids.length; i++) sendUI(ship, {id:ids[i],visible:false});
       ship.custom.option_screen = true;
     }    
   }
