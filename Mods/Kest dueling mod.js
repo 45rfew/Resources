@@ -139,10 +139,7 @@ a.Aries_707 = '{"name":"Aries","level":7,"model":7,"size":4.5,"specs":{"shield":
 
 var ships = [];
 for (let ship in a) ships.push(a[ship]);
-//var ship_list = Array(ships.length).fill(0).map((r, i) => JSON.parse(ships[i]).typespec.code).filter(item => ![102,191].includes(item));
-var ship_list = [
-  [101,103,201,202,203,204,301,302,303,304,305,306,307,401,402,403,404,405,406,407,408,409,501,502,503,504,505,506,507,508,509,510,511,512,601,602,603,604,605,606,607,608,609,610,611,612,613,614,615,701,702,703,704,705,706,707]
-];
+var ship_list = Array(Array(ships.length).fill(0).map((r, i) => JSON.parse(ships[i]).typespec.code).filter(item => ![102,191].includes(item)));
 
 var vocabulary = [
   {text: "You", icon:"\u004e", key:"O" },
