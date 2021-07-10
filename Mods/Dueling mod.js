@@ -28,11 +28,11 @@ authorize = id => {
     visible: true,
     shortcut: "M",
     components: [
-      { type:"box",position:[0,0,200,100],fill:"rgba(68, 85, 102, 0)",stroke:"#cde",width:5},
-      { type: "text",position:[0,30,100,60],value:"Admin ship [M]",color:"#cde"},
+      {type:"box",position:[0,0,200,100],fill:"rgba(68, 85, 102, 0)",stroke:"#cde",width:5},
+      {type: "text",position:[0,30,100,60],value:"Admin ship [M]",color:"#cde"},
     ]
   });     
-  return game.ships[id].name + " was granted admin ship\n";
+  return game.ships[id].name + " was granted admin ship\n ";
 };
 //Function allowing to enable admin ship, for yourself or other players
 //To use execute authorize(id) where id is the id of the ship wanted to 
@@ -40,7 +40,7 @@ authorize = id => {
 unauthorize = id => {
   game.ships[id].setUIComponent({id:"Admin ship",visible:false});  
   game.ships[id].set({type:101});
-  return "Admin ship was disabled for " + game.ships[id].name + "\n";  
+  return "Admin ship was disabled for " + game.ships[id].name + "\n ";  
 };
 //Same as the authorize function, just disables admin ship for a certain player
 game.modding.commands.kick = function(req){
@@ -51,11 +51,11 @@ game.modding.commands.kick = function(req){
 
 game.modding.commands.announce = function(req){
   let text = req.replace('announce ','');
-  game.setUIComponent({
+  sendUI(game, {
     id:"id",position:[25,75,50,25],visible:true,
     components: [{type:"text",position:[0,0,100,20],value:text,color:"#ffbbbb"}]
   });   
-  setTimeout(function(){game.setUIComponent({id:"id",visible:false});},10000);
+  setTimeout(function(){sendUI(game, {id:"id",visible:false});},10000);
 }; 
 
 game.modding.commands.list = function(){
@@ -141,7 +141,7 @@ this.tick = function(game){
       if (ship.stats < stats) ship.set({stats:stats});
       if (!ship.custom.init){ 
         ship.custom.init = true;
-        ship.setUIComponent({ 
+        sendUI(ship, { 
           id: "Options",
           position: [71.5,0,6.6,4],
           clickable: true,
@@ -153,7 +153,7 @@ this.tick = function(game){
           ]
         });   
         ship.custom.option_screen = true;    
-        ship.setUIComponent({ 
+        sendUI(ship, { 
           id: "Restore",
           position: [64.5,0,7.2,4],
           clickable: true,
@@ -189,6 +189,13 @@ game.modding.tick = function(t){
     this.context.tick(this.game);
   }
 };  
+
+var sendUI = function(ship, UI) {
+  if (ship != null && typeof ship.setUIComponent == "function") {
+    if (UI.visible || UI.visible == null) ship.setUIComponent(UI);
+    else ship.setUIComponent({id: UI.id, position: [0,0,0,0], visible: false});
+  }
+};
 
 var UIevents = {
   switch: function(input,ship){
@@ -229,15 +236,15 @@ var UIevents = {
   },
   options: function(ship){
     let ids = ["Next ship","Previous ship","Reset","Spectate","A-Speedster"];
-    let shc = Array(ids.length).fill(0).map((r, i) => `"${ids.indexOf(ids[i])+1}"`);
+    let shc = Array(ids.length).fill(0).map((r, i) => `${ids.indexOf(ids[i])+1}`);
     if (ship.custom.option_screen === true){
       for (let i=0; i<ids.length; i++){
-        ship.setUIComponent({
+        sendUI(ship, {
           id: ids[i],
           position: [19+i*12,21,12,10],
           clickable: true,
           visible: true,
-          shortcut: shc[i],
+          shortcut: `${shc[i]}`,
           components: [
             {type:"box",position:[0,0,100,100],fill:"rgba(68, 85, 102, 0)",stroke:"#CDE",width:4},
             {type: "text",position:[5,35,90,40],value:`${ids[i]} [${i+1}]`,color:"#CDE"},
@@ -246,7 +253,7 @@ var UIevents = {
       }  
       ship.custom.option_screen = false;
     } else if (ship.custom.option_screen === false){
-      for (let i=0; i<5; i++) ship.setUIComponent({id:ids[i],visible:false});
+      for (let i=0; i<5; i++) sendUI(ship, {id:ids[i],visible:false});
       ship.custom.option_screen = true;
     }    
   }
